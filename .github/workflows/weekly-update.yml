@@ -22,15 +22,20 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt ruff pytest
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browser
+        run: playwright install chromium
 
       - name: Lint (blocks deploy on failure)
         run: python -m ruff check .
 
       - name: Test (blocks deploy on failure)
-        run: python -m pytest tests/test_pipeline.py tests/test_base.py -v
+        run: python -m pytest tests/test_pipeline.py tests/test_base.py tests/test_claude_scraper.py -v
 
       - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python pipeline.py
 
       - name: Check for changes

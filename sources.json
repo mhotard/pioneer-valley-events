@@ -1,0 +1,67 @@
+{
+  "sources": [
+    {
+      "name": "hawks-reed",
+      "url": "https://www.hawksandreed.com/events",
+      "venue": "Hawks & Reed Performing Arts Center",
+      "town": "Greenfield",
+      "type": "html"
+    },
+    {
+      "name": "gateway-city-arts",
+      "url": "https://gatewaycityarts.com/events",
+      "venue": "Gateway City Arts",
+      "town": "Holyoke",
+      "type": "html"
+    },
+    {
+      "name": "smith-college",
+      "url": "https://www.smith.edu/about-smith/smith-events",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "type": "html"
+    },
+    {
+      "name": "hampshire-college",
+      "url": "https://www.hampshire.edu/events",
+      "venue": "Hampshire College",
+      "town": "Amherst",
+      "type": "html"
+    },
+    {
+      "name": "northampton-arts",
+      "url": "https://www.northamptonarts.org/events",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "type": "html"
+    },
+    {
+      "name": "iron-horse",
+      "url": "https://www.iheg.com/iron-horse-music-hall",
+      "venue": "Iron Horse Music Hall",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
+      "name": "pearl-street",
+      "url": "https://www.iheg.com/pearl-street-nightclub",
+      "venue": "Pearl Street Nightclub",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
+      "name": "academy-of-music",
+      "url": "https://www.academyofmusictheatre.com",
+      "venue": "Academy of Music Theatre",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
+      "name": "the-drake",
+      "url": "https://www.thedrakebar.com",
+      "venue": "The Drake",
+      "town": "Amherst",
+      "type": "html"
+    }
+  ]
+}

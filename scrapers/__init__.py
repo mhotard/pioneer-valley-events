@@ -1,17 +1,16 @@
 from .amherst_cinema import AmherstCinemaScraper
-from .gateway_city_arts import GatewayCityArtsScraper
-from .hawks_reed import HawksReedScraper
-from .iron_horse import IronHorseScraper
-from .northampton import NorthamptonCityScraper
-from .the_drake import TheDrakeScraper
+from .claude_scraper import load_claude_scrapers
 from .umass import UMassScraper
 
-ALL_SCRAPERS = [
+# Hand-written scrapers (kept for sources with reliable structured data)
+STATIC_SCRAPERS = [
     UMassScraper,
-    IronHorseScraper,
     AmherstCinemaScraper,
-    TheDrakeScraper,
-    NorthamptonCityScraper,
-    HawksReedScraper,
-    GatewayCityArtsScraper,
 ]
+
+
+def get_all_scrapers(sources_path=None):
+    """Return all scraper instances: static hand-written + Claude-powered."""
+    scrapers = [cls() for cls in STATIC_SCRAPERS]
+    scrapers += load_claude_scrapers(sources_path)
+    return scrapers

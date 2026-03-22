@@ -16,7 +16,7 @@ import sys
 from datetime import date, timedelta
 from difflib import SequenceMatcher
 
-from scrapers import ALL_SCRAPERS
+from scrapers import get_all_scrapers
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 # Only include events within this window (past 3 days → future 90 days)
@@ -58,8 +58,7 @@ def filter_by_date(events: list) -> list:
 def run(scrapers, dry_run=False):
     all_events = []
 
-    for ScraperClass in scrapers:
-        scraper = ScraperClass()
+    for scraper in scrapers:
         print(f"\nRunning scraper: {scraper.name}")
         events = scraper.fetch()
         all_events.extend(e.to_dict() for e in events)
@@ -98,14 +97,16 @@ def main():
     parser.add_argument("--source", help="Run only this scraper (by name)")
     args = parser.parse_args()
 
+    all_scrapers = get_all_scrapers()
+
     if args.source:
-        scrapers = [s for s in ALL_SCRAPERS if s().name == args.source]
+        scrapers = [s for s in all_scrapers if s.name == args.source]
         if not scrapers:
-            names = [s().name for s in ALL_SCRAPERS]
+            names = [s.name for s in all_scrapers]
             print(f"Unknown source '{args.source}'. Available: {', '.join(names)}")
             sys.exit(1)
     else:
-        scrapers = ALL_SCRAPERS
+        scrapers = all_scrapers
 
     run(scrapers, dry_run=args.dry_run)
 
