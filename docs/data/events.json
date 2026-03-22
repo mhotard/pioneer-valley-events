@@ -2,6 +2,21 @@
   "generated": "2026-03-22",
   "events": [
     {
+      "id": "evt-a09a2385d1",
+      "title": "Teen Peer Tutoring Program",
+      "date": "2026-03-22",
+      "venue": "Jones Library",
+      "town": "Amherst",
+      "source": "jones-library",
+      "category": "academia",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "",
+      "image_url": null
+    },
+    {
       "id": "evt-5e51ea9ab7",
       "title": "Public Policy & Public Administration Information Session Registration",
       "date": "2026-03-23",
@@ -30,6 +45,36 @@
       "description": "Public Policy Colloquium Bridgette Davis - How RCT Implementation as a form of Policy Entrepreneurship Shapes Embedded Agency in Human Services Organizations Bring your lunch, dessert provided!",
       "url": "https://events.umass.edu/event/public-policy-colloquium-bridgette-davis-how-rct-implementation-as-a-form-of-policy-entrepreneurship-shapes-embedded-agency-in-human-services-organizations",
       "image_url": "https://localist-images.azureedge.net/photos/52135173933805/huge/a28067d1f0fa7477bf0c7b33787eccd519bdb62a.jpg"
+    },
+    {
+      "id": "evt-048963c19e",
+      "title": "Mindful Mondays",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "community",
+      "time": "12:15 PM",
+      "end_time": "1:00 PM",
+      "address": "",
+      "description": "If you are looking for a place to make connections and practice tools for awareness and self-accepta...",
+      "url": "/news-events/events/mindful-mondays",
+      "image_url": null
+    },
+    {
+      "id": "evt-68e7a903d4",
+      "title": "Music Monday 5: Max Wareham, banjo",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "music",
+      "time": "1:00 PM",
+      "end_time": "1:30 PM",
+      "address": "",
+      "description": "Smith College banjo instructor Max Wareham, who tours nationally with Grammy-winning bluegrass music...",
+      "url": "/news-events/events/music-monday-5-max-wareham-banjo",
+      "image_url": null
     },
     {
       "id": "evt-48e52d724a",
@@ -62,6 +107,36 @@
       "image_url": "https://localist-images.azureedge.net/assets/main/thumbs/event-huge-4820bb5c9e28a2cf4acef980a65992d6aee20211700fbe1494bea7af79aec963.png"
     },
     {
+      "id": "evt-0344f4e8e6",
+      "title": "The Future of Privacy: Working Towards a Society That Protects Our Personal Data",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "academia",
+      "time": "5:00 PM",
+      "end_time": "7:00 PM",
+      "address": "",
+      "description": "Sarah Lamdan, author of Data Cartels: The Companies That Control and Monopolize Our Information, who...",
+      "url": "/news-events/events/future-privacy-working-towards-society-protects-our-personal-data",
+      "image_url": null
+    },
+    {
+      "id": "evt-cf36afeafd",
+      "title": "Suture Clinic & Lecture With Dr. Deb Davis '76",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "academia",
+      "time": "5:30 PM",
+      "end_time": "7:00 PM",
+      "address": "",
+      "description": "Each participant will receive an individual suture kit and will learn about and practice a variety o...",
+      "url": "/news-events/events/suture-clinic-lecture-dr-deb-davis-76",
+      "image_url": null
+    },
+    {
       "id": "evt-53f1edfd34",
       "title": "Son of Monarchs",
       "date": "2026-03-23",
@@ -75,6 +150,36 @@
       "description": "A Mexican biologist returns to his hometown amidst the butterfly forests of Michoacán, sparking a personal metamorphosis. Zoom introduction by Alexis Gambis, filmmaker, biologist, and founder of LABOCINE.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=539914~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SonOfMonarchsWeb.jpg?itok=7ScsfelL"
+    },
+    {
+      "id": "evt-e3e4c20b6c",
+      "title": "Photography as Resistance: Global Encounters Photo Exhibit",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "arts",
+      "time": "8:00 AM",
+      "end_time": "4:30 PM",
+      "address": "",
+      "description": "Come see how Smith students are using their camera lenses to showcase all facets of resistance, chal...",
+      "url": "/news-events/events/photography-resistance-global-encounters-photo-exhibit",
+      "image_url": null
+    },
+    {
+      "id": "evt-c87f92889b",
+      "title": "Holley Flagg '62 Art Exhibition",
+      "date": "2026-03-23",
+      "venue": "Smith College",
+      "town": "Northampton",
+      "source": "smith-college",
+      "category": "arts",
+      "time": "9:00 AM",
+      "end_time": "4:00 PM",
+      "address": "",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create. I am d...",
+      "url": "/news-events/events/holley-flagg-62-art-exhibition",
+      "image_url": null
     },
     {
       "id": "evt-a627374ec8",
@@ -272,6 +377,36 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/PillionWeb.jpg?itok=1QntKgFR"
     },
     {
+      "id": "evt-4ad4697933",
+      "title": "Wednesday Market",
+      "date": "2026-03-25",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "food",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/Calendar.aspx?EID=32016&month=3&year=2026&day=22&calType=0",
+      "image_url": null
+    },
+    {
+      "id": "evt-01d5581b19",
+      "title": "District 2 Meeting via Zoom",
+      "date": "2026-03-25",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/Calendar.aspx?EID=34987&month=3&year=2026&day=22&calType=0",
+      "image_url": null
+    },
+    {
       "id": "evt-456e31e895",
       "title": "Days of Dialogue",
       "date": "2026-03-25",
@@ -437,6 +572,21 @@
       "image_url": null
     },
     {
+      "id": "evt-a4c34f8531",
+      "title": "Office Hours with State Representative Mindy Domb",
+      "date": "2026-03-27",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/Calendar.aspx?EID=34532&month=3&year=2026&day=22&calType=0",
+      "image_url": null
+    },
+    {
       "id": "evt-a46df6fafd",
       "title": "Amherst College Baseball vs Wesleyan University",
       "date": "2026-03-27",
@@ -542,6 +692,21 @@
       "image_url": null
     },
     {
+      "id": "evt-f129b1d71b",
+      "title": "Very Hungry Caterpillar Day",
+      "date": "2026-03-29",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "12:00 PM",
+      "end_time": "4:30 PM",
+      "address": "",
+      "description": "Celebrate Very Hungry Caterpillar Day at The Carle!",
+      "url": "https://carlemuseum.org/visit/events/very-hungry-caterpillar-day-3",
+      "image_url": null
+    },
+    {
       "id": "evt-58d4d96911",
       "title": "Dog Day Afternoon",
       "date": "2026-03-29",
@@ -585,6 +750,21 @@
       "description": "In August 1972, three amateur crooks in Brooklyn plan a nice, simple bank robbery. As everything goes wrong, the uncomplicated heist becomes a bizarre nightmare. Al Pacino and John Cazale star in director Sidney Lumet’s marvelously successful experiment in realism, featuring scenes of extended improvisation.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=533245~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/DogDayAfternoonWeb.jpg?itok=7cFXwGtS"
+    },
+    {
+      "id": "evt-154ac870ab",
+      "title": "Wednesday Market",
+      "date": "2026-04-01",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "food",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/Calendar.aspx?EID=32017&month=3&year=2026&day=22&calType=0",
+      "image_url": null
     },
     {
       "id": "evt-3f216da51e",
@@ -662,6 +842,36 @@
       "image_url": null
     },
     {
+      "id": "evt-b62d155d06",
+      "title": "A Night of Fairies",
+      "date": "2026-04-02",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "4:00 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "As part of The Carle After Dark enjoy live music, make your own fairy house, and more!",
+      "url": "https://carlemuseum.org/visit/events/night-fairies",
+      "image_url": null
+    },
+    {
+      "id": "evt-74119456c8",
+      "title": "Exploring Indigenous Stories in Picture Books",
+      "date": "2026-04-03",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "academia",
+      "time": "9:30 AM",
+      "end_time": "12:30 PM",
+      "address": "",
+      "description": "Learn how to select and share picture books that celebrate Indigenous identities and cultures.",
+      "url": "https://carlemuseum.org/visit/events/exploring-indigenous-stories-picture-books",
+      "image_url": null
+    },
+    {
       "id": "evt-c2f5c2e46d",
       "title": "Romy and Michele's High School Reunion",
       "date": "2026-04-03",
@@ -689,6 +899,21 @@
       "address": "Amherst, MA 01002",
       "description": "Amherst College Women's Track and Field Amherst Spring Fling Streaming Video: https://www.nsnsports.net/colleges/amherst/",
       "url": "https://athletics.amherst.edu/calendar.aspx?game_id=14673&amp;sport_id=23",
+      "image_url": null
+    },
+    {
+      "id": "evt-b1bac03725",
+      "title": "Youth Entrepreneurship Workshop Series",
+      "date": "2026-04-04",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/Calendar.aspx?EID=34949&month=3&year=2026&day=22&calType=0",
       "image_url": null
     },
     {
@@ -1112,6 +1337,21 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TurnerConstableWeb2.jpg?itok=ev-ADGWn"
     },
     {
+      "id": "evt-e894d7fab9",
+      "title": "413 Day",
+      "date": "2026-04-13",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm",
+      "category": "festival",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "A celebration of western Mass. with NEPM!",
+      "url": "https://www.nepm.org/nepm-events/2026-03-12/413-day-2026",
+      "image_url": null
+    },
+    {
       "id": "evt-f5050c0aab",
       "title": "High School II",
       "date": "2026-04-13",
@@ -1185,6 +1425,21 @@
       "description": "Gory revenge is raised to the level of visual poetry in this endlessly inventive film, charting the path of vengeance taken by a young woman whose parents were the victims of a criminal gang.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=540286~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/LadySnowblood.jpg?itok=PslA9UAG"
+    },
+    {
+      "id": "evt-b83700b4c1",
+      "title": "An Evening with Fran Lebowitz",
+      "date": "2026-04-18",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm",
+      "category": "comedy",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "Presented by NEPM's Smart & Funny People.",
+      "url": "https://www.nepm.org/nepm-events/2025-12-09/an-evening-with-fran-lebowitz",
+      "image_url": null
     },
     {
       "id": "evt-b445ff41dd",
@@ -1562,6 +1817,21 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AMatterOfLifeAndDeathWeb.jpg?itok=b-wsdFiq"
     },
     {
+      "id": "evt-9de2708087",
+      "title": "NEPM Book Club: 'The Emperor of Gladness' with author Ocean Vuong",
+      "date": "2026-04-30",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm",
+      "category": "academia",
+      "time": "7:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "The NEPM Book Club's next meeting will be Thursday, April 30 at 7 p.m. We'll be reading \"The Emperor of Gladness\" by Ocean Vuong, who will be joining us for a Q&A!",
+      "url": "https://www.nepm.org/nepm-events/2026-02-18/nepm-book-club-the-emperor-of-gladness-with-author-ocean-vuong",
+      "image_url": null
+    },
+    {
       "id": "evt-a944483a08",
       "title": "The Blair Witch Project",
       "date": "2026-05-01",
@@ -1785,6 +2055,21 @@
       "description": "Nicola Coughlan (Bridgerton) joins Éanna Hardwicke (The Sixth Commandment) and Siobhán McSweeney (Derry Girls) in John Millington Synge’s riveting play of youth and self-discovery.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=540264~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/NTL_PlayboyWesternWorldWeb.jpg?itok=0k8_8GVD"
+    },
+    {
+      "id": "evt-39a2fba67c",
+      "title": "Ear Hustle Live!",
+      "date": "2026-05-30",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm",
+      "category": "music",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "NEPM's Smart & Funny People series brings the acclaimed podcast Ear Hustle to the Iron Horse on Saturday, May 30.",
+      "url": "https://www.nepm.org/2026-03-17/ear-hustle-live",
+      "image_url": null
     },
     {
       "id": "evt-7cc6669819",
