@@ -1,12 +1,46 @@
-"""Scraper for Amherst Cinema (amherstcinema.org)."""
+"""Scraper for Amherst Cinema (amherstcinema.org) — Drupal 7 Views structure."""
 
 import re
+from datetime import date, datetime
+
 import requests
 from bs4 import BeautifulSoup
+
 from .base import BaseScraper, Event
 
 BASE_URL = "https://amherstcinema.org"
-CALENDAR_URL = f"{BASE_URL}/films"
+LISTING_URL = f"{BASE_URL}/coming-soon"
+
+
+def parse_date(raw: str) -> str:
+    """
+    Parse dates like 'Sun, 3/22' or 'Fri, 3/27' into YYYY-MM-DD.
+    Assumes current or next year based on whether the date has passed.
+    """
+    m = re.search(r'(\d{1,2})/(\d{1,2})', raw)
+    if not m:
+        return ""
+    month, day = int(m.group(1)), int(m.group(2))
+    today = date.today()
+    year = today.year
+    try:
+        d = date(year, month, day)
+        if d < today - __import__('datetime').timedelta(days=3):
+            d = date(year + 1, month, day)
+        return d.isoformat()
+    except ValueError:
+        return ""
+
+
+def parse_time(raw: str) -> str:
+    """Convert '1:30 pm' → '1:30 PM'."""
+    raw = raw.strip()
+    for fmt in ["%I:%M %p", "%I:%M%p", "%I %p"]:
+        try:
+            return datetime.strptime(raw.upper(), fmt.upper()).strftime("%-I:%M %p")
+        except ValueError:
+            continue
+    return raw.upper()
 
 
 class AmherstCinemaScraper(BaseScraper):
@@ -14,102 +48,75 @@ class AmherstCinemaScraper(BaseScraper):
     town = "Amherst"
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
-        resp = requests.get(CALENDAR_URL, headers=headers, timeout=15)
+        headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}  # noqa: E501
+        resp = requests.get(LISTING_URL, headers=headers, timeout=15)
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
 
         events = []
         seen = set()
 
-        # Amherst Cinema uses a movie listing grid; each film may have multiple showtimes
-        for film in soup.select(".film-item, .movie-item, article.film, .views-row"):
-            try:
-                title_el = film.select_one("h2, h3, .film-title, .title")
-                if not title_el:
-                    continue
-                title = self.clean(title_el.get_text())
-                if not title:
-                    continue
-
-                link_el = film.select_one("a[href]")
-                href = link_el["href"] if link_el else ""
-                if href and href.startswith("/"):
-                    href = BASE_URL + href
-
-                img_el = film.select_one("img")
-                img = img_el.get("src", "") if img_el else None
-
-                desc_el = film.select_one(".synopsis, .description, p")
-                desc = self.clean(desc_el.get_text()[:400]) if desc_el else ""
-
-                # Showtimes
-                showtime_els = film.select(".showtime, .show-time, time, .date-time")
-                if not showtime_els:
-                    # Try to scrape detail page for showtimes
-                    showtimes = self._scrape_showtimes(href, headers)
-                else:
-                    showtimes = []
-                    for el in showtime_els:
-                        raw = el.get("datetime", el.get_text())
-                        if "T" in raw:
-                            date = self.normalize_date(raw[:10])
-                            time = raw[11:16]  # HH:MM
-                        else:
-                            date = self.normalize_date(raw)
-                            time = ""
-                        if date:
-                            showtimes.append((date, time))
-
-                if not showtimes:
-                    # No dates found, skip
-                    continue
-
-                for date, time in showtimes:
-                    key = f"{title}-{date}-{time}"
-                    if key in seen:
-                        continue
-                    seen.add(key)
-
-                    events.append(Event(
-                        title=title,
-                        date=date,
-                        time=self.normalize_time(time) if time else "",
-                        venue="Amherst Cinema",
-                        address="28 Amity St, Amherst, MA 01002",
-                        town=self.town,
-                        description=desc,
-                        url=href,
-                        image_url=img or None,
-                        category="film",
-                        source=self.name,
-                    ))
-
-            except Exception as e:
-                print(f"[{self.name}] Skipping film: {e}")
+        # Each film is in a .col-xs-8 block inside the show_event view
+        for film_block in soup.select(".col-xs-8"):
+            title_el = film_block.select_one(".title a")
+            if not title_el:
                 continue
+
+            title = self.clean(title_el.get_text())
+            href = title_el.get("href", "")
+            film_url = BASE_URL + href if href.startswith("/") else href
+
+            desc_el = film_block.select_one(".body")
+            description = self.clean(desc_el.get_text()[:500]) if desc_el else ""
+
+            # Image is in the sibling .col-xs-4
+            img_url = None
+            col4 = film_block.find_previous_sibling("div", class_="col-xs-4")
+            if not col4:
+                # Try parent approach
+                parent = film_block.parent
+                col4 = parent.find("div", class_="col-xs-4") if parent else None
+            if col4:
+                img_el = col4.select_one("img")
+                if img_el:
+                    img_url = img_el.get("src")
+
+            # Each showtime is a .views-row inside .times
+            for row in film_block.select(".times .views-row"):
+                date_el = row.select_one(".date")
+                time_el = row.select_one(".time .date-display-single")
+
+                if not date_el:
+                    continue
+
+                date_str = parse_date(date_el.get_text())
+                if not date_str:
+                    continue
+
+                time_str = parse_time(time_el.get_text()) if time_el else ""
+
+                # Showtime ticket link (optional)
+                ticket_el = row.select_one(".time a")
+                event_url = ticket_el["href"] if ticket_el else film_url
+
+                key = f"{title}|{date_str}|{time_str}"
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                events.append(Event(
+                    title=title,
+                    date=date_str,
+                    time=time_str,
+                    venue="Amherst Cinema",
+                    address="28 Amity St, Amherst, MA 01002",
+                    town=self.town,
+                    description=description,
+                    url=event_url,
+                    image_url=img_url,
+                    category="film",
+                    source=self.name,
+                ))
 
         print(f"[{self.name}] Found {len(events)} events")
         return events
-
-    def _scrape_showtimes(self, url: str, headers: dict) -> list[tuple]:
-        """Fetch a film detail page and extract showtime dates."""
-        if not url:
-            return []
-        try:
-            resp = requests.get(url, headers=headers, timeout=10)
-            soup = BeautifulSoup(resp.text, "html.parser")
-            showtimes = []
-            for el in soup.select("time, .showtime, .date"):
-                raw = el.get("datetime", el.get_text())
-                if "T" in raw:
-                    date = self.normalize_date(raw[:10])
-                    time_part = raw[11:16]
-                else:
-                    date = self.normalize_date(raw)
-                    time_part = ""
-                if date:
-                    showtimes.append((date, time_part))
-            return showtimes
-        except Exception:
-            return []

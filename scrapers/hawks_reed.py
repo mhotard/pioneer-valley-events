@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+
 from .base import BaseScraper, Event
 
 BASE_URL = "https://www.hawksandreed.com"
@@ -49,7 +50,7 @@ class HawksReedScraper(BaseScraper):
                     category = "comedy"
                 elif any(w in title_lower for w in ["film", "movie", "cinema", "screen"]):
                     category = "film"
-                elif any(w in title_lower for w in ["dance", "theater", "theatre", "play", "performance"]):
+                elif any(w in title_lower for w in ["dance", "theater", "theatre", "play", "performance"]):  # noqa: E501
                     category = "arts"
                 else:
                     category = "music"

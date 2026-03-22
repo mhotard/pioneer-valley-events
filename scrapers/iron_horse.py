@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+
 from .base import BaseScraper, Event
 
 BASE_URL = "https://www.iheg.com"
@@ -39,7 +40,8 @@ class IronHorseScraper(BaseScraper):
 
                         title    = self.clean(title_el.get_text())
                         raw_date = date_el.get("datetime", date_el.get_text())
-                        date     = self.normalize_date(raw_date[:10] if "T" in raw_date else raw_date)
+                        raw = raw_date[:10] if "T" in raw_date else raw_date
+                        date     = self.normalize_date(raw)
                         if not date or not title:
                             continue
 
@@ -55,7 +57,11 @@ class IronHorseScraper(BaseScraper):
                             date=date,
                             time=time,
                             venue=venue_name,
-                            address="20 Center St, Northampton, MA 01060" if "Iron Horse" in venue_name else "10 Pearl St, Northampton, MA 01060",
+                            address=(
+                                "20 Center St, Northampton, MA 01060"
+                                if "Iron Horse" in venue_name
+                                else "10 Pearl St, Northampton, MA 01060"
+                            ),
                             town=town,
                             description=desc,
                             url=href,

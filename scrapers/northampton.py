@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+
 from .base import BaseScraper, Event
 
 BASE_URL = "https://www.northamptonma.gov"

@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+
 from .base import BaseScraper, Event
 
 BASE_URL = "https://thedrakehotel.net"
@@ -46,7 +47,8 @@ class TheDrakeScraper(BaseScraper):
 
                 # Simple category heuristic for The Drake
                 title_lower = title.lower()
-                if any(w in title_lower for w in ["jazz", "open mic", "band", "concert", "music", "singer"]):
+                music_words = ["jazz", "open mic", "band", "concert", "music", "singer"]
+                if any(w in title_lower for w in music_words):
                     category = "music"
                 elif any(w in title_lower for w in ["comedy", "stand-up", "standup"]):
                     category = "comedy"

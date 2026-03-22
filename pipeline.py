@@ -13,7 +13,7 @@ import argparse
 import json
 import os
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from difflib import SequenceMatcher
 
 from scrapers import ALL_SCRAPERS

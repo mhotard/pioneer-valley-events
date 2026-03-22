@@ -22,7 +22,13 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt ruff pytest
+
+      - name: Lint (blocks deploy on failure)
+        run: python -m ruff check .
+
+      - name: Test (blocks deploy on failure)
+        run: python -m pytest tests/test_pipeline.py tests/test_base.py -v
 
       - name: Run pipeline
         run: python pipeline.py
