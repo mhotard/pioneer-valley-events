@@ -1,0 +1,42 @@
+name: Weekly Event Update
+
+on:
+  schedule:
+    # Every Sunday at 6 AM UTC (2 AM Eastern)
+    - cron: '0 6 * * 0'
+  workflow_dispatch:  # allow manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-events:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        run: python pipeline.py
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --quiet site/data/events.json || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push updated events
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add site/data/events.json
+          git commit -m "chore: weekly event update $(date -u +'%Y-%m-%d')"
+          git push
