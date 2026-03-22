@@ -16,50 +16,50 @@
     },
     {
       "name": "smith-college",
-      "url": "https://www.smith.edu/about-smith/smith-events",
+      "url": "https://www.smith.edu/events",
       "venue": "Smith College",
       "town": "Northampton",
       "type": "html"
     },
     {
-      "name": "hampshire-college",
-      "url": "https://www.hampshire.edu/events",
-      "venue": "Hampshire College",
+      "name": "jones-library",
+      "url": "https://www.joneslibrary.org/calendar.aspx",
+      "venue": "Jones Library",
       "town": "Amherst",
       "type": "html"
     },
     {
-      "name": "northampton-arts",
-      "url": "https://www.northamptonarts.org/events",
-      "venue": "Various Northampton Venues",
-      "town": "Northampton",
+      "name": "eric-carle-museum",
+      "url": "https://www.carlemuseum.org/events",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
       "type": "html"
     },
     {
-      "name": "iron-horse",
-      "url": "https://www.iheg.com/iron-horse-music-hall",
-      "venue": "Iron Horse Music Hall",
-      "town": "Northampton",
+      "name": "nepm",
+      "url": "https://www.nepm.org/events",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
+    },
+    {
+      "name": "umass-athletics",
+      "url": "https://umassathletics.com/calendar",
+      "venue": "UMass Athletics",
+      "town": "Amherst",
+      "type": "html"
+    },
+    {
+      "name": "amherst-college-athletics",
+      "url": "https://athletics.amherst.edu/calendar",
+      "venue": "Amherst College Athletics",
+      "town": "Amherst",
       "type": "playwright"
     },
     {
-      "name": "pearl-street",
-      "url": "https://www.iheg.com/pearl-street-nightclub",
-      "venue": "Pearl Street Nightclub",
-      "town": "Northampton",
-      "type": "playwright"
-    },
-    {
-      "name": "academy-of-music",
-      "url": "https://www.academyofmusictheatre.com",
-      "venue": "Academy of Music Theatre",
-      "town": "Northampton",
-      "type": "playwright"
-    },
-    {
-      "name": "the-drake",
-      "url": "https://www.thedrakebar.com",
-      "venue": "The Drake",
+      "name": "town-of-amherst",
+      "url": "https://www.amherstma.gov/Calendar.aspx",
+      "venue": "Various Amherst Venues",
       "town": "Amherst",
       "type": "html"
     }

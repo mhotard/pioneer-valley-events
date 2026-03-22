@@ -1,10 +1,8 @@
 # Pioneer Valley Events
 
-A community-built event aggregator for Amherst, Northampton, and the Pioneer Valley. Hosted free on GitHub Pages, updated weekly.
+A community-built event aggregator for Amherst, Northampton, and the Pioneer Valley. Hosted free on GitHub Pages, updated weekly via GitHub Actions.
 
-## Live site
-
-Once deployed: `https://<your-username>.github.io/pioneer-valley-events`
+**Live site:** [mhotard.github.io/pioneer-valley-events](https://mhotard.github.io/pioneer-valley-events)
 
 ---
 
@@ -12,101 +10,113 @@ Once deployed: `https://<your-username>.github.io/pioneer-valley-events`
 
 ```
 pioneer-valley-events/
-├── site/                   # Static site (what gets hosted)
+├── docs/                       # Static site (served by GitHub Pages)
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js
 │   └── data/
-│       └── events.json     # Event data, updated weekly
-├── scrapers/               # One Python scraper per source
-│   ├── base.py             # Base class + Event dataclass
-│   ├── umass.py
-│   ├── iron_horse.py
-│   ├── amherst_cinema.py
-│   ├── the_drake.py
-│   ├── northampton.py
-│   ├── hawks_reed.py
-│   └── gateway_city_arts.py
-├── pipeline.py             # Aggregation + dedup script
+│       └── events.json         # Event data, regenerated weekly
+├── scrapers/
+│   ├── base.py                 # BaseScraper + Event dataclass
+│   ├── umass.py                # UMass events (JSON-LD parsing)
+│   ├── amherst_cinema.py       # Amherst Cinema showtimes
+│   └── claude_scraper.py       # Claude Haiku-powered universal scraper
+├── sources.json                # Config for all Claude-powered sources
+├── pipeline.py                 # Aggregation, dedup, and output script
 ├── requirements.txt
-└── .github/
-    └── workflows/
-        └── weekly-update.yml   # GitHub Actions automation
+├── pyproject.toml              # ruff linting config
+└── .github/workflows/
+    ├── ci.yml                  # Lint + test on every push
+    └── weekly-update.yml       # Scrape → commit → deploy every Sunday
 ```
 
 ---
 
-## Deploy to GitHub Pages
+## How it works
 
-1. Create a new GitHub repo named `pioneer-valley-events`
-2. Push this directory:
-   ```bash
-   git init
-   git add .
-   git commit -m "initial commit"
-   git remote add origin https://github.com/<your-username>/pioneer-valley-events.git
-   git push -u origin main
-   ```
-3. In your repo settings: **Pages → Source → Deploy from branch → `main` → `/site`**
-4. Your site will be live at `https://<your-username>.github.io/pioneer-valley-events/`
+1. **Static scrapers** (`umass.py`, `amherst_cinema.py`) use hand-written parsers for reliable structured sources.
+2. **Claude-powered scrapers** (`claude_scraper.py`) fetch each URL in `sources.json`, clean the HTML, and send it to Claude Haiku for event extraction — no custom parser needed per site.
+3. `pipeline.py` merges all results, deduplicates near-identical events, filters to the next 90 days, and writes `docs/data/events.json`.
+4. GitHub Pages serves `docs/` as the static site. GitHub Actions re-runs the pipeline every Sunday and commits any changes.
 
 ---
 
-## Run the pipeline manually (Claude Code workflow)
+## Run the pipeline manually
 
 ```bash
 # Install dependencies once
 pip install -r requirements.txt
+playwright install chromium
+
+# Set your Anthropic API key (required for Claude-powered sources)
+export ANTHROPIC_API_KEY=sk-ant-...
 
 # Run all scrapers and update events.json
-python pipeline.py
+python3 pipeline.py
 
 # Preview results without writing
-python pipeline.py --dry-run
+python3 pipeline.py --dry-run
 
 # Run a single source
-python pipeline.py --source umass
-python pipeline.py --source iron-horse
+python3 pipeline.py --source umass
+python3 pipeline.py --source jones-library
 
-# Then commit and push to redeploy
-git add site/data/events.json
+# Commit and push to redeploy
+git add docs/data/events.json
 git commit -m "chore: update events $(date +%Y-%m-%d)"
 git push
 ```
 
 ---
 
-## Automated weekly updates (GitHub Actions)
+## Adding a new event source
 
-The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC. It:
-1. Runs `python pipeline.py`
-2. If `events.json` changed, commits and pushes it
-3. GitHub Pages automatically redeploys on push
+Just add an entry to `sources.json` — no code required:
 
-To trigger it manually: **Actions → Weekly Event Update → Run workflow**
+```json
+{
+  "name": "my-venue",
+  "url": "https://myvenue.com/events",
+  "venue": "My Venue Name",
+  "town": "Northampton",
+  "type": "html"
+}
+```
+
+Use `"type": "playwright"` for JavaScript-rendered pages. The Claude Haiku model handles extraction automatically.
 
 ---
 
-## Adding a new event source
+## Automated weekly updates (GitHub Actions)
 
-1. Create `scrapers/my_source.py` extending `BaseScraper`:
-   ```python
-   from .base import BaseScraper, Event
+The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC (2 AM Eastern). It:
+1. Lints with `ruff` (blocks deploy on failure)
+2. Runs `pytest` (blocks deploy on failure)
+3. Runs `python pipeline.py`
+4. Commits and pushes `events.json` if it changed
+5. GitHub Pages autodeploys on push
 
-   class MySourceScraper(BaseScraper):
-       name = "my-source"
-       town = "Northampton"
+**Required secret:** Add `ANTHROPIC_API_KEY` in your repo under **Settings → Secrets and variables → Actions**.
 
-       def _fetch(self) -> list[Event]:
-           # fetch, parse, return list of Event(...)
-           ...
-   ```
-2. Add it to `scrapers/__init__.py`:
-   ```python
-   from .my_source import MySourceScraper
-   ALL_SCRAPERS = [..., MySourceScraper]
-   ```
-3. Run `python pipeline.py --source my-source` to test it.
+To trigger manually: **Actions → Weekly Event Update → Run workflow**
+
+---
+
+## Sources currently scraped
+
+| Source | Town | Notes |
+|--------|------|-------|
+| UMass Amherst | Amherst | JSON-LD structured data |
+| Amherst Cinema | Amherst | Film showtimes |
+| Jones Library | Amherst | Programs and events |
+| Eric Carle Museum | Amherst | Special exhibitions and programs |
+| Town of Amherst | Amherst | Community calendar |
+| Amherst College Athletics | Amherst | Home game schedule |
+| Smith College | Northampton | Campus events |
+| Hawks & Reed | Greenfield | Performing arts |
+| Gateway City Arts | Holyoke | Arts and culture |
+| NEPM | Pioneer Valley | Curated regional events (includes Iron Horse, Academy of Music) |
+| UMass Athletics | Amherst | Home game schedule |
 
 ---
 
@@ -116,25 +126,10 @@ To trigger it manually: **Actions → Weekly Event Update → Run workflow**
 
 ---
 
-## Sources currently scraped
-
-| Source | Town | Category |
-|--------|------|----------|
-| UMass Amherst | Amherst | Mixed |
-| Iron Horse Music Hall | Northampton | Music |
-| Pearl Street Nightclub | Northampton | Music |
-| Amherst Cinema | Amherst | Film |
-| The Drake | Amherst | Music |
-| City of Northampton | Northampton | Community |
-| Hawks & Reed | Greenfield | Mixed |
-| Gateway City Arts | Holyoke | Arts |
-
----
-
 ## Roadmap
 
-- [ ] Add more sources: Smith College, Hampshire College, Academy of Music, Pleasant Street Theater, Springfield Museums
+- [ ] Pleasant Street Theater (Northampton)
+- [ ] Springfield Museums
 - [ ] Eventbrite API integration for broader coverage
-- [ ] Claude API enrichment pass (better category tagging, description cleanup)
-- [ ] Image support
 - [ ] Email/RSS subscription
+- [ ] Image support
