@@ -48,6 +48,55 @@
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "type": "html"
+    },
+    {
+      "name": "academy-of-music",
+      "url": "https://aomtheatre.com/events",
+      "venue": "Academy of Music Theatre",
+      "town": "Northampton",
+      "type": "html"
+    },
+    {
+      "name": "noho-arts",
+      "url": "https://www.nohoarts.org/events",
+      "venue": "Northampton Center for the Arts",
+      "town": "Northampton",
+      "type": "html"
+    },
+    {
+      "name": "northampton-live",
+      "url": "https://northampton.live/arts-entertainment",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
+      "name": "arts-hub-wma",
+      "url": "https://www.artshubwma.org/calendar",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
+    },
+    {
+      "name": "valley-arts-newsletter",
+      "url": "https://valleyartsnewsletter.com/",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
+    },
+    {
+      "name": "explore-western-mass",
+      "url": "https://explorewesternmass.com/events/",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
+    },
+    {
+      "name": "visit-hampshire-county",
+      "url": "https://visithampshirecounty.com/calendar",
+      "venue": "Various Hampshire County Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
     }
   ]
 }

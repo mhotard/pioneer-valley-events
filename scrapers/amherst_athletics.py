@@ -1,11 +1,14 @@
 """Scraper for Amherst College Athletics home games via iCal feed."""
 
+import logging
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
 import requests
 
 from .base import BaseScraper, Event
+
+log = logging.getLogger("pipeline")
 
 ICAL_URL = "https://athletics.amherst.edu/calendar.ics"
 EASTERN = ZoneInfo("America/New_York")
@@ -25,6 +28,7 @@ def _is_home(location: str) -> bool:
 
 class AmherstAthleticsScraper(BaseScraper):
     name = "amherst-athletics"
+    url = ICAL_URL
     town = "Amherst"
 
     def _fetch(self) -> list[Event]:
@@ -95,5 +99,5 @@ class AmherstAthleticsScraper(BaseScraper):
                 source=self.name,
             ))
 
-        print(f"[{self.name}] Found {len(events)} events")
+        log.debug("[%s] Found %d events", self.name, len(events))
         return events

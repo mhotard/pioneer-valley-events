@@ -1,12 +1,15 @@
 """Scraper for UMass Amherst events (events.umass.edu) — uses JSON-LD structured data."""
 
 import json
+import logging
 from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
 
 from .base import BaseScraper, Event
+
+log = logging.getLogger("pipeline")
 
 BASE_URL = "https://events.umass.edu"
 # Fetch multiple pages to get enough events
@@ -56,6 +59,7 @@ def parse_iso(iso: str):
 
 class UMassScraper(BaseScraper):
     name = "umass"
+    url = f"{BASE_URL}/calendar"
     town = "Amherst"
 
     def _fetch(self) -> list[Event]:
@@ -141,7 +145,7 @@ class UMassScraper(BaseScraper):
                         ))
 
             except Exception as e:
-                print(f"[{self.name}] Error on {page_url}: {e}")
+                log.warning("[%s] Error on %s: %s", self.name, page_url, e)
 
-        print(f"[{self.name}] Found {len(events)} events")
+        log.debug("[%s] Found %d events", self.name, len(events))
         return events

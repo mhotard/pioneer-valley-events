@@ -9,6 +9,7 @@ Both are configured via sources.json entries:
 """
 
 import json
+import logging
 import os
 from typing import Optional
 
@@ -17,6 +18,8 @@ from anthropic import Anthropic
 from bs4 import BeautifulSoup
 
 from .base import BaseScraper, Event
+
+log = logging.getLogger("pipeline")
 
 _client: Optional[Anthropic] = None
 
@@ -60,10 +63,10 @@ MAX_HTML_CHARS = 20_000  # ~5k tokens — enough for a full event listing page
 def _get_client() -> Anthropic:
     global _client
     if _client is None:
-        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        api_key = os.environ.get("ANTHROPIC_API_KEY_PIONEER") or os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise EnvironmentError(
-                "ANTHROPIC_API_KEY environment variable is not set. "
+                "ANTHROPIC_API_KEY_PIONEER environment variable is not set. "
                 "Get a key at https://console.anthropic.com/"
             )
         _client = Anthropic(api_key=api_key)
@@ -132,7 +135,7 @@ def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str)
                 source=source_name,
             ))
         except Exception as e:
-            print(f"[{source_name}] Skipping malformed event dict: {e}")
+            log.warning("[%s] Skipping malformed event dict: %s", source_name, e)
     return events
 
 
@@ -154,7 +157,7 @@ class ClaudeHTMLScraper(BaseScraper):
         dicts = _extract_events(cleaned, self.venue, self.town)
         events = _dicts_to_events(dicts, self.name, self.venue, self.town)
 
-        print(f"[{self.name}] Found {len(events)} events")
+        log.debug("[%s] Found %d events", self.name, len(events))
         return events
 
 
@@ -189,7 +192,7 @@ class ClaudePlaywrightScraper(BaseScraper):
         dicts = _extract_events(cleaned, self.venue, self.town)
         events = _dicts_to_events(dicts, self.name, self.venue, self.town)
 
-        print(f"[{self.name}] Found {len(events)} events")
+        log.debug("[%s] Found %d events", self.name, len(events))
         return events
 
 

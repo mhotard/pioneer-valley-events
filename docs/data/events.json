@@ -2,21 +2,6 @@
   "generated": "2026-03-22",
   "events": [
     {
-      "id": "evt-a09a2385d1",
-      "title": "Teen Peer Tutoring Program",
-      "date": "2026-03-22",
-      "venue": "Jones Library",
-      "town": "Amherst",
-      "source": "jones-library",
-      "category": "academia",
-      "time": "",
-      "end_time": "",
-      "address": "",
-      "description": "",
-      "url": "",
-      "image_url": null
-    },
-    {
       "id": "evt-5e51ea9ab7",
       "title": "Public Policy & Public Administration Information Session Registration",
       "date": "2026-03-23",
@@ -383,12 +368,12 @@
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "food",
+      "category": "community",
       "time": "",
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=32016&month=3&year=2026&day=22&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -403,7 +388,7 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=34987&month=3&year=2026&day=22&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -583,7 +568,7 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=34532&month=3&year=2026&day=22&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -758,12 +743,12 @@
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "food",
+      "category": "community",
       "time": "",
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=32017&month=3&year=2026&day=22&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -913,7 +898,7 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=34949&month=3&year=2026&day=22&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -1343,7 +1328,7 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm",
-      "category": "festival",
+      "category": "community",
       "time": "",
       "end_time": "",
       "address": "",

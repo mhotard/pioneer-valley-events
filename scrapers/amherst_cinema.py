@@ -1,5 +1,6 @@
 """Scraper for Amherst Cinema (amherstcinema.org) — Drupal 7 Views structure."""
 
+import logging
 import re
 from datetime import date, datetime
 
@@ -7,6 +8,8 @@ import requests
 from bs4 import BeautifulSoup
 
 from .base import BaseScraper, Event
+
+log = logging.getLogger("pipeline")
 
 BASE_URL = "https://amherstcinema.org"
 LISTING_URL = f"{BASE_URL}/coming-soon"
@@ -45,6 +48,7 @@ def parse_time(raw: str) -> str:
 
 class AmherstCinemaScraper(BaseScraper):
     name = "amherst-cinema"
+    url = LISTING_URL
     town = "Amherst"
 
     def _fetch(self) -> list[Event]:
@@ -118,5 +122,5 @@ class AmherstCinemaScraper(BaseScraper):
                     source=self.name,
                 ))
 
-        print(f"[{self.name}] Found {len(events)} events")
+        log.debug("[%s] Found %d events", self.name, len(events))
         return events

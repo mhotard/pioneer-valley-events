@@ -1,10 +1,13 @@
 """Base scraper class for Pioneer Valley Events."""
 
 import hashlib
+import logging
 import re
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
 from typing import Optional
+
+log = logging.getLogger("pipeline")
 
 
 @dataclass
@@ -38,14 +41,17 @@ class Event:
 
 class BaseScraper(ABC):
     name: str = "base"
+    url: str = ""
     town: str = ""
 
     def fetch(self) -> list[Event]:
         """Fetch and return normalized events. Catches all exceptions gracefully."""
+        self.last_error: Optional[str] = None
         try:
             return self._fetch()
         except Exception as e:
-            print(f"[{self.name}] ERROR: {e}")
+            self.last_error = str(e)
+            log.error("[%s] ERROR: %s", self.name, e)
             return []
 
     @abstractmethod

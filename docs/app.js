@@ -5,7 +5,7 @@
 const state = {
   events: [],
   view: 'list',
-  filters: { q: '', dateFrom: '', dateTo: '', category: '', town: '' },
+  filters: { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' },
   calendarMonth: null, // Date object for calendar display
   calendarSelectedDay: null, // 'YYYY-MM-DD'
 };
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   state.calendarMonth.setDate(1);
 
   await loadEvents();
+  populateSourceFilter();
   setupFilters();
   setupViewSwitcher();
   setupModal();
@@ -38,6 +39,18 @@ async function loadEvents() {
   }
 }
 
+/* ---- Source dropdown (dynamic) ---- */
+function populateSourceFilter() {
+  const sel = document.getElementById('source-filter');
+  const sources = [...new Set(state.events.map(e => e.source).filter(Boolean))].sort();
+  sources.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    sel.appendChild(opt);
+  });
+}
+
 /* ---- Filters ---- */
 function setupFilters() {
   const search = document.getElementById('search');
@@ -45,6 +58,7 @@ function setupFilters() {
   const dateTo = document.getElementById('date-to');
   const catFilter = document.getElementById('category-filter');
   const townFilter = document.getElementById('town-filter');
+  const sourceFilter = document.getElementById('source-filter');
   const clearBtn = document.getElementById('clear-filters');
 
   search.addEventListener('input', () => { state.filters.q = search.value.trim(); render(); });
@@ -52,6 +66,7 @@ function setupFilters() {
   dateTo.addEventListener('change', () => { state.filters.dateTo = dateTo.value; render(); });
   catFilter.addEventListener('change', () => { state.filters.category = catFilter.value; render(); });
   townFilter.addEventListener('change', () => { state.filters.town = townFilter.value; render(); });
+  sourceFilter.addEventListener('change', () => { state.filters.source = sourceFilter.value; render(); });
 
   clearBtn.addEventListener('click', () => {
     search.value = '';
@@ -59,13 +74,14 @@ function setupFilters() {
     dateTo.value = '';
     catFilter.value = '';
     townFilter.value = '';
-    state.filters = { q: '', dateFrom: '', dateTo: '', category: '', town: '' };
+    sourceFilter.value = '';
+    state.filters = { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' };
     render();
   });
 }
 
 function applyFilters() {
-  const { q, dateFrom, dateTo, category, town } = state.filters;
+  const { q, dateFrom, dateTo, category, town, source } = state.filters;
   const ql = q.toLowerCase();
 
   return state.events
@@ -77,6 +93,7 @@ function applyFilters() {
       if (dateTo && e.date > dateTo) return false;
       if (category && e.category !== category) return false;
       if (town && e.town !== town) return false;
+      if (source && e.source !== source) return false;
       return true;
     })
     .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
