@@ -1,10 +1,14 @@
+from .amherst_athletics import AmherstAthleticsScraper
 from .amherst_cinema import AmherstCinemaScraper
 from .claude_scraper import load_claude_scrapers
 from .umass import UMassScraper
+from .umass_athletics import UMassAthleticsScraper
 
 # Hand-written scrapers (kept for sources with reliable structured data)
 STATIC_SCRAPERS = [
     UMassScraper,
+    UMassAthleticsScraper,
+    AmherstAthleticsScraper,
     AmherstCinemaScraper,
 ]
 

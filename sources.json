@@ -43,20 +43,6 @@
       "type": "html"
     },
     {
-      "name": "umass-athletics",
-      "url": "https://umassathletics.com/calendar",
-      "venue": "UMass Athletics",
-      "town": "Amherst",
-      "type": "html"
-    },
-    {
-      "name": "amherst-college-athletics",
-      "url": "https://athletics.amherst.edu/calendar",
-      "venue": "Amherst College Athletics",
-      "town": "Amherst",
-      "type": "playwright"
-    },
-    {
       "name": "town-of-amherst",
       "url": "https://www.amherstma.gov/Calendar.aspx",
       "venue": "Various Amherst Venues",
