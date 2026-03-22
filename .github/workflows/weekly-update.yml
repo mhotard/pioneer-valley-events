@@ -30,13 +30,13 @@ jobs:
       - name: Check for changes
         id: diff
         run: |
-          git diff --quiet site/data/events.json || echo "changed=true" >> $GITHUB_OUTPUT
+          git diff --quiet docs/data/events.json || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push updated events
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add site/data/events.json
+          git add docs/data/events.json
           git commit -m "chore: weekly event update $(date -u +'%Y-%m-%d')"
           git push

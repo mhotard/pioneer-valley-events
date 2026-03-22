@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Pioneer Valley Events — Pipeline
-Run this script to scrape all sources, deduplicate, and update site/data/events.json.
+Run this script to scrape all sources, deduplicate, and update docs/data/events.json.
 
 Usage:
     python pipeline.py               # run all scrapers
@@ -18,7 +18,7 @@ from difflib import SequenceMatcher
 
 from scrapers import ALL_SCRAPERS
 
-OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "site", "data", "events.json")
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 # Only include events within this window (past 3 days → future 90 days)
 DATE_MIN = (date.today() - timedelta(days=3)).isoformat()
 DATE_MAX = (date.today() + timedelta(days=90)).isoformat()

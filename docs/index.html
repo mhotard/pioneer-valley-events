@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pioneer Valley Events</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>Pioneer Valley Events</h1>
+        <p class="tagline">Amherst &middot; Northampton &middot; Easthampton &middot; and beyond</p>
+      </div>
+      <div class="view-switcher" role="group" aria-label="View mode">
+        <button class="view-btn active" data-view="list" title="List view">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+          List
+        </button>
+        <button class="view-btn" data-view="cards" title="Cards view">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          Cards
+        </button>
+        <button class="view-btn" data-view="calendar" title="Calendar view">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+          Calendar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="filters-bar">
+    <div class="filters-inner">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+        <input type="search" id="search" placeholder="Search events, venues..." autocomplete="off">
+      </div>
+      <div class="filter-group">
+        <label for="date-from" class="sr-only">From date</label>
+        <input type="date" id="date-from" title="From date">
+        <span class="date-sep">to</span>
+        <label for="date-to" class="sr-only">To date</label>
+        <input type="date" id="date-to" title="To date">
+      </div>
+      <div class="filter-group">
+        <select id="category-filter" aria-label="Filter by category">
+          <option value="">All categories</option>
+          <option value="music">Music</option>
+          <option value="arts">Arts &amp; Theater</option>
+          <option value="film">Film</option>
+          <option value="comedy">Comedy</option>
+          <option value="community">Community</option>
+          <option value="academia">Lectures &amp; Academia</option>
+          <option value="family">Family &amp; Kids</option>
+          <option value="food">Food &amp; Markets</option>
+          <option value="outdoor">Outdoor &amp; Sports</option>
+          <option value="festival">Festivals</option>
+        </select>
+        <select id="town-filter" aria-label="Filter by town">
+          <option value="">All towns</option>
+          <option value="Amherst">Amherst</option>
+          <option value="Northampton">Northampton</option>
+          <option value="Easthampton">Easthampton</option>
+          <option value="Hadley">Hadley</option>
+          <option value="South Hadley">South Hadley</option>
+          <option value="Greenfield">Greenfield</option>
+          <option value="Holyoke">Holyoke</option>
+          <option value="Springfield">Springfield</option>
+          <option value="Pioneer Valley">Regionwide</option>
+        </select>
+      </div>
+      <button id="clear-filters" class="clear-btn" aria-label="Clear filters">Clear</button>
+    </div>
+  </div>
+
+  <div class="results-bar">
+    <span id="result-count"></span>
+    <span id="last-updated"></span>
+  </div>
+
+  <main id="main-content">
+    <div id="events-container"></div>
+  </main>
+
+  <!-- Event detail modal -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>Pioneer Valley Events &mdash; community-built event aggregator</p>
+      <p class="footer-sub">Data updated weekly &middot; <a href="https://github.com" target="_blank" rel="noopener">Contribute on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
