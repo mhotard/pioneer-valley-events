@@ -22,13 +22,6 @@
       "type": "html"
     },
     {
-      "name": "jones-library",
-      "url": "https://www.joneslibrary.org/calendar.aspx",
-      "venue": "Jones Library",
-      "town": "Amherst",
-      "type": "html"
-    },
-    {
       "name": "eric-carle-museum",
       "url": "https://www.carlemuseum.org/events",
       "venue": "Eric Carle Museum of Picture Book Art",

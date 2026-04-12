@@ -1,0 +1,279 @@
+{
+  "events": [
+    {
+      "title": "Multicultural Festival",
+      "date": "2026-04-11",
+      "venue": "Amherst Town Common",
+      "town": "Amherst",
+      "category": "festival",
+      "time": "10:00 AM",
+      "end_time": "4:00 PM",
+      "description": "Annual multicultural celebration with food, music, and dance from communities across the Pioneer Valley."
+    },
+    {
+      "title": "Smith College Art Museum Open House",
+      "recurrence": "second Friday of each month",
+      "venue": "Smith College Museum of Art",
+      "town": "Northampton",
+      "category": "arts",
+      "time": "5:00 PM",
+      "end_time": "8:00 PM",
+      "description": "Free monthly open house at the Smith College Museum of Art.",
+      "url": "https://scma.smith.edu",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    {
+      "title": "GSH Summer Sizzlers (8K/5K)",
+      "recurrence": "every Wednesday",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "Weekly 8K and 5K run series.",
+      "start_date": "2026-04-22",
+      "end_date": "2026-08-26"
+    },
+    {
+      "title": "GSH Summer Sizzlers (8K/5K)",
+      "date": "2026-04-19",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "8K and 5K run. Season opener (Sunday)."
+    },
+    {
+      "title": "Holyoke Elk's Cross-Country Race (8K/5K)",
+      "recurrence": "every Thursday",
+      "venue": "Holyoke",
+      "town": "Holyoke",
+      "category": "outdoor",
+      "description": "Weekly 8K and 5K cross-country run series.",
+      "start_date": "2026-04-16",
+      "end_date": "2026-07-30"
+    },
+    {
+      "title": "Syrup Stampede 5K & 2K",
+      "date": "2026-04-12",
+      "venue": "Florence",
+      "town": "Northampton",
+      "category": "outdoor",
+      "description": "5K and 2K run in Florence."
+    },
+    {
+      "title": "MacDuffie Run for Hope 5K",
+      "date": "2026-04-25",
+      "venue": "Granby",
+      "town": "Granby",
+      "category": "outdoor",
+      "description": "5K run and kids run."
+    },
+    {
+      "title": "UMass 5K Dash & Dine",
+      "date": "2026-04-25",
+      "venue": "UMass Amherst",
+      "town": "Amherst",
+      "category": "outdoor",
+      "description": "5K run and kids run at UMass."
+    },
+    {
+      "title": "Veterans in Motion 5K",
+      "date": "2026-04-25",
+      "venue": "Haydenville",
+      "town": "Haydenville",
+      "category": "outdoor",
+      "description": "5K and 1.5 mile run."
+    },
+    {
+      "title": "Daffodil Run 5K/10K",
+      "date": "2026-04-26",
+      "venue": "Amherst",
+      "town": "Amherst",
+      "category": "outdoor",
+      "description": "10K and 5K run in Amherst."
+    },
+    {
+      "title": "Dandelion Dash and Mushroom Mile",
+      "date": "2026-05-03",
+      "venue": "Hadley",
+      "town": "Hadley",
+      "category": "outdoor",
+      "description": "5K and 1 mile run in Hadley."
+    },
+    {
+      "title": "Runway 5K",
+      "date": "2026-05-03",
+      "venue": "Northampton",
+      "town": "Northampton",
+      "category": "outdoor",
+      "description": "5K run in Northampton."
+    },
+    {
+      "title": "Baystate Health Nurses Week 5K",
+      "date": "2026-05-09",
+      "venue": "Holyoke",
+      "town": "Holyoke",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Run with the Lions 5K",
+      "date": "2026-05-09",
+      "venue": "Southampton",
+      "town": "Southampton",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Lauren's Haven 5K Run/Walk",
+      "date": "2026-05-16",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run/walk."
+    },
+    {
+      "title": "Celebrate Kate 5K",
+      "date": "2026-05-17",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run. Virtual option available."
+    },
+    {
+      "title": "Outrun Hunger 5K",
+      "date": "2026-05-17",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K and 1 mile run. Virtual option available."
+    },
+    {
+      "title": "Memorial Day 5K",
+      "date": "2026-05-23",
+      "venue": "Ware",
+      "town": "Ware",
+      "category": "outdoor",
+      "description": "5K run in Ware."
+    },
+    {
+      "title": "Pound the Pavement 5K",
+      "date": "2026-06-06",
+      "venue": "Sunderland",
+      "town": "Sunderland",
+      "category": "outdoor",
+      "description": "5K run and kids run."
+    },
+    {
+      "title": "Holyoke Pride Rainbow Run 5K",
+      "date": "2026-06-13",
+      "venue": "Holyoke",
+      "town": "Holyoke",
+      "category": "outdoor",
+      "description": "5K run for Holyoke Pride."
+    },
+    {
+      "title": "Whoopie Pie Waddle 5K",
+      "date": "2026-06-14",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Father's Day Road Race (10K/5K)",
+      "date": "2026-06-21",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "10K, 5K, and 1 mile run."
+    },
+    {
+      "title": "Springfield's Big Fourth 5K",
+      "date": "2026-07-04",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run on the Fourth of July."
+    },
+    {
+      "title": "Holy Cannoli 5K",
+      "date": "2026-07-11",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K and 2 mile run."
+    },
+    {
+      "title": "Mentoring Matters 5K",
+      "date": "2026-08-08",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run. Virtual option available."
+    },
+    {
+      "title": "Springfield Puerto Rican Parade Pa'lante 5K",
+      "date": "2026-09-12",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Colby's Path to the Cure 5K",
+      "date": "2026-09-19",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Don Maynard Memorial 5 Miler",
+      "date": "2026-09-19",
+      "venue": "Greenfield",
+      "town": "Greenfield",
+      "category": "outdoor",
+      "description": "5K run in Greenfield."
+    },
+    {
+      "title": "Summit Run 5K",
+      "date": "2026-09-20",
+      "venue": "Hadley",
+      "town": "Hadley",
+      "category": "outdoor",
+      "description": "5K run in Hadley."
+    },
+    {
+      "title": "La Bonita Vecindad 5K",
+      "date": "2026-09-26",
+      "venue": "Springfield",
+      "town": "Springfield",
+      "category": "outdoor",
+      "description": "5K run."
+    },
+    {
+      "title": "Westover Run the Runway 5K",
+      "date": "2026-10-03",
+      "venue": "Westover Air Reserve Base",
+      "town": "Chicopee",
+      "category": "outdoor",
+      "description": "5K run on the runway."
+    },
+    {
+      "title": "Happy Valley Half Marathon & 5K",
+      "date": "2026-10-18",
+      "venue": "Northampton",
+      "town": "Northampton",
+      "category": "outdoor",
+      "description": "Half marathon and 5K run."
+    },
+    {
+      "title": "Ludlow Clocktower Classic 5K",
+      "date": "2026-10-24",
+      "venue": "Ludlow",
+      "town": "Ludlow",
+      "category": "outdoor",
+      "description": "5K run."
+    }
+  ]
+}
