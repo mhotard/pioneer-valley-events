@@ -90,6 +90,13 @@
       "venue": "Various Hampshire County Venues",
       "town": "Pioneer Valley",
       "type": "html"
+    },
+    {
+      "name": "harriers-race-calendar",
+      "url": "https://harriers.org/Calendar/wmracecalendar.html",
+      "venue": "Various Western Mass Venues",
+      "town": "Pioneer Valley",
+      "type": "html"
     }
   ]
 }

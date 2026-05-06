@@ -12,7 +12,7 @@
       "time": "10:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and fascinating demonstrations. Meet sheep and lambs up close, watch sheepdogs at work, and participate in washing, carding, dyeing, and weaving wool.",
+      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and demonstrations. Meet sheep and lambs, watch sheepdogs, see shearing, spinning, weaving. Visitors can wash, card, dye, and weave wool or enjoy games and crafts.",
       "url": "https://www.historic-deerfield.org/events/wooly-wonders/",
       "image_url": null
     },
@@ -27,7 +27,7 @@
       "time": "11:00 AM",
       "end_time": "6:00 PM",
       "address": "",
-      "description": "Annual celebration of pride with an iconic parade starting at 11 a.m. and a festival in the Armory Street lot behind Thornes Marketplace. Features family-friendly drag shows, music by local queer and diverse performers, vendors, and more.",
+      "description": "Day of joy celebrating Hampshire Pride with iconic parade starting at 11 a.m. and festival in Armory Street lot with vendors, drag shows, music by local queer and diverse performers.",
       "url": "https://www.hampshirepridema.com/",
       "image_url": null
     },
@@ -42,7 +42,7 @@
       "time": "2:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Andrus Madsen and the Arcadia Players ensemble present overtures by Georg Philipp Telemann, Johann Caspar Fischer, and Johann Bernhard Bach, including Telemann's Hamburg overture celebrating the River Elbe.",
+      "description": "Andrus Madsen and the Arcadia Players ensemble present overtures by Georg Philipp Telemann, Johann Caspar Fischer, and Johann Bernhard Bach.",
       "url": "https://www.arcadiaplayers.org/",
       "image_url": null
     },
@@ -57,7 +57,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Cesar Franck's Symphony in D anchors a powerful program of hope. Concert opens with Verdi's iconic overture La Forza del Destino and features Brahms's Gesang der Parzen with orchestra and chorus.",
+      "description": "Cesar Franck's Symphony in D anchors a powerful program. Concert opens with Verdi's La Forza del Destino overture and includes Brahms's Gesang der Parzen with orchestra and chorus.",
       "url": "https://www.pvsoc.org/event-details/87th-season-finale-destiny-and-will",
       "image_url": null
     },
@@ -72,7 +72,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "A new high school a cappella event featuring Revolution from Springfield Conservatory of the Arts, the Hamptones from Northampton High School, and the BHS Madrigals from Brattleboro Union High School. Emceed by actor Naheem Garcia with special performance by Javier Colon.",
+      "description": "High school a cappella event with Revolution, Hamptones, and BHS Madrigals. Emceed by Naheem Garcia with special performance by Javier Colon, Season 1 winner of NBC's The Voice.",
       "url": "https://www.springfieldconservatoryofthearts.com/",
       "image_url": null
     },
@@ -87,7 +87,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Courtney Lewis conducts a program featuring Respighi's Ancient Airs and Dances, violinist Charles Yang in Kris Bowers' concerto 'For a Younger Self,' and Brahms' Symphony No. 2.",
+      "description": "Courtney Lewis conducts a program with Respighi's Ancient Airs and Dances, violinist Charles Yang performing Kris Bowers' 'For a Younger Self,' and Brahms' Symphony No. 2.",
       "url": "https://www.springfieldsymphony.org/event/brahms-a-modern-voice/",
       "image_url": null
     },
@@ -102,7 +102,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring America's next generation of circus artists. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
+      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring soon-to-be graduates of NECCA's 3-year professional training program. Tells the story of a community navigating trials and growing together.",
       "url": "https://hopecenterforthearts.org/events/broken-open-saturday/",
       "image_url": null
     },
@@ -117,7 +117,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Ralph Alessi is an ECM recording artist and acclaimed American jazz trumpeter, composer, and educator. He blends classical precision with avant-garde jazz, collaborating with many prominent musicians.",
+      "description": "ECM recording artist Ralph Alessi, acclaimed jazz trumpeter, composer, and educator performs with his quartet. His versatility blends classical precision with avant-garde jazz.",
       "url": "https://www.jazzshares.org/events/ralph-alessi-quartet",
       "image_url": null
     },
@@ -132,7 +132,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "A special evening of live performance with Emily Wells (vocals, violin, keys, synths, drums) and special guest artists including Hannah Berube, Kirin McElwain, Che Ali, Philip McGinty, and Michi Wiancko.",
+      "description": "Special evening with renowned vocalist, composer, and video artist Emily Wells and special guest artists including Hannah Berube, Kirin McElwain, Che Ali, Philip McGinty, and Michi Wiancko. Culminates a week-long residency.",
       "url": "https://www.antennacloudfarm.com/",
       "image_url": null
     },
@@ -143,11 +143,11 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm-culture",
-      "category": "family",
+      "category": "community",
       "time": "9:30 AM",
       "end_time": "3:00 PM",
       "address": "",
-      "description": "Joint meeting and judged primrose show hosted by the New England Chapter of the American Primrose Society and the Berkshire Chapter of the North American Rock Garden Society. Includes presentations by Jodie Mitchell, owner of Barnhaven Primroses.",
+      "description": "Joint meeting of the New England Chapter of the American Primrose Society and Berkshire Chapter of the North American Rock Garden Society with primrose show and presentations by Jodie Mitchell, owner of Barnhaven Primroses in France.",
       "url": "https://www.berkshirebotanical.org/gathering-primroses-springs-most-charming-flowers-take-center-stage",
       "image_url": null
     },
@@ -192,7 +192,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Week-long celebration of children's literature happening across Berkshire, Franklin, Hampden, and Hampshire counties. Showcases Massachusetts-based children's authors with story time readings, school visits, library events, community workshops, and more.",
+      "description": "Week-long celebration of children's literature across Berkshire, Franklin, Hampden, and Hampshire counties featuring Massachusetts-based authors with story readings, school visits, library events, workshops, and more.",
       "url": "https://www.makidslitfest.org/festival-calendar",
       "image_url": null
     },
@@ -207,7 +207,7 @@
       "time": "10:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and fascinating demonstrations. Meet sheep and lambs up close, watch sheepdogs at work, and participate in washing, carding, dyeing, and weaving wool.",
+      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and demonstrations. Meet sheep and lambs, watch sheepdogs, see shearing, spinning, weaving. Visitors can wash, card, dye, and weave wool or enjoy games and crafts.",
       "url": "https://www.historic-deerfield.org/events/wooly-wonders/",
       "image_url": null
     },
@@ -222,7 +222,7 @@
       "time": "1:00 PM",
       "end_time": "",
       "address": "",
-      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring America's next generation of circus artists. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
+      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring soon-to-be graduates of NECCA's 3-year professional training program. Tells the story of a community navigating trials and growing together.",
       "url": "https://hopecenterforthearts.org/events/broken-open-saturday/",
       "image_url": null
     },
@@ -237,23 +237,23 @@
       "time": "3:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Season finale concert featuring winning composition 'Soaring Over the White Mountains' by David Vess from the biennial composition competition, along with works by Aaron Copland, Florence Price, and Gwyneth Walker. Free and open to the public.",
+      "description": "Holyoke Civic Symphony presents winning composition 'Soaring Over the White Mountains' by David Vess and works by Aaron Copland, Florence Price, and Gwyneth Walker. Free and open to the public.",
       "url": "https://holyokecivicsymphony.org/season/2025-2026-the-stories-we-tell/an-american-story",
       "image_url": null
     },
     {
-      "id": "evt-f684f49243",
-      "title": "Monday Night Tango in Hadley, Beginner-Friendly Series",
-      "date": "2026-05-04",
+      "id": "evt-09a3910062",
+      "title": "New Exhibition opens at SCMA: \"Don't mind if I do\"",
+      "date": "2026-05-05",
       "venue": "Various Northampton Venues",
       "town": "Northampton",
       "source": "northampton-live",
       "category": "arts",
-      "time": "7:00 PM",
-      "end_time": "10:00 PM",
+      "time": "",
+      "end_time": "",
       "address": "",
-      "description": "A warm weekly tango night in Hadley. Start with a beginner-friendly class.",
-      "url": "/events/monday-night-tango-in-hadley-beginner-friendly-series",
+      "description": "Find a comfortable seat and see the Smith College Museum of Art a little differently. \"Don't mind if …",
+      "url": "",
       "image_url": null
     },
     {
@@ -293,12 +293,27 @@
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "academia",
+      "category": "community",
       "time": "1:00 PM",
       "end_time": "3:00 PM",
       "address": "",
       "description": "RECEIVED: 5/1/26, 10:11 am. LIST OF TOPICS: Click \"More Details\" for List of Topics",
       "url": "/Calendar.aspx?EID=35303&month=5&year=2026&day=5&calType=0",
+      "image_url": null
+    },
+    {
+      "id": "evt-0ec0fffb70",
+      "title": "Tuesday Farmers' Market",
+      "date": "2026-05-05",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "food",
+      "time": "1:30 PM",
+      "end_time": "6:30 PM",
+      "address": "",
+      "description": "Every Tuesday, 1:30-6:30pm on the Plaza behind Thornes Marketplace in downtown Northampton. April …",
+      "url": "",
       "image_url": null
     },
     {
@@ -422,6 +437,21 @@
       "image_url": "https://localist-images.azureedge.net/photos/51825259461396/huge/79cd7329ea75f34e6a3a63a4be3d0334e3e5ba79.jpg"
     },
     {
+      "id": "evt-393f092517",
+      "title": "Monday Night Tango in Hadley, Beginner-Friendly Series",
+      "date": "2026-05-05",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "community",
+      "time": "7:00 PM",
+      "end_time": "10:00 PM",
+      "address": "",
+      "description": "No class Memorial Day (May 25)! A warm weekly tango night in Hadley. Start with a beginner-friendly …",
+      "url": "",
+      "image_url": null
+    },
+    {
       "id": "evt-93edd05d84",
       "title": "All Campus Choir",
       "date": "2026-05-05",
@@ -447,8 +477,8 @@
       "time": "7:30 PM",
       "end_time": "10:30 PM",
       "address": "",
-      "description": "Tenor saxophonist Houston Person will perform with the Green Street Trio at City Sports Grille.",
-      "url": "/events/saxophonist-houston-person-in-concert",
+      "description": "Tenor saxophonist Houston Person will perform with the Green Street Trio at City Sports Grille in …",
+      "url": "",
       "image_url": null
     },
     {
@@ -462,8 +492,8 @@
       "time": "9:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing Grateful Dead music.",
-      "url": "/events/dead-night-grateful-dead-cover-2026-05-05",
+      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing …",
+      "url": "",
       "image_url": null
     },
     {
@@ -492,7 +522,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "70 Boltwood Walk",
+      "description": "",
       "url": "/Calendar.aspx?EID=32022&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -642,7 +672,7 @@
       "time": "5:00 PM",
       "end_time": "7:00 PM",
       "address": "",
-      "description": "RECEIVED: 5/1/26 at 12:03 p.m. Topics include: Meeting Opens, Review and Receive Meeting Minutes from April 15th, 2026, Public Comment, Old Business (SAPHE 2.0), New Business (52 Elf Hill Rd Request for Variance), Director's Update and more.",
+      "description": "RECEIVED: 5/1/26 at 12:03 p.m. Topics include: Meeting Opens, Review and Receive Meeting Minutes, Public Comment, Old Business, New Business, Director's Update",
       "url": "/Calendar.aspx?EID=35304&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -717,8 +747,8 @@
       "time": "7:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "The Reverend Peyton's Big Damn Band live performance. Door Time: 6:00 PM, Show Time: 7:00 PM",
-      "url": "/events/the-reverend-peyton-s-big-damn2026-05-06",
+      "description": "The Reverend Peyton's Big Damn Band Wednesday, May 6th, 2026, Door Time: 6:00 PM Show Time: 7:00 PM …",
+      "url": "https://www.bandsintown.com/t/108016516?app_id=pkvts0on0m&came_from=287&utm_medium=api&utm_source=partner_api&utm_campaign=ticket",
       "image_url": null
     },
     {
@@ -732,8 +762,8 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Celebrate West African Music and Dance with Drummers and Dancers of Wofa.",
-      "url": "/events/valerie-naranjo-and-barry-olsen-featuring-wofa-drummers-and-da2026-05-06",
+      "description": "Come celebrate West African Music and Dance with Drummers and Dancers of **Wofa** in collaboration …",
+      "url": "https://bombyx.live/events/valerie-naranjo-and-barry-olsen/",
       "image_url": null
     },
     {
@@ -762,8 +792,8 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "paris_monster at The Parlor Room. Doors 7:00pm, Show 7:30pm",
-      "url": "/events/paris-monster",
+      "description": "paris_monster at The Parlor Room Wednesday, May 6th SHOW: 7:30pm / DOORS: 7:00pm TICKETS STARTING …",
+      "url": "https://theparlorroom.my.salesforce-sites.com/ticket/#/events/a0SV500000BB9b7MAD",
       "image_url": null
     },
     {
@@ -957,7 +987,7 @@
       "time": "6:00 PM",
       "end_time": "6:30 PM",
       "address": "",
-      "description": "RECEIVED: 5/4/26 at 2:18 p.m. Meeting includes Call to Order, Standing Business, Executive Session regarding strategy sessions in preparation for negotiations with nonunion personnel.",
+      "description": "RECEIVED: 5/4/26 at 2:18 p.m. Meeting Opening and Standing Business, Executive Session regarding negotiations with nonunion personnel",
       "url": "/Calendar.aspx?EID=35311&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -972,7 +1002,7 @@
       "time": "6:30 PM",
       "end_time": "9:00 PM",
       "address": "",
-      "description": "REVISED: 5/5/26 at 1:10 p.m. Hybrid Meeting. Topics include Call to Order, Public comments, Approve minutes, Warrants, Review of selected school committee policies, Student Safety and Welfare discussions.",
+      "description": "REVISED: 5/5/26 at 1:10 p.m. Topics include: Call to Order, Public comments, Approve minutes, Warrants, School committee policies",
       "url": "/Calendar.aspx?EID=35308&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -1017,8 +1047,8 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Acclaimed Canadian folk singer, songwriter, and musician Rose Cousins performs.",
-      "url": "/events/rose-cousins-at-the-parlor-room",
+      "description": "Rose Cousins at The Parlor Room May 7th, 2026 Acclaimed Canadian folk singer, songwriter, and …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1152,8 +1182,8 @@
       "time": "4:00 PM",
       "end_time": "8:00 PM",
       "address": "",
-      "description": "Visit SCMA for art, making, and community. From 4–7 p.m. try your hand at art activities.",
-      "url": "/events/may-8-second-friday-at-the-smith-college-museum-of-art",
+      "description": "Visit the SCMA on May 8 from 4–8 p.m. for art, making, and community. From 4–7 p.m. Try your hand at …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1182,8 +1212,8 @@
       "time": "5:00 PM",
       "end_time": "",
       "address": "",
-      "description": "A high flying family circus show combining circus and theater.",
-      "url": "/events/circus-springboard-broken-open",
+      "description": "A high flying family circus show combining circus and theater in which a community navigates the …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1197,8 +1227,8 @@
       "time": "5:00 PM",
       "end_time": "7:00 PM",
       "address": "",
-      "description": "Two-person exhibition by Northampton artists Maren Brown and Jo Smith featuring mixed media work.",
-      "url": "/events/the-connected-unconscious",
+      "description": "Northampton artists Maren Brown and Jo Smith in a two-person exhibition featuring Brown's …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1242,8 +1272,8 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Max Wareham performs at The Parlor Room. Whether on archaeological digs or translating various mediums.",
-      "url": "/events/max-wareham",
+      "description": "Max Wareham at The Parlor Room May 8th, 2026 7:30 PM Whether on archaeological digs or translating …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1332,8 +1362,8 @@
       "time": "10:30 AM",
       "end_time": "",
       "address": "",
-      "description": "The Berkshire Athenaeum and Berkshire County Head Start host acclaimed children's author.",
-      "url": "/events/mass-kids-lit-fest-comes-to-the-berkshire-athenaeum",
+      "description": "The Berkshire Athenaeum and Berkshire County Head Start will host acclaimed children's author Carol …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1362,7 +1392,7 @@
       "time": "11:00 AM",
       "end_time": "3:00 PM",
       "address": "",
-      "description": "Collaborative event organized by Youth Fighting for a Sustainable Future with workshops on composting, recycling, and lowering energy use. Features information on alternative energy, vegetarian/vegan food options, live music, games, and vendors. Free and open to the public.",
+      "description": "Collaborative event with workshops on composting, recycling, energy use, alternative energy, vegetarian/vegan food, live music, games, and vendors. Free and open to the public.",
       "url": "https://www.longmeadowma.gov/calendar.aspx?EID=5580",
       "image_url": null
     },
@@ -1407,8 +1437,8 @@
       "time": "11:00 AM",
       "end_time": "12:00 PM",
       "address": "",
-      "description": "Calling all fans of Dragon Masters early reader series! Bestselling author Tracey West is coming.",
-      "url": "/events/dragon-masters-palooza-with-author-tracey-west",
+      "description": "Calling all fans of the Dragon Masters early reader series! Bestselling author Tracey West is coming …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1418,12 +1448,12 @@
       "venue": "Various Northampton Venues",
       "town": "Northampton",
       "source": "northampton-live",
-      "category": "family",
+      "category": "arts",
       "time": "1:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Pioneer Valley Ballet presents Cinderella… With A Twist.",
-      "url": "/events/cinderella-with-a-twist",
+      "description": "Pioneer Valley Ballet presents Cinderella… With A Twist on Saturday, May 9 at the Academy of Music …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1452,7 +1482,7 @@
       "time": "3:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Satire of big business and big religion set in a smoky speakeasy where gangsters do deals and the Salvation Army saves souls. Features unforgettable score with 'Bilbao Song,' 'Mandalay Song,' and 'Surabaya Johnny.'",
+      "description": "Satire of big business and big religion set in a speakeasy where gangsters and the Salvation Army converge. Features unforgettable score including 'Bilbao Song,' 'Mandalay Song,' and 'Surabaya Johnny.'",
       "url": "https://events.clarkart.edu/detail/5224",
       "image_url": null
     },
@@ -1467,8 +1497,8 @@
       "time": "3:00 PM",
       "end_time": "8:30 PM",
       "address": "",
-      "description": "Join a Flo Fest Fundraiser night at JJ's. Come hang out and grab food.",
-      "url": "/events/party-at-jjs-flo-fest-fundraiser",
+      "description": "Please join us on Saturday, May 9th for a Flo Fest Fundraiser night at JJ's.Come hang out, grab a …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1497,8 +1527,8 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Ari & Mia at The Parlor Room. Doors 7:00pm, Show 7:30pm. Tickets starting at $24",
-      "url": "/events/mia",
+      "description": "Ari & Mia at The Parlor Room Saturday, May 9th SHOW: 7:30pm / DOORS: 7:00pm TICKETS STARTING AT: $24 …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1512,7 +1542,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "170 Chestnut St",
+      "description": "",
       "url": "/Calendar.aspx?EID=35158&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -1632,8 +1662,8 @@
       "time": "6:00 PM",
       "end_time": "8:00 PM",
       "address": "",
-      "description": "Create community on second Sundays of every month with a virtual open mic on Zoom.",
-      "url": "/events/second-sundays-virtual-ope2026-05-10",
+      "description": "Come create community on second Sundays of every month 6-8pm EST with a virtual open mic on zoom. …",
+      "url": "",
       "image_url": null
     },
     {
@@ -1648,7 +1678,22 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/events/cello-chocolate-5-10-26",
+      "url": "",
+      "image_url": null
+    },
+    {
+      "id": "evt-6309bf95ab",
+      "title": "EORC Stanley Park 3mi XC",
+      "date": "2026-05-11",
+      "venue": "Various Western Mass Venues",
+      "town": "Pioneer Valley",
+      "source": "harriers-race-calendar",
+      "category": "outdoor",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "Each Monday, Starts Apr 27th thru August 24th. Empire One Running Club at Stanley Park, Westfield, MA",
+      "url": "http://empireonerunningclub.org/cross-country-races/",
       "image_url": null
     },
     {
@@ -1752,8 +1797,23 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "70 Boltwood Walk",
+      "description": "",
       "url": "/Calendar.aspx?EID=35289&month=5&year=2026&day=5&calType=0",
+      "image_url": null
+    },
+    {
+      "id": "evt-fd026562d6",
+      "title": "SMAC Grant 5K XC Races",
+      "date": "2026-05-12",
+      "venue": "Various Western Mass Venues",
+      "town": "Pioneer Valley",
+      "source": "harriers-race-calendar",
+      "category": "outdoor",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "Each Tuesday, Starts Apr 7th thru August 25th. Sugarloaf Mountain AC at Northampton, MA",
+      "url": "http://sugarloafmountainathletic.org/Results/northampton-grant-5k-cross-country-races/",
       "image_url": null
     },
     {
@@ -1877,18 +1937,18 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/ErupcjaWeb.jpg?itok=tnDFa0z3"
     },
     {
-      "id": "evt-0a6ec83cf5",
-      "title": "GSH Summer Sizzlers (8K/5K)",
+      "id": "evt-8cece6980c",
+      "title": "GSH Summer Sizzlers",
       "date": "2026-05-13",
-      "venue": "Springfield",
-      "town": "Springfield",
-      "source": "community",
+      "venue": "Various Western Mass Venues",
+      "town": "Pioneer Valley",
+      "source": "harriers-race-calendar",
       "category": "outdoor",
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Weekly 8K and 5K run series.",
-      "url": "",
+      "description": "Each Wednesday, Starts Sun Apr 19th 5KM XC then each Wed alt wk 8K-Road/5K-XC thru August 26th. Greater Springfield Harriers at Forest Park, Springfield, MA",
+      "url": "http://www.harriers.org/SummerSizzler/index.html",
       "image_url": null
     },
     {
@@ -1902,7 +1962,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Triangle St",
+      "description": "",
       "url": "/Calendar.aspx?EID=35132&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -1917,7 +1977,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "70 Boltwood Walk",
+      "description": "",
       "url": "/Calendar.aspx?EID=32023&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
@@ -1979,6 +2039,21 @@
       "address": "",
       "description": "Weekly 8K and 5K cross-country run series.",
       "url": "",
+      "image_url": null
+    },
+    {
+      "id": "evt-a02bd35909",
+      "title": "EORC Holyoke Elks XC",
+      "date": "2026-05-14",
+      "venue": "Various Western Mass Venues",
+      "town": "Pioneer Valley",
+      "source": "harriers-race-calendar",
+      "category": "outdoor",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "Each Thursday, Start Apr 7th thru September 24th. Empire One Running Club at Holyoke Lodge of Elks, Holyoke, MA",
+      "url": "http://empireonerunningclub.org/cross-country-races/",
       "image_url": null
     },
     {
@@ -2112,7 +2187,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "New York Times bestselling author discusses The Dream Atlas, a gorgeously illustrated guide with thirteen months of progressive exercises to aid in deeper, more meaningful dreaming. Fiona Cook is a mother, home health care worker, community gardener, and writer.",
+      "description": "New York Times bestselling author discusses The Dream Atlas, a gorgeously illustrated guide with thirteen months of progressive exercises for deeper, meaningful dreaming.",
       "url": "https://odysseybks.com/event/2026-05-14/fiona-cook-person",
       "image_url": null
     },
@@ -2273,11 +2348,11 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm-culture",
-      "category": "arts",
+      "category": "academia",
       "time": "10:00 AM",
       "end_time": "12:00 PM",
       "address": "",
-      "description": "Mark the 140th anniversary of Emily Dickinson's death with a walk through downtown Amherst. Explores Amherst's cultural landscape and significance to the poet. Walk at your own pace to Dickinson's grave in West Cemetery for final poems and lemonade toast. Free, registration required.",
+      "description": "Mark the 140th anniversary of Emily Dickinson's death with a walk through downtown Amherst. Explore Amherst's cultural landscape and its significance to the poet. Registration required.",
       "url": "https://www.emilydickinsonmuseum.org/poetry-walk-2026/",
       "image_url": null
     },
@@ -2322,7 +2397,7 @@
       "time": "8:00 AM",
       "end_time": "11:00 AM",
       "address": "",
-      "description": "Cherished annual community event in Springfield celebrating the city's founding on May 14, 1636. Residents and visitors gather downtown to enjoy classic breakfast of pancakes, bacon, coffee, juice, and milk while connecting with neighbors.",
+      "description": "Cherished annual community event celebrating Springfield's founding on May 14, 1636. Enjoy pancakes, bacon, coffee, juice, and milk while connecting with neighbors and friends.",
       "url": "https://www.spiritofspringfield.org/events/worlds-largest-pancake-breakfast",
       "image_url": null
     },
@@ -2397,7 +2472,7 @@
       "time": "4:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Performance of Rachmaninoff's All-Night Vigil (also known as Vespers), a compilation of texts from three canonical hours of Eastern Orthodox church service. Illumine joined by Grammy-award-winning basso profundo Glenn Miller.",
+      "description": "Illumine joined by Grammy-award-winning basso profundo Glenn Miller performs Rachmaninoff's All-Night Vigil, a compilation of texts from Vespers, Matins, and the First Hour of Eastern Orthodox church service.",
       "url": "https://illuminechoir.org/#c4",
       "image_url": null
     },
@@ -2787,7 +2862,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "NEPM's Smart & Funny People series brings the acclaimed podcast Ear Hustle to the Iron Horse.",
+      "description": "NEPM's Smart & Funny People series brings the acclaimed podcast Ear Hustle to the Iron Horse on Saturday, May 30.",
       "url": "https://www.nepm.org/2026-03-17/ear-hustle-live",
       "image_url": null
     },
@@ -2822,8 +2897,8 @@
       "image_url": null
     },
     {
-      "id": "evt-b2b702b3f9",
-      "title": "Mr. Finn's Cabaret Summer 2026: An Evening with Judy Kuhn",
+      "id": "evt-97740b32e1",
+      "title": "Mr. Finn's Cabaret Summer 2026 - An Evening with Judy Kuhn",
       "date": "2026-05-31",
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
@@ -2832,13 +2907,13 @@
       "time": "8:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Tony Award nominee Judy Kuhn performs in Pittsfield for the first time, headlining the 2026 season of Mr. Finn's Cabaret. Lineup also includes performances from BSC Musical Theatre Conservatory and guest artists throughout the summer.",
+      "description": "Tony Award nominee Judy Kuhn headlines the 2026 season of Mr. Finn's Cabaret for the first time, with performances from the BSC Musical Theatre Conservatory and guest artists.",
       "url": "https://barringtonstageco.org/2026-season-shows/",
       "image_url": null
     },
     {
-      "id": "evt-8b6aa1a59b",
-      "title": "Mr. Finn's Cabaret Summer 2026: An Evening with Judy Kuhn",
+      "id": "evt-8490429a05",
+      "title": "Mr. Finn's Cabaret Summer 2026 - An Evening with Judy Kuhn",
       "date": "2026-06-01",
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
@@ -2847,7 +2922,7 @@
       "time": "8:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Tony Award nominee Judy Kuhn performs in Pittsfield for the first time, headlining the 2026 season of Mr. Finn's Cabaret. Lineup also includes performances from BSC Musical Theatre Conservatory and guest artists throughout the summer.",
+      "description": "Tony Award nominee Judy Kuhn headlines the 2026 season of Mr. Finn's Cabaret for the first time, with performances from the BSC Musical Theatre Conservatory and guest artists.",
       "url": "https://barringtonstageco.org/2026-season-shows/",
       "image_url": null
     },
