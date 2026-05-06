@@ -12,7 +12,7 @@
       "time": "10:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and demonstrations. Watch shearing, spinning, weaving, and more. Participate in washing, carding, dyeing, and weaving wool or enjoy games and crafts.",
+      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and fascinating demonstrations. Meet sheep and lambs up close, watch sheepdogs at work, and participate in washing, carding, dyeing, and weaving wool.",
       "url": "https://www.historic-deerfield.org/events/wooly-wonders/",
       "image_url": null
     },
@@ -27,7 +27,7 @@
       "time": "11:00 AM",
       "end_time": "6:00 PM",
       "address": "",
-      "description": "Hampshire Pride creates a space where people of all genders, sexual orientations, races, and ages can come together. Features an iconic parade starting at 11 a.m., festival with vendors, family-friendly drag shows and music by local queer performers.",
+      "description": "Annual celebration of pride with an iconic parade starting at 11 a.m. and a festival in the Armory Street lot behind Thornes Marketplace. Features family-friendly drag shows, music by local queer and diverse performers, vendors, and more.",
       "url": "https://www.hampshirepridema.com/",
       "image_url": null
     },
@@ -42,7 +42,7 @@
       "time": "2:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Andrus Madsen and the Arcadia Players ensemble present overtures by Telemann, Johann Caspar Fischer, and Johann Bernhard Bach. Telemann's overture captures the motion and character of Hamburg's River Elbe.",
+      "description": "Andrus Madsen and the Arcadia Players ensemble present overtures by Georg Philipp Telemann, Johann Caspar Fischer, and Johann Bernhard Bach, including Telemann's Hamburg overture celebrating the River Elbe.",
       "url": "https://www.arcadiaplayers.org/",
       "image_url": null
     },
@@ -57,7 +57,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Concert features Cesar Franck's Symphony in D anchoring a powerful program of hope. Opens with Verdi's overture to La Forza del Destino, then orchestra and chorus perform Brahms's Gesang der Parzen.",
+      "description": "Cesar Franck's Symphony in D anchors a powerful program of hope. Concert opens with Verdi's iconic overture La Forza del Destino and features Brahms's Gesang der Parzen with orchestra and chorus.",
       "url": "https://www.pvsoc.org/event-details/87th-season-finale-destiny-and-will",
       "image_url": null
     },
@@ -72,7 +72,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "A new high school a cappella event with Revolution, the Hamptones, and BHS Madrigals workshopping under college choral directors. Emceed by actor Naheem Garcia with special performance by Javier Colon, Season 1 winner of NBC's The Voice.",
+      "description": "A new high school a cappella event featuring Revolution from Springfield Conservatory of the Arts, the Hamptones from Northampton High School, and the BHS Madrigals from Brattleboro Union High School. Emceed by actor Naheem Garcia with special performance by Javier Colon.",
       "url": "https://www.springfieldconservatoryofthearts.com/",
       "image_url": null
     },
@@ -87,7 +87,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Courtney Lewis conducts a program beginning with Respighi's Ancient Airs and Dances. Violinist Charles Yang debuts with Kris Bowers' concerto. Concert closes with Brahms' Symphony No. 2.",
+      "description": "Courtney Lewis conducts a program featuring Respighi's Ancient Airs and Dances, violinist Charles Yang in Kris Bowers' concerto 'For a Younger Self,' and Brahms' Symphony No. 2.",
       "url": "https://www.springfieldsymphony.org/event/brahms-a-modern-voice/",
       "image_url": null
     },
@@ -102,7 +102,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "NECCA presents its annual Circus Springboard show featuring soon-to-be graduates of NECCA's 3-year professional training program. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
+      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring America's next generation of circus artists. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
       "url": "https://hopecenterforthearts.org/events/broken-open-saturday/",
       "image_url": null
     },
@@ -117,8 +117,23 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Ralph Alessi is an ECM recording artist and acclaimed American jazz trumpeter, composer, and educator. A native of San Rafael, California, he has collaborated with many prominent musicians.",
+      "description": "Ralph Alessi is an ECM recording artist and acclaimed American jazz trumpeter, composer, and educator. He blends classical precision with avant-garde jazz, collaborating with many prominent musicians.",
       "url": "https://www.jazzshares.org/events/ralph-alessi-quartet",
+      "image_url": null
+    },
+    {
+      "id": "evt-21ab40d318",
+      "title": "Antenna Cloud Farm presents Emily Wells & Friends",
+      "date": "2026-05-02",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "",
+      "address": "",
+      "description": "A special evening of live performance with Emily Wells (vocals, violin, keys, synths, drums) and special guest artists including Hannah Berube, Kirin McElwain, Che Ali, Philip McGinty, and Michi Wiancko.",
+      "url": "https://www.antennacloudfarm.com/",
       "image_url": null
     },
     {
@@ -128,11 +143,11 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm-culture",
-      "category": "community",
+      "category": "family",
       "time": "9:30 AM",
       "end_time": "3:00 PM",
       "address": "",
-      "description": "BBG hosts the New England Chapter of the American Primrose Society and Berkshire Chapter of the North American Rock Garden Society for their joint meeting and judged primrose show. Free presentations by Jodie Mitchell, owner of Barnhaven Primroses.",
+      "description": "Joint meeting and judged primrose show hosted by the New England Chapter of the American Primrose Society and the Berkshire Chapter of the North American Rock Garden Society. Includes presentations by Jodie Mitchell, owner of Barnhaven Primroses.",
       "url": "https://www.berkshirebotanical.org/gathering-primroses-springs-most-charming-flowers-take-center-stage",
       "image_url": null
     },
@@ -167,6 +182,21 @@
       "image_url": null
     },
     {
+      "id": "evt-79be624235",
+      "title": "Mass Kid's Lit Fest",
+      "date": "2026-05-03",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "family",
+      "time": "",
+      "end_time": "",
+      "address": "",
+      "description": "Week-long celebration of children's literature happening across Berkshire, Franklin, Hampden, and Hampshire counties. Showcases Massachusetts-based children's authors with story time readings, school visits, library events, community workshops, and more.",
+      "url": "https://www.makidslitfest.org/festival-calendar",
+      "image_url": null
+    },
+    {
       "id": "evt-4f8d8f5a31",
       "title": "Wooly Wonders Heritage Breed Sheep Weekend",
       "date": "2026-05-03",
@@ -177,7 +207,7 @@
       "time": "10:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and demonstrations. Watch shearing, spinning, weaving, and more. Participate in washing, carding, dyeing, and weaving wool or enjoy games and crafts.",
+      "description": "Get to know rare and historic heritage breed sheep with hands-on fun and fascinating demonstrations. Meet sheep and lambs up close, watch sheepdogs at work, and participate in washing, carding, dyeing, and weaving wool.",
       "url": "https://www.historic-deerfield.org/events/wooly-wonders/",
       "image_url": null
     },
@@ -192,8 +222,38 @@
       "time": "1:00 PM",
       "end_time": "",
       "address": "",
-      "description": "NECCA presents its annual Circus Springboard show featuring soon-to-be graduates of NECCA's 3-year professional training program. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
+      "description": "The New England Center for Circus Arts presents its annual Circus Springboard show featuring America's next generation of circus artists. Tells the story of a community navigating trials and tribulations of growing up and being torn apart.",
       "url": "https://hopecenterforthearts.org/events/broken-open-saturday/",
+      "image_url": null
+    },
+    {
+      "id": "evt-a03594345c",
+      "title": "The Holyoke Civic Symphony: An American Story",
+      "date": "2026-05-03",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "music",
+      "time": "3:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Season finale concert featuring winning composition 'Soaring Over the White Mountains' by David Vess from the biennial composition competition, along with works by Aaron Copland, Florence Price, and Gwyneth Walker. Free and open to the public.",
+      "url": "https://holyokecivicsymphony.org/season/2025-2026-the-stories-we-tell/an-american-story",
+      "image_url": null
+    },
+    {
+      "id": "evt-f684f49243",
+      "title": "Monday Night Tango in Hadley, Beginner-Friendly Series",
+      "date": "2026-05-04",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "arts",
+      "time": "7:00 PM",
+      "end_time": "10:00 PM",
+      "address": "",
+      "description": "A warm weekly tango night in Hadley. Start with a beginner-friendly class.",
+      "url": "/events/monday-night-tango-in-hadley-beginner-friendly-series",
       "image_url": null
     },
     {
@@ -212,21 +272,6 @@
       "image_url": "https://localist-images.azureedge.net/photos/51532476728210/huge/dff8f316ec33621d259ebc33b997f5e718637eb6.jpg"
     },
     {
-      "id": "evt-980ed1d994",
-      "title": "30th Anniversary Exhibition",
-      "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
-      "category": "arts",
-      "time": "10:00 AM",
-      "end_time": "5:00 PM",
-      "address": "",
-      "description": "",
-      "url": "event/30th-anniversary-exhib2026-05-05",
-      "image_url": null
-    },
-    {
       "id": "evt-e2c2ec2559",
       "title": "Adoption Across the Life Course: The Needs and Experiences of Adult Adoptees in the USA and UK",
       "date": "2026-05-05",
@@ -242,33 +287,18 @@
       "image_url": "https://localist-images.azureedge.net/assets/main/thumbs/event-huge-4820bb5c9e28a2cf4acef980a65992d6aee20211700fbe1494bea7af79aec963.png"
     },
     {
-      "id": "evt-bd734ddaf6",
-      "title": "SCMA Conversations: Decoding Caravaggio: Mysteries and Attributions in Sicily",
+      "id": "evt-cecbc982b2",
+      "title": "Finance Committee of the Town Council",
       "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
       "category": "academia",
-      "time": "12:00 PM",
-      "end_time": "1:00 PM",
+      "time": "1:00 PM",
+      "end_time": "3:00 PM",
       "address": "",
-      "description": "",
-      "url": "event/scma-conversations-decoding-caravaggio-mysteries-and-attributions-in-sicily",
-      "image_url": null
-    },
-    {
-      "id": "evt-09ffcceac3",
-      "title": "Captured Glimpses at Sunset In Our Town",
-      "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
-      "category": "arts",
-      "time": "2:00 PM",
-      "end_time": "7:00 PM",
-      "address": "",
-      "description": "",
-      "url": "event/captured-glimpses-at-sunset-in-our2026-05-05",
+      "description": "RECEIVED: 5/1/26, 10:11 am. LIST OF TOPICS: Click \"More Details\" for List of Topics",
+      "url": "/Calendar.aspx?EID=35303&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -302,36 +332,6 @@
       "image_url": "https://localist-images.azureedge.net/photos/52756418325287/huge/3f0bb71ce1fda33a32838ee952a18356ad5e7ef6.jpg"
     },
     {
-      "id": "evt-ccbe36c5d9",
-      "title": "Monarch and Mourning Cloak: Storytime with author and illustrator Sarah Brannen",
-      "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
-      "category": "family",
-      "time": "4:00 PM",
-      "end_time": "5:00 PM",
-      "address": "",
-      "description": "",
-      "url": "event/monarch-and-mourning-cloak-storytime-with-author-and-illustrator-sarah-brannen",
-      "image_url": null
-    },
-    {
-      "id": "evt-4f642481cb",
-      "title": "Cat Nap Storytime with Caldecott Honoree Brian Lies",
-      "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
-      "category": "family",
-      "time": "4:00 PM",
-      "end_time": "5:00 PM",
-      "address": "",
-      "description": "",
-      "url": "event/cat-nap-storytime-with-caldecott-honoree-brian-lies",
-      "image_url": null
-    },
-    {
       "id": "evt-77368b1687",
       "title": "Therapy Dog Hour at Stonewall Center",
       "date": "2026-05-05",
@@ -362,18 +362,18 @@
       "image_url": "https://localist-images.azureedge.net/photos/51073943185319/huge/56f9ed7593a9bf209e71a539887132119811542d.jpg"
     },
     {
-      "id": "evt-2ed5d19557",
-      "title": "Artist's Reception: \"Portals & Portmanteaux\" Daniel Hales' Travel Collages",
+      "id": "evt-ff0048334d",
+      "title": "Public Shade Tree Committee",
       "date": "2026-05-05",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "arts-hub-wma",
-      "category": "arts",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
       "time": "5:30 PM",
-      "end_time": "7:30 PM",
+      "end_time": "6:00 PM",
       "address": "",
-      "description": "",
-      "url": "event/artist-s-reception-portals-portmanteaux-daniel-hales-travel-collages",
+      "description": "Site visit to view the request to remove a 24\" oak to improve the sight line looking north from Clark Hill Road.",
+      "url": "/Calendar.aspx?EID=35285&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -437,6 +437,36 @@
       "image_url": "https://localist-images.azureedge.net/photos/52328918151526/huge/4e1c7f2797c9fdedfe9eb539009360413d418586.jpg"
     },
     {
+      "id": "evt-68c277ad03",
+      "title": "Saxophonist Houston Person in Concert",
+      "date": "2026-05-05",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "10:30 PM",
+      "address": "",
+      "description": "Tenor saxophonist Houston Person will perform with the Green Street Trio at City Sports Grille.",
+      "url": "/events/saxophonist-houston-person-in-concert",
+      "image_url": null
+    },
+    {
+      "id": "evt-e2049701a3",
+      "title": "Dead Night: Grateful Dead Cover Bands",
+      "date": "2026-05-05",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "9:00 PM",
+      "end_time": "12:00 AM",
+      "address": "",
+      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing Grateful Dead music.",
+      "url": "/events/dead-night-grateful-dead-cover-2026-05-05",
+      "image_url": null
+    },
+    {
       "id": "evt-76db913b86",
       "title": "GSH Summer Sizzlers (8K/5K)",
       "date": "2026-05-06",
@@ -462,8 +492,8 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "",
-      "url": "",
+      "description": "70 Boltwood Walk",
+      "url": "/Calendar.aspx?EID=32022&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -523,7 +553,7 @@
       "end_time": "2:00 PM",
       "address": "",
       "description": "A virtual workshop exploring how shifting motivation shapes your work",
-      "url": "/news-events/events/how-thrive-your-career-motivation-movement",
+      "url": "https://smith.edu/news-events/events/how-thrive-your-career-motivation-movement",
       "image_url": null
     },
     {
@@ -602,6 +632,21 @@
       "image_url": "https://localist-images.azureedge.net/photos/52690905545301/huge/46d2b163c28c55e433476b155b3ccfbd148675d3.jpg"
     },
     {
+      "id": "evt-96a6fe04fd",
+      "title": "Board of Health",
+      "date": "2026-05-06",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "5:00 PM",
+      "end_time": "7:00 PM",
+      "address": "",
+      "description": "RECEIVED: 5/1/26 at 12:03 p.m. Topics include: Meeting Opens, Review and Receive Meeting Minutes from April 15th, 2026, Public Comment, Old Business (SAPHE 2.0), New Business (52 Elf Hill Rd Request for Variance), Director's Update and more.",
+      "url": "/Calendar.aspx?EID=35304&month=5&year=2026&day=5&calType=0",
+      "image_url": null
+    },
+    {
       "id": "evt-d301fed5eb",
       "title": "LGBTQIA+ Talk Space",
       "date": "2026-05-06",
@@ -615,6 +660,21 @@
       "description": "This is a weekly drop-in group for students to socialize, make friends, and talk about topics like classes, mental health, and being LGBTQIA+. Open to all UMass and other Five College students. Sponsored by the Stonewall Center and CCPH. Meets weekly on Wednesdays from 6pm to 7:30pm.",
       "url": "https://events.umass.edu/event/lgbtqia-talk-space-3690",
       "image_url": "https://localist-images.azureedge.net/photos/51886743694956/huge/5aebfa5b4cfe6aec7247128afd5ef983f68297ad.jpg"
+    },
+    {
+      "id": "evt-34a507dfae",
+      "title": "Planning Board",
+      "date": "2026-05-06",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "6:30 PM",
+      "end_time": "9:00 PM",
+      "address": "",
+      "description": "RECEIVED: 5/1/26 at 2:14 p.m. LIST OF TOPICS: Click \"More Details\" for the List of Topics",
+      "url": "/Calendar.aspx?EID=35307&month=5&year=2026&day=5&calType=0",
+      "image_url": null
     },
     {
       "id": "evt-9a13728612",
@@ -647,6 +707,36 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSoundmanWeb.jpg?itok=xDIt4GOn"
     },
     {
+      "id": "evt-ef6118efd6",
+      "title": "The Reverend Peyton's Big Damn Band",
+      "date": "2026-05-06",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:00 PM",
+      "end_time": "12:00 AM",
+      "address": "",
+      "description": "The Reverend Peyton's Big Damn Band live performance. Door Time: 6:00 PM, Show Time: 7:00 PM",
+      "url": "/events/the-reverend-peyton-s-big-damn2026-05-06",
+      "image_url": null
+    },
+    {
+      "id": "evt-d52168f8aa",
+      "title": "Valerie Naranjo and Barry Olsen featuring Wofa Drummers and Dancers",
+      "date": "2026-05-06",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Celebrate West African Music and Dance with Drummers and Dancers of Wofa.",
+      "url": "/events/valerie-naranjo-and-barry-olsen-featuring-wofa-drummers-and-da2026-05-06",
+      "image_url": null
+    },
+    {
       "id": "evt-6d6d1bcc09",
       "title": "Jazz Ensemble I & Studio Orchestra",
       "date": "2026-05-06",
@@ -660,6 +750,21 @@
       "description": "UMass Amherst's top jazz ensemble performs in the first half, and then is augmented with strings and winds for a full jazz orchestra in the second half. Jeffrey W. Holmes, director",
       "url": "https://events.umass.edu/event/jazz-ensemble-i-studio-orchestra",
       "image_url": "https://localist-images.azureedge.net/photos/52328936672458/huge/2fa06d2e2e0a6ea8256add0cfa6bdc1b5be3802a.jpg"
+    },
+    {
+      "id": "evt-ae0a0762c5",
+      "title": "paris_monster",
+      "date": "2026-05-06",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "",
+      "address": "",
+      "description": "paris_monster at The Parlor Room. Doors 7:00pm, Show 7:30pm",
+      "url": "/events/paris-monster",
+      "image_url": null
     },
     {
       "id": "evt-5f97f38d44",
@@ -687,8 +792,8 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
-      "url": "/news-events/events/holley-flagg-62-art-exhibition",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
+      "url": "https://smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
     {
@@ -722,6 +827,21 @@
       "image_url": null
     },
     {
+      "id": "evt-3ba1923e83",
+      "title": "Town Services and Outreach Committee of the Town Council",
+      "date": "2026-05-07",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "10:00 AM",
+      "end_time": "12:00 PM",
+      "address": "",
+      "description": "RECEIVED: 5/5/26, 9:29 am. LIST OF TOPICS: Click \"More Details\" for List of Topics",
+      "url": "/Calendar.aspx?EID=35314&month=5&year=2026&day=5&calType=0",
+      "image_url": null
+    },
+    {
       "id": "evt-755b28649b",
       "title": "What Worked? What Didn't?: Reconsidering Your Semester of Teaching",
       "date": "2026-05-07",
@@ -733,7 +853,7 @@
       "end_time": "12:00 PM",
       "address": "",
       "description": "Facilitated by Justin Cammy and Caroline Melly.",
-      "url": "/news-events/events/what-worked-what-didnt-reconsidering-your-semester-teaching",
+      "url": "https://smith.edu/news-events/events/what-worked-what-didnt-reconsidering-your-semester-teaching",
       "image_url": null
     },
     {
@@ -778,7 +898,22 @@
       "end_time": "2:00 PM",
       "address": "",
       "description": "Hannah Creamer: Exercise & Sport Studies Thesis Defense",
-      "url": "/news-events/events/ess-thesis-defense-hannah-creamer",
+      "url": "https://smith.edu/news-events/events/ess-thesis-defense-hannah-creamer",
+      "image_url": null
+    },
+    {
+      "id": "evt-0cfa5d1244",
+      "title": "Joint meeting of the Town Council and Finance Committee",
+      "date": "2026-05-07",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "3:00 PM",
+      "end_time": "5:00 PM",
+      "address": "",
+      "description": "REVISED: 5/4/26, 12:28 pm. RECEIVED: 5/1/26, 12:18 pm. LIST OF TOPICS: Click \"More Details\" for List of Topics",
+      "url": "/Calendar.aspx?EID=35306&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -803,12 +938,42 @@
       "venue": "Eric Carle Museum of Picture Book Art",
       "town": "Amherst",
       "source": "eric-carle-museum",
-      "category": "family",
+      "category": "music",
       "time": "4:00 PM",
       "end_time": "8:00 PM",
       "address": "",
       "description": "As part of The Carle After Dark join us for live music, and more!",
       "url": "https://carlemuseum.org/visit/events/once-upon-picture-book",
+      "image_url": null
+    },
+    {
+      "id": "evt-57907f7c44",
+      "title": "Union 26 School Committee and Amherst-Pelham Regional School Committee joint meeting",
+      "date": "2026-05-07",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "academia",
+      "time": "6:00 PM",
+      "end_time": "6:30 PM",
+      "address": "",
+      "description": "RECEIVED: 5/4/26 at 2:18 p.m. Meeting includes Call to Order, Standing Business, Executive Session regarding strategy sessions in preparation for negotiations with nonunion personnel.",
+      "url": "/Calendar.aspx?EID=35311&month=5&year=2026&day=5&calType=0",
+      "image_url": null
+    },
+    {
+      "id": "evt-e80d8f7a5b",
+      "title": "Amherst School Committee",
+      "date": "2026-05-07",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "academia",
+      "time": "6:30 PM",
+      "end_time": "9:00 PM",
+      "address": "",
+      "description": "REVISED: 5/5/26 at 1:10 p.m. Hybrid Meeting. Topics include Call to Order, Public comments, Approve minutes, Warrants, Review of selected school committee policies, Student Safety and Welfare discussions.",
+      "url": "/Calendar.aspx?EID=35308&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -842,6 +1007,21 @@
       "image_url": null
     },
     {
+      "id": "evt-184d4440bc",
+      "title": "Rose Cousins at The Parlor Room",
+      "date": "2026-05-07",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Acclaimed Canadian folk singer, songwriter, and musician Rose Cousins performs.",
+      "url": "/events/rose-cousins-at-the-parlor-room",
+      "image_url": null
+    },
+    {
       "id": "evt-e0c2c8cef9",
       "title": "Holley Flagg '62 Art Exhibition",
       "date": "2026-05-07",
@@ -852,8 +1032,8 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
-      "url": "/news-events/events/holley-flagg-62-art-exhibition",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
+      "url": "https://smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
     {
@@ -912,7 +1092,7 @@
       "time": "11:00 AM",
       "end_time": "11:45 AM",
       "address": "",
-      "description": "",
+      "description": "Move, sing, talk, and explore materials during this interactive storytime for early learners.",
       "url": "https://carlemuseum.org/visit/events/open-book-open-play-40",
       "image_url": null
     },
@@ -962,6 +1142,21 @@
       "image_url": "https://www.joneslibrary.org/DocumentCenter/View/12037"
     },
     {
+      "id": "evt-fee6b6ea10",
+      "title": "May 8 Second Friday at the Smith College Museum of Art",
+      "date": "2026-05-08",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "arts",
+      "time": "4:00 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "Visit SCMA for art, making, and community. From 4–7 p.m. try your hand at art activities.",
+      "url": "/events/may-8-second-friday-at-the-smith-college-museum-of-art",
+      "image_url": null
+    },
+    {
       "id": "evt-6ade3f3ee6",
       "title": "Smith College Art Museum Open House",
       "date": "2026-05-08",
@@ -974,6 +1169,51 @@
       "address": "",
       "description": "Free monthly open house at the Smith College Museum of Art.",
       "url": "https://scma.smith.edu",
+      "image_url": null
+    },
+    {
+      "id": "evt-2c1919d965",
+      "title": "Circus Springboard: Broken Open",
+      "date": "2026-05-08",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "family",
+      "time": "5:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "A high flying family circus show combining circus and theater.",
+      "url": "/events/circus-springboard-broken-open",
+      "image_url": null
+    },
+    {
+      "id": "evt-d727961370",
+      "title": "The connected unconscious",
+      "date": "2026-05-08",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "arts",
+      "time": "5:00 PM",
+      "end_time": "7:00 PM",
+      "address": "",
+      "description": "Two-person exhibition by Northampton artists Maren Brown and Jo Smith featuring mixed media work.",
+      "url": "/events/the-connected-unconscious",
+      "image_url": null
+    },
+    {
+      "id": "evt-7900052a2f",
+      "title": "Members' Preview for Under the Cork Tree: The Story of Ferdinand",
+      "date": "2026-05-08",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "arts",
+      "time": "5:30 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "Be the first to see the new exhibition! Plus, enjoy special hors d'oeuvres, and live music!",
+      "url": "https://carlemuseum.org/visit/events/members-preview-under-cork-tree-story-ferdinand-0",
       "image_url": null
     },
     {
@@ -992,6 +1232,21 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/ErupcjaWeb.jpg?itok=tnDFa0z3"
     },
     {
+      "id": "evt-dcaf39b8ee",
+      "title": "Max Wareham",
+      "date": "2026-05-08",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Max Wareham performs at The Parlor Room. Whether on archaeological digs or translating various mediums.",
+      "url": "/events/max-wareham",
+      "image_url": null
+    },
+    {
       "id": "evt-d1035f79c0",
       "title": "Holley Flagg '62 Art Exhibition",
       "date": "2026-05-08",
@@ -1002,8 +1257,8 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
-      "url": "/news-events/events/holley-flagg-62-art-exhibition",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
+      "url": "https://smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
     {
@@ -1067,6 +1322,21 @@
       "image_url": null
     },
     {
+      "id": "evt-0161fab341",
+      "title": "Mass Kids Lit Fest Comes to the Berkshire Athenaeum!",
+      "date": "2026-05-09",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "family",
+      "time": "10:30 AM",
+      "end_time": "",
+      "address": "",
+      "description": "The Berkshire Athenaeum and Berkshire County Head Start host acclaimed children's author.",
+      "url": "/events/mass-kids-lit-fest-comes-to-the-berkshire-athenaeum",
+      "image_url": null
+    },
+    {
       "id": "evt-4d09db56a3",
       "title": "In Jackson Heights",
       "date": "2026-05-09",
@@ -1080,6 +1350,81 @@
       "description": "Frederick Wiseman's IN JACKSON HEIGHTS is about the racially and ethnically diverse neighborhood of Jackson Heights in Queens, New York.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=536435~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/InJacksonHeightsWeb.jpg?itok=RjHeMCnI"
+    },
+    {
+      "id": "evt-56d6be763a",
+      "title": "Future Planet Fiesta",
+      "date": "2026-05-09",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "community",
+      "time": "11:00 AM",
+      "end_time": "3:00 PM",
+      "address": "",
+      "description": "Collaborative event organized by Youth Fighting for a Sustainable Future with workshops on composting, recycling, and lowering energy use. Features information on alternative energy, vegetarian/vegan food options, live music, games, and vendors. Free and open to the public.",
+      "url": "https://www.longmeadowma.gov/calendar.aspx?EID=5580",
+      "image_url": null
+    },
+    {
+      "id": "evt-9469acde16",
+      "title": "Ferdinand Curator-Led Tour",
+      "date": "2026-05-09",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "arts",
+      "time": "11:00 AM",
+      "end_time": "12:00 PM",
+      "address": "",
+      "description": "Explore the exhibition through a curator's lens.",
+      "url": "https://carlemuseum.org/visit/events/ferdinand-curator-led-tour",
+      "image_url": null
+    },
+    {
+      "id": "evt-0322840bd9",
+      "title": "Special Storytime: Talia Aikens-Nuñez",
+      "date": "2026-05-09",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "11:30 AM",
+      "address": "",
+      "description": "\"Every day, I say hi to my world. ¡Hola, mundo! And hi to my garden. ¡Hola, jardín!\" Join author Talia Aikens-Nuñez for a reading of her new book, Wonder in the Garden.",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-talia-aikens-nunez",
+      "image_url": null
+    },
+    {
+      "id": "evt-4306ae8db9",
+      "title": "Dragon Masters Palooza with Author Tracey West!",
+      "date": "2026-05-09",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "12:00 PM",
+      "address": "",
+      "description": "Calling all fans of Dragon Masters early reader series! Bestselling author Tracey West is coming.",
+      "url": "/events/dragon-masters-palooza-with-author-tracey-west",
+      "image_url": null
+    },
+    {
+      "id": "evt-e9137da22c",
+      "title": "Cinderella... With A Twist",
+      "date": "2026-05-09",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "family",
+      "time": "1:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Pioneer Valley Ballet presents Cinderella… With A Twist.",
+      "url": "/events/cinderella-with-a-twist",
+      "image_url": null
     },
     {
       "id": "evt-4f0ef39cc8",
@@ -1097,6 +1442,36 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/BlueHeronWeb2.jpg?itok=brJIA_ee"
     },
     {
+      "id": "evt-e05097e57d",
+      "title": "Glimmerglass Presents Happy End",
+      "date": "2026-05-09",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "arts",
+      "time": "3:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Satire of big business and big religion set in a smoky speakeasy where gangsters do deals and the Salvation Army saves souls. Features unforgettable score with 'Bilbao Song,' 'Mandalay Song,' and 'Surabaya Johnny.'",
+      "url": "https://events.clarkart.edu/detail/5224",
+      "image_url": null
+    },
+    {
+      "id": "evt-6be2bd7ad6",
+      "title": "Party At JJ's! - Flo Fest Fundraiser",
+      "date": "2026-05-09",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "community",
+      "time": "3:00 PM",
+      "end_time": "8:30 PM",
+      "address": "",
+      "description": "Join a Flo Fest Fundraiser night at JJ's. Come hang out and grab food.",
+      "url": "/events/party-at-jjs-flo-fest-fundraiser",
+      "image_url": null
+    },
+    {
       "id": "evt-03086a69bf",
       "title": "Erupcja",
       "date": "2026-05-09",
@@ -1112,18 +1487,33 @@
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/ErupcjaWeb.jpg?itok=tnDFa0z3"
     },
     {
+      "id": "evt-0b96911a4e",
+      "title": "Mia",
+      "date": "2026-05-09",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:30 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Ari & Mia at The Parlor Room. Doors 7:00pm, Show 7:30pm. Tickets starting at $24",
+      "url": "/events/mia",
+      "image_url": null
+    },
+    {
       "id": "evt-069cc47078",
       "title": "Sandlot Baseball",
       "date": "2026-05-10",
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "sports",
+      "category": "outdoor",
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "",
-      "url": "",
+      "description": "170 Chestnut St",
+      "url": "/Calendar.aspx?EID=35158&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -1214,6 +1604,51 @@
       "address": "101 University Drive - Suite B1Amherst, MA 01002",
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=17801",
+      "image_url": null
+    },
+    {
+      "id": "evt-4e23baf98c",
+      "title": "CLICK! Stories, Photos, Dance",
+      "date": "2026-05-10",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "2:00 PM",
+      "end_time": "4:00 PM",
+      "address": "",
+      "description": "Enjoy bilingual storytimes of books featured in the exhibition CLICK! Photographers Make Picture Books.",
+      "url": "https://carlemuseum.org/visit/events/click-stories-photos-dance",
+      "image_url": null
+    },
+    {
+      "id": "evt-fadfbb1827",
+      "title": "Second Sundays Virtual Open Mic",
+      "date": "2026-05-10",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "community",
+      "time": "6:00 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "Create community on second Sundays of every month with a virtual open mic on Zoom.",
+      "url": "/events/second-sundays-virtual-ope2026-05-10",
+      "image_url": null
+    },
+    {
+      "id": "evt-765b0b8745",
+      "title": "Cello Chocolate",
+      "date": "2026-05-10",
+      "venue": "Various Northampton Venues",
+      "town": "Northampton",
+      "source": "northampton-live",
+      "category": "music",
+      "time": "7:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "/events/cello-chocolate-5-10-26",
       "image_url": null
     },
     {
@@ -1317,8 +1752,8 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "",
-      "url": "",
+      "description": "70 Boltwood Walk",
+      "url": "/Calendar.aspx?EID=35289&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -1467,8 +1902,8 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "",
-      "url": "",
+      "description": "Triangle St",
+      "url": "/Calendar.aspx?EID=35132&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -1482,8 +1917,8 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "",
-      "url": "",
+      "description": "70 Boltwood Walk",
+      "url": "/Calendar.aspx?EID=32023&month=5&year=2026&day=5&calType=0",
       "image_url": null
     },
     {
@@ -1667,6 +2102,21 @@
       "image_url": null
     },
     {
+      "id": "evt-2ea6e98694",
+      "title": "Fiona Cook in Person",
+      "date": "2026-05-14",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "academia",
+      "time": "7:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "New York Times bestselling author discusses The Dream Atlas, a gorgeously illustrated guide with thirteen months of progressive exercises to aid in deeper, more meaningful dreaming. Fiona Cook is a mother, home health care worker, community gardener, and writer.",
+      "url": "https://odysseybks.com/event/2026-05-14/fiona-cook-person",
+      "image_url": null
+    },
+    {
       "id": "evt-736b2459c0",
       "title": "Erupcja",
       "date": "2026-05-14",
@@ -1817,6 +2267,21 @@
       "image_url": "https://www.joneslibrary.org/DocumentCenter/View/12189"
     },
     {
+      "id": "evt-183ddeee17",
+      "title": "Poetry Walk 2026",
+      "date": "2026-05-16",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "arts",
+      "time": "10:00 AM",
+      "end_time": "12:00 PM",
+      "address": "",
+      "description": "Mark the 140th anniversary of Emily Dickinson's death with a walk through downtown Amherst. Explores Amherst's cultural landscape and significance to the poet. Walk at your own pace to Dickinson's grave in West Cemetery for final poems and lemonade toast. Free, registration required.",
+      "url": "https://www.emilydickinsonmuseum.org/poetry-walk-2026/",
+      "image_url": null
+    },
+    {
       "id": "evt-a4a18f419f",
       "title": "UMass Baseball vs Central Michigan",
       "date": "2026-05-16",
@@ -1845,6 +2310,21 @@
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=18278",
       "image_url": "https://www.joneslibrary.org/DocumentCenter/View/12397"
+    },
+    {
+      "id": "evt-b3d46a04c7",
+      "title": "World's Largest Pancake Breakfast",
+      "date": "2026-05-16",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "food",
+      "time": "8:00 AM",
+      "end_time": "11:00 AM",
+      "address": "",
+      "description": "Cherished annual community event in Springfield celebrating the city's founding on May 14, 1636. Residents and visitors gather downtown to enjoy classic breakfast of pancakes, bacon, coffee, juice, and milk while connecting with neighbors.",
+      "url": "https://www.spiritofspringfield.org/events/worlds-largest-pancake-breakfast",
+      "image_url": null
     },
     {
       "id": "evt-733eb142ab",
@@ -1889,6 +2369,36 @@
       "address": "101 University Drive - Suite B1Amherst, MA 01002",
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=17802",
+      "image_url": null
+    },
+    {
+      "id": "evt-fe8978bf3a",
+      "title": "Special Storytime: Fiona Cook",
+      "date": "2026-05-17",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "2:00 PM",
+      "end_time": "2:30 PM",
+      "address": "",
+      "description": "Join New York Times Best Selling author, Fiona Cook, for an interactive spring storytime!",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-fiona-cook",
+      "image_url": null
+    },
+    {
+      "id": "evt-ce43c30a32",
+      "title": "Illumine Vocal Arts Ensemble: Sergei Rachmaninoff's All-Night Vigil",
+      "date": "2026-05-17",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "music",
+      "time": "4:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Performance of Rachmaninoff's All-Night Vigil (also known as Vespers), a compilation of texts from three canonical hours of Eastern Orthodox church service. Illumine joined by Grammy-award-winning basso profundo Glenn Miller.",
+      "url": "https://illuminechoir.org/#c4",
       "image_url": null
     },
     {
@@ -2003,7 +2513,7 @@
       "venue": "Eric Carle Museum of Picture Book Art",
       "town": "Amherst",
       "source": "eric-carle-museum",
-      "category": "family",
+      "category": "outdoor",
       "time": "6:00 PM",
       "end_time": "8:00 PM",
       "address": "",
@@ -2273,7 +2783,7 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm",
-      "category": "music",
+      "category": "comedy",
       "time": "",
       "end_time": "",
       "address": "",
@@ -2295,6 +2805,51 @@
       "description": "Who was Frida Kahlo? Everyone knows her name, but who was the woman behind the bright colors, the big brows, and the floral crowns? This 2020 film returns with new footage from a 2026 transatlantic exhibition from Tate Britain and MFA Houston.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=541405~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/FridaKahloWeb.jpg?itok=7Ho_T4lO"
+    },
+    {
+      "id": "evt-b81c777279",
+      "title": "Special Storytime: Sarah Lynn Baker",
+      "date": "2026-05-30",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "2:00 PM",
+      "end_time": "2:30 PM",
+      "address": "",
+      "description": "Join Sarah Lynn Baker as she reads her debut picture book, Becca & Bubbe's Bucket List.",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-sarah-lynn-baker",
+      "image_url": null
+    },
+    {
+      "id": "evt-b2b702b3f9",
+      "title": "Mr. Finn's Cabaret Summer 2026: An Evening with Judy Kuhn",
+      "date": "2026-05-31",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "music",
+      "time": "8:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Tony Award nominee Judy Kuhn performs in Pittsfield for the first time, headlining the 2026 season of Mr. Finn's Cabaret. Lineup also includes performances from BSC Musical Theatre Conservatory and guest artists throughout the summer.",
+      "url": "https://barringtonstageco.org/2026-season-shows/",
+      "image_url": null
+    },
+    {
+      "id": "evt-8b6aa1a59b",
+      "title": "Mr. Finn's Cabaret Summer 2026: An Evening with Judy Kuhn",
+      "date": "2026-06-01",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm-culture",
+      "category": "music",
+      "time": "8:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Tony Award nominee Judy Kuhn performs in Pittsfield for the first time, headlining the 2026 season of Mr. Finn's Cabaret. Lineup also includes performances from BSC Musical Theatre Conservatory and guest artists throughout the summer.",
+      "url": "https://barringtonstageco.org/2026-season-shows/",
+      "image_url": null
     },
     {
       "id": "evt-0f4ce44f34",
@@ -2327,6 +2882,21 @@
       "image_url": null
     },
     {
+      "id": "evt-8881ff6b6a",
+      "title": "Viva Ferdinand!",
+      "date": "2026-06-04",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "music",
+      "time": "4:00 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "As part of The Carle After Dark join us for live music, and more!",
+      "url": "https://carlemuseum.org/visit/events/viva-ferdinand",
+      "image_url": null
+    },
+    {
       "id": "evt-dcfcf2c225",
       "title": "Seeds",
       "date": "2026-06-04",
@@ -2340,6 +2910,21 @@
       "description": "An exploration of Black generational farmers in the American South reveals the fragility of legacy and the significance of owning land. Director Brittany Shyne joins us for a post-film discussion. Free to Amherst Cinema Members.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=555782~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SeedsWeb.jpg?itok=EEKwHjQn"
+    },
+    {
+      "id": "evt-b0671dbcb1",
+      "title": "Word Play with The Center Dance Studio",
+      "date": "2026-06-05",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "12:00 PM",
+      "address": "",
+      "description": "Bring your dancing feet for creative movement inspired by picture books.",
+      "url": "https://carlemuseum.org/visit/events/word-play-center-dance-studio-57",
+      "image_url": null
     },
     {
       "id": "evt-e5b863aad1",
@@ -2370,6 +2955,21 @@
       "description": "Bryan Cranston and Marianne Jean-Baptiste feature in the triumphantly acclaimed new production of Arthur Miller’s classic play.",
       "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=540260~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
       "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AllMySonsWeb2_0.jpg?itok=PLqlU19N"
+    },
+    {
+      "id": "evt-bc78a17e92",
+      "title": "Special Storytime: R.W. Alley",
+      "date": "2026-06-06",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "2:00 PM",
+      "end_time": "2:30 PM",
+      "address": "",
+      "description": "Join author R. W. Alley as he shares the newest book in the \"Breezy Valley at Work\" series, Construction Crews Build Big!",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-rw-alley-1",
+      "image_url": null
     },
     {
       "id": "evt-c0c7eade71",
@@ -2447,6 +3047,21 @@
       "image_url": null
     },
     {
+      "id": "evt-890fa1f5a9",
+      "title": "Special Storytime: Vicki Johnson & Gillian Reid",
+      "date": "2026-06-13",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "11:30 AM",
+      "address": "",
+      "description": "Join us to celebrate Mac Wears a Hat, a new story from the creators of Molly's Tuxedo, written by Vicki Johnson and illustrated by Gillian Reid.",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-vicki-johnson-gillian-reid",
+      "image_url": null
+    },
+    {
       "id": "evt-72aa4760dd",
       "title": "Whoopie Pie Waddle 5K",
       "date": "2026-06-14",
@@ -2459,6 +3074,21 @@
       "address": "",
       "description": "5K run.",
       "url": "",
+      "image_url": null
+    },
+    {
+      "id": "evt-9500ed1902",
+      "title": "Reading Buddies",
+      "date": "2026-06-14",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "2:30 PM",
+      "end_time": "3:30 PM",
+      "address": "",
+      "description": "Practice reading out loud to a really good listener…a Bright Spot therapy dog!",
+      "url": "https://carlemuseum.org/visit/events/reading-buddies",
       "image_url": null
     },
     {
@@ -2489,6 +3119,21 @@
       "address": "",
       "description": "Weekly 8K and 5K cross-country run series.",
       "url": "",
+      "image_url": null
+    },
+    {
+      "id": "evt-829fb900b5",
+      "title": "Members' Preview for Soul, Sound, and Voice: The Art of Jerry Pinkney",
+      "date": "2026-06-18",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "arts",
+      "time": "5:30 PM",
+      "end_time": "8:00 PM",
+      "address": "",
+      "description": "Be the first to see the new exhibition! Plus, enjoy special hors d'oeuvres, and live music!",
+      "url": "https://carlemuseum.org/visit/events/members-preview-soul-sound-and-voice-art-jerry-pinkney",
       "image_url": null
     },
     {
@@ -2534,6 +3179,51 @@
       "address": "",
       "description": "Weekly 8K and 5K cross-country run series.",
       "url": "",
+      "image_url": null
+    },
+    {
+      "id": "evt-e00690e9ca",
+      "title": "Family Jam with BenAnna Band",
+      "date": "2026-06-26",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "music",
+      "time": "10:30 AM",
+      "end_time": "11:00 AM",
+      "address": "",
+      "description": "Families will go bananas for this high energy musical duo that will have them singing, dancing, and playing along on live instruments!",
+      "url": "https://carlemuseum.org/visit/events/family-jam-benanna-band-0",
+      "image_url": null
+    },
+    {
+      "id": "evt-fa403b86af",
+      "title": "Story Chasers",
+      "date": "2026-06-26",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "11:45 AM",
+      "address": "",
+      "description": "Embark on a storytelling adventure across the museum.",
+      "url": "https://carlemuseum.org/visit/events/story-chasers-21",
+      "image_url": null
+    },
+    {
+      "id": "evt-739220193a",
+      "title": "Special Storytime with Ruth Forman",
+      "date": "2026-06-27",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "11:00 AM",
+      "end_time": "11:30 AM",
+      "address": "",
+      "description": "Join author Ruth Forman as she shares her new book Do I Love You? Yes I Do!",
+      "url": "https://carlemuseum.org/visit/events/special-storytime-ruth-forman",
       "image_url": null
     },
     {
@@ -2657,6 +3347,21 @@
       "image_url": null
     },
     {
+      "id": "evt-991eb1f623",
+      "title": "Yoga for Kids!",
+      "date": "2026-07-11",
+      "venue": "Eric Carle Museum of Picture Book Art",
+      "town": "Amherst",
+      "source": "eric-carle-museum",
+      "category": "family",
+      "time": "10:15 AM",
+      "end_time": "10:45 AM",
+      "address": "",
+      "description": "Children ages 3-6 will explore movement and fun inspired by picture books.",
+      "url": "https://carlemuseum.org/visit/events/yoga-kids-13",
+      "image_url": null
+    },
+    {
       "id": "evt-366dfaed57",
       "title": "GSH Summer Sizzlers (8K/5K)",
       "date": "2026-07-15",
@@ -2723,7 +3428,7 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm",
-      "category": "arts",
+      "category": "academia",
       "time": "7:00 PM",
       "end_time": "",
       "address": "",

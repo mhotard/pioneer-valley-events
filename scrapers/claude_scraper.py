@@ -76,8 +76,11 @@ def _get_client() -> Anthropic:
 def _clean_html(html: str) -> str:
     """Strip scripts, styles, nav, footer — keep main content."""
     soup = BeautifulSoup(html, "html.parser")
-    for tag in soup(["script", "style", "noscript", "svg", "nav", "header", "footer", "aside"]):
+    for tag in soup(["script", "style", "noscript", "svg", "nav", "header", "footer", "aside", "img"]):
         tag.decompose()
+    # Strip all attributes except href and datetime to reduce size
+    for tag in soup.find_all(True):
+        tag.attrs = {k: v for k, v in tag.attrs.items() if k in ("href", "datetime")}
     # Try to isolate the main content area
     main = soup.find("main") or soup.find("div", id="main") or soup.find("div", id="content")
     content = str(main) if main else str(soup.body or soup)
