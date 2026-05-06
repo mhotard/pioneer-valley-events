@@ -3,6 +3,7 @@ from .amherst_cinema import AmherstCinemaScraper
 from .claude_scraper import load_claude_scrapers
 from .community import CommunityEventsScraper
 from .jones_library import JonesLibraryScraper
+from .nepm_culture import NEPMCultureScraper
 from .umass import UMassScraper
 from .umass_athletics import UMassAthleticsScraper
 
@@ -14,6 +15,7 @@ STATIC_SCRAPERS = [
     AmherstCinemaScraper,
     CommunityEventsScraper,
     JonesLibraryScraper,
+    NEPMCultureScraper,
 ]
 
 
