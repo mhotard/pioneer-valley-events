@@ -31,7 +31,7 @@ jobs:
         run: python -m ruff check .
 
       - name: Test (blocks deploy on failure)
-        run: python -m pytest tests/test_pipeline.py tests/test_base.py tests/test_claude_scraper.py -v
+        run: python -m pytest -v
 
       - name: Run pipeline
         env:

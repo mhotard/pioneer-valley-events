@@ -18,16 +18,16 @@ pioneer-valley-events/
 │       └── events.json         # Event data, regenerated weekly
 ├── scrapers/
 │   ├── base.py                 # BaseScraper + Event dataclass
-│   ├── umass.py                # UMass events (JSON-LD parsing)
-│   ├── amherst_cinema.py       # Amherst Cinema showtimes
-│   └── claude_scraper.py       # Claude Haiku-powered universal scraper
+│   ├── claude_scraper.py       # Claude Haiku-powered universal scraper
+│   ├── ical.py                 # Shared base for iCal feed scrapers
+│   └── ...                     # One file per structured-data source
 ├── sources.json                # Config for all Claude-powered sources
+├── community_events.json       # Manually-curated events (supports recurrence)
 ├── pipeline.py                 # Aggregation, dedup, and output script
 ├── requirements.txt
 ├── pyproject.toml              # ruff linting config
 └── .github/workflows/
-    ├── ci.yml                  # Lint + test on every push
-    └── weekly-update.yml       # Scrape → commit → deploy every Sunday
+    └── weekly-update.yml       # Lint → test → scrape → commit every Sunday
 ```
 
 ---
@@ -107,16 +107,21 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 | Source | Town | Notes |
 |--------|------|-------|
 | UMass Amherst | Amherst | JSON-LD structured data |
+| UMass Athletics | Amherst | Home game schedule (iCal) |
+| Amherst College Athletics | Amherst | Home game schedule (iCal) |
 | Amherst Cinema | Amherst | Film showtimes |
-| Jones Library | Amherst | Programs and events |
+| Jones Library | Amherst | Programs and events (RSS) |
 | Eric Carle Museum | Amherst | Special exhibitions and programs |
 | Town of Amherst | Amherst | Community calendar |
-| Amherst College Athletics | Amherst | Home game schedule |
 | Smith College | Northampton | Campus events |
+| Academy of Music | Northampton | Theatre and music |
+| Northampton Center for the Arts | Northampton | Arts events |
+| Northampton.live | Northampton | Aggregated listings |
 | Hawks & Reed | Greenfield | Performing arts |
-| Gateway City Arts | Holyoke | Arts and culture |
-| NEPM | Pioneer Valley | Curated regional events (includes Iron Horse, Academy of Music) |
-| UMass Athletics | Amherst | Home game schedule |
+| NEPM + Culture to Do | Pioneer Valley | Curated regional events and weekly newsletter |
+| Harriers Race Calendar | Pioneer Valley | Western Mass road races |
+| Arts Hub WMA, Valley Arts Newsletter, Visit Hampshire County | Pioneer Valley | Regional calendars |
+| Community events | — | Manually curated in `community_events.json` |
 
 ---
 
