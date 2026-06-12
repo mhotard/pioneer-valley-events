@@ -113,14 +113,19 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 | Jones Library | Amherst | Programs and events (RSS) |
 | Eric Carle Museum | Amherst | Special exhibitions and programs |
 | Town of Amherst | Amherst | Community calendar |
+| The Drake | Amherst | Live music venue |
 | Smith College | Northampton | Campus events |
+| Forbes Library | Northampton | Programs and events (LibCal RSS) |
+| Iron Horse Music Hall | Northampton | Live music (Parlor Room collective) |
 | Academy of Music | Northampton | Theatre and music |
 | Northampton Center for the Arts | Northampton | Arts events |
 | Northampton.live | Northampton | Aggregated listings |
-| Hawks & Reed | Greenfield | Performing arts |
+| Mount Holyoke College | South Hadley | Campus events (Localist API) |
+| Springfield Museums | Springfield | Exhibits, tours, classes (Events Calendar API) |
+| Hawks & Reed | Greenfield | Performing arts (Events Calendar API) |
 | NEPM + Culture to Do | Pioneer Valley | Curated regional events and weekly newsletter |
 | Harriers Race Calendar | Pioneer Valley | Western Mass road races |
-| Arts Hub WMA, Valley Arts Newsletter, Visit Hampshire County | Pioneer Valley | Regional calendars |
+| Arts Hub WMA, Valley Advocate, Valley Arts Newsletter, Visit Hampshire County | Pioneer Valley | Regional calendars |
 | Community events | — | Manually curated in `community_events.json` |
 
 ---

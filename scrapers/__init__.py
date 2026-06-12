@@ -2,9 +2,12 @@ from .amherst_athletics import AmherstAthleticsScraper
 from .amherst_cinema import AmherstCinemaScraper
 from .claude_scraper import load_claude_scrapers
 from .community import CommunityEventsScraper
+from .forbes_library import ForbesLibraryScraper
 from .harriers import HarriersScraper
 from .jones_library import JonesLibraryScraper
+from .mtholyoke import MountHolyokeScraper
 from .nepm_culture import NEPMCultureScraper
+from .tribe_events import HawksReedScraper, SpringfieldMuseumsScraper
 from .umass import UMassScraper
 from .umass_athletics import UMassAthleticsScraper
 
@@ -16,8 +19,12 @@ STATIC_SCRAPERS = [
     AmherstCinemaScraper,
     CommunityEventsScraper,
     JonesLibraryScraper,
+    ForbesLibraryScraper,
+    MountHolyokeScraper,
     NEPMCultureScraper,
     HarriersScraper,
+    SpringfieldMuseumsScraper,
+    HawksReedScraper,
 ]
 
 

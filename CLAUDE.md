@@ -42,8 +42,13 @@ scrapers/
   umass_athletics.py   iCal (subclasses ICalScraper)
   amherst_athletics.py iCal (subclasses ICalScraper)
   umass.py             JSON-LD from events.umass.edu
+  mtholyoke.py         Localist JSON API (events.mtholyoke.edu/api/2/events)
+  tribe_events.py      TribeEventsScraper base for WordPress "The Events Calendar"
+                       REST API (/wp-json/tribe/events/v1/events) —
+                       springfield-museums and hawks-reed subclass it
   amherst_cinema.py    custom HTML parsing (Drupal)
   jones_library.py     RSS feed
+  forbes_library.py    LibCal RSS feed (brittle escaping — see regexes there)
   nepm_culture.py      finds latest newsletter edition, reuses claude_scraper helpers
   harriers.py          reads harriers.org race_calendar.json directly
   community.py         manually-curated events from community_events.json (supports recurrence)
@@ -103,3 +108,9 @@ categories to "community").
   confirm via their REST API:
   `curl 'https://www.hawksandreed.com/wp-json/tribe/events/v1/events?per_page=5'`
 - Playwright sources are slow (~25s each) — that's normal.
+- Dead ends checked 2026-06-12, don't re-investigate: Hampshire College and
+  Springfield Symphony hard-block even headless Chrome (403/Access denied);
+  recorder.com/events is an empty shell even rendered; iheg.com,
+  calvintheatre.com, pleasantstreettheater.com, ironhorsemusic.com are all
+  parked/squatted domains. The real Iron Horse is `ironhorse.org` (Parlor Room
+  collective). The Drake is `thedrakeamherst.org` (server-rendered, html type).

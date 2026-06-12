@@ -1,11 +1,25 @@
 {
   "sources": [
     {
-      "name": "hawks-reed",
-      "url": "https://www.hawksandreed.com/events",
-      "venue": "Hawks & Reed Performing Arts Center",
-      "town": "Greenfield",
+      "name": "the-drake",
+      "url": "https://www.thedrakeamherst.org/events",
+      "venue": "The Drake",
+      "town": "Amherst",
       "type": "html"
+    },
+    {
+      "name": "iron-horse",
+      "url": "https://ironhorse.org/shows",
+      "venue": "Iron Horse Music Hall",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
+      "name": "valley-advocate",
+      "url": "https://valleyadvocate.com/events/",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "type": "playwright"
     },
     {
       "name": "smith-college",
