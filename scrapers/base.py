@@ -1,10 +1,12 @@
 """Base scraper class for Pioneer Valley Events."""
 
 import hashlib
+import html
 import logging
 import re
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
+from datetime import datetime
 from typing import Optional
 
 log = logging.getLogger("pipeline")
@@ -62,19 +64,15 @@ class BaseScraper(ABC):
 
     @staticmethod
     def clean(text: str) -> str:
-        """Strip extra whitespace and HTML entities."""
+        """Strip extra whitespace and decode HTML entities."""
         if not text:
             return ""
-        text = re.sub(r'\s+', ' ', text).strip()
-        text = text.replace('&amp;', '&').replace('&nbsp;', ' ')
-        text = text.replace('&#8217;', "'").replace('&#8220;', '"').replace('&#8221;', '"')
-        text = text.replace('&ldquo;', '"').replace('&rdquo;', '"').replace('&rsquo;', "'")
-        return text
+        text = html.unescape(text)
+        return re.sub(r'\s+', ' ', text).strip()
 
     @staticmethod
     def normalize_date(raw: str) -> str:
         """Try to parse various date strings into YYYY-MM-DD. Returns '' on failure."""
-        from datetime import datetime
         formats = [
             "%Y-%m-%d", "%m/%d/%Y", "%B %d, %Y", "%b %d, %Y",
             "%A, %B %d, %Y", "%A, %b %d, %Y", "%d %B %Y",
@@ -90,7 +88,6 @@ class BaseScraper(ABC):
     @staticmethod
     def normalize_time(raw: str) -> str:
         """Convert time strings to 12-hour format. Returns raw on failure."""
-        from datetime import datetime
         for fmt in ["%H:%M", "%H:%M:%S", "%I:%M %p", "%I:%M%p", "%I %p"]:
             try:
                 return datetime.strptime(raw.strip(), fmt).strftime("%-I:%M %p")

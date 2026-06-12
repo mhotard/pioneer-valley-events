@@ -2,7 +2,7 @@
 
 import logging
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -28,7 +28,7 @@ def parse_date(raw: str) -> str:
     year = today.year
     try:
         d = date(year, month, day)
-        if d < today - __import__('datetime').timedelta(days=3):
+        if d < today - timedelta(days=3):
             d = date(year + 1, month, day)
         return d.isoformat()
     except ValueError:

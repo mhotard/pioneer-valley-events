@@ -8,21 +8,29 @@ Usage:
     python3 debug_scraper.py amherst-cinema   # single source
 """
 
+import json
+import os
 import sys
 
 import requests
 from bs4 import BeautifulSoup
 
-SOURCES = {
-    "umass":            "https://events.umass.edu/calendar",
-    "amherst-cinema":   "https://amherstcinema.org/coming-soon",
-    "iron-horse":       "https://www.iheg.com/iron-horse-music-hall/calendar",
-    "the-drake":        "https://www.thedrakehotel.net/events",
-    "hawks-reed":       "https://www.hawksandreed.com/events",
-    "gateway-city":     "https://gatewaycityarts.com/events",
-    "northampton":      "https://www.northamptonma.gov/calendar.aspx",
-    "academy-of-music": "https://www.academyofmusictheatre.com/events",
-}
+from scrapers import get_all_scrapers
+
+
+def load_sources() -> dict:
+    """All scraper names → URLs (static scrapers + sources.json entries)."""
+    sources_path = os.path.join(os.path.dirname(__file__), "sources.json")
+    with open(sources_path) as f:
+        config = json.load(f)
+    sources = {s["name"]: s["url"] for s in config.get("sources", [])}
+    for scraper in get_all_scrapers():
+        if scraper.name not in sources and getattr(scraper, "url", ""):
+            sources[scraper.name] = scraper.url
+    return sources
+
+
+SOURCES = load_sources()
 
 HEADERS = {
     "User-Agent": (

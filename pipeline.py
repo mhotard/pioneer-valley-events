@@ -55,12 +55,10 @@ def deduplicate(events: list) -> list:
     Remove near-duplicate events using title similarity + same date.
     Keeps the event with the richer description.
     """
-    unique = []
+    by_date: dict[str, list] = {}
     for ev in events:
-        merged = False
-        for existing in unique:
-            if existing["date"] != ev["date"]:
-                continue
+        candidates = by_date.setdefault(ev["date"], [])
+        for i, existing in enumerate(candidates):
             similarity = SequenceMatcher(
                 None,
                 existing["title"].lower(),
@@ -69,12 +67,11 @@ def deduplicate(events: list) -> list:
             if similarity > 0.82:
                 # Keep the one with more info
                 if len(ev.get("description", "")) > len(existing.get("description", "")):
-                    unique[unique.index(existing)] = ev
-                merged = True
+                    candidates[i] = ev
                 break
-        if not merged:
-            unique.append(ev)
-    return unique
+        else:
+            candidates.append(ev)
+    return [ev for group in by_date.values() for ev in group]
 
 
 def filter_by_date(events: list) -> list:
