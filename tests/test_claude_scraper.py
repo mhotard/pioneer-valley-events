@@ -7,10 +7,13 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+import pytest
+
 from scrapers.claude_scraper import (
     ClaudeHTMLScraper,
     _clean_html,
     _dicts_to_events,
+    _parse_json_array,
     load_claude_scrapers,
 )
 
@@ -77,6 +80,34 @@ class TestCleanHtml:
         big_html = "<div>" + "x" * 100_000 + "</div>"
         result = _clean_html(big_html)
         assert len(result) <= 20_100  # slight buffer for tags
+
+
+# ---- _parse_json_array ----
+
+class TestParseJsonArray:
+    def test_parses_valid_json(self):
+        assert _parse_json_array(json.dumps(SAMPLE_DICTS)) == SAMPLE_DICTS
+
+    def test_strips_markdown_fences(self):
+        fenced = f"```json\n{json.dumps(SAMPLE_DICTS)}\n```"
+        assert _parse_json_array(fenced) == SAMPLE_DICTS
+
+    def test_salvages_truncated_array(self):
+        # Simulate hitting max_tokens mid-way through the second object
+        full = json.dumps(SAMPLE_DICTS)
+        truncated = full[: full.index('"Comedy Show"') + 5]
+        result = _parse_json_array(truncated)
+        assert len(result) == 1
+        assert result[0]["title"] == "Jazz Night"
+
+    def test_salvages_with_leading_text(self):
+        raw = "Here are the events:\n" + json.dumps(SAMPLE_DICTS)[:-20]
+        result = _parse_json_array(raw)
+        assert len(result) == 1
+
+    def test_raises_on_garbage(self):
+        with pytest.raises(ValueError):
+            _parse_json_array("not valid json")
 
 
 # ---- _dicts_to_events ----

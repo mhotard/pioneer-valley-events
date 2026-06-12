@@ -11,6 +11,7 @@ Both are configured via sources.json entries:
 import json
 import logging
 import os
+import re
 from typing import Optional
 
 import requests
@@ -22,6 +23,13 @@ from .base import BaseScraper, Event
 log = logging.getLogger("pipeline")
 
 _client: Optional[Anthropic] = None
+
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+VALID_CATEGORIES = {
+    "music", "arts", "film", "comedy", "community",
+    "academia", "family", "food", "outdoor", "festival",
+}
 
 BROWSER_UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -76,7 +84,8 @@ def _get_client() -> Anthropic:
 def _clean_html(html: str) -> str:
     """Strip scripts, styles, nav, footer — keep main content."""
     soup = BeautifulSoup(html, "html.parser")
-    for tag in soup(["script", "style", "noscript", "svg", "nav", "header", "footer", "aside", "img"]):
+    junk_tags = ["script", "style", "noscript", "svg", "nav", "header", "footer", "aside", "img"]
+    for tag in soup(junk_tags):
         tag.decompose()
     # Strip all attributes except href and datetime to reduce size
     for tag in soup.find_all(True):
@@ -87,7 +96,36 @@ def _clean_html(html: str) -> str:
     return content[:MAX_HTML_CHARS]
 
 
-def _extract_events(html: str, venue: str, town: str) -> list[dict]:
+def _parse_json_array(raw: str) -> list:
+    """Parse Haiku's response into a list, salvaging truncated output.
+
+    If the response was cut off mid-array (e.g. the model hit max_tokens),
+    drop the incomplete trailing object and keep the complete ones.
+    """
+    raw = raw.strip()
+    # Strip markdown fences if present
+    if raw.startswith("```"):
+        raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+
+    # Salvage: truncate to each closing brace (last first) and close the array
+    start = raw.find("[")
+    if start == -1:
+        raise ValueError(f"No JSON array in response: {raw[:200]!r}")
+    body = raw[start:]
+    for end in reversed([m.start() for m in re.finditer(r"\}", body)]):
+        try:
+            return json.loads(body[: end + 1] + "]")
+        except json.JSONDecodeError:
+            continue
+    raise ValueError(f"Could not parse response as JSON array: {raw[:200]!r}")
+
+
+def _extract_events(html: str, venue: str, town: str, source_name: str = "") -> list[dict]:
     """Call Haiku and return parsed list of event dicts."""
     from datetime import date
 
@@ -101,16 +139,18 @@ def _extract_events(html: str, venue: str, town: str) -> list[dict]:
     client = _get_client()
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=4096,
+        max_tokens=8192,
         messages=[{"role": "user", "content": prompt}],
     )
 
-    raw = message.content[0].text.strip()
-    # Strip markdown fences if present
-    if raw.startswith("```"):
-        raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+    raw = message.content[0].text
+    if message.stop_reason == "max_tokens":
+        log.warning(
+            "[%s] Haiku output hit max_tokens — salvaging partial event list",
+            source_name or venue,
+        )
 
-    return json.loads(raw)
+    return _parse_json_array(raw)
 
 
 def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str) -> list[Event]:
@@ -120,8 +160,12 @@ def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str)
         try:
             title = str(d.get("title", "")).strip()
             date_str = str(d.get("date", "")).strip()
-            if not title or not date_str:
+            if not title or not DATE_RE.match(date_str):
                 continue
+
+            category = str(d.get("category", "")).strip().lower()
+            if category not in VALID_CATEGORIES:
+                category = "community"
 
             events.append(Event(
                 title=title,
@@ -134,7 +178,7 @@ def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str)
                 description=str(d.get("description", ""))[:500],
                 url=str(d.get("url", "")),
                 image_url=None,
-                category=str(d.get("category", "community")),
+                category=category,
                 source=source_name,
             ))
         except Exception as e:
@@ -151,29 +195,25 @@ class ClaudeHTMLScraper(BaseScraper):
         self.venue = venue
         self.town = town
 
-    def _fetch(self) -> list[Event]:
+    def _get_html(self) -> str:
         headers = {"User-Agent": BROWSER_UA}
         resp = requests.get(self.url, headers=headers, timeout=20)
         resp.raise_for_status()
+        return resp.text
 
-        cleaned = _clean_html(resp.text)
-        dicts = _extract_events(cleaned, self.venue, self.town)
+    def _fetch(self) -> list[Event]:
+        cleaned = _clean_html(self._get_html())
+        dicts = _extract_events(cleaned, self.venue, self.town, self.name)
         events = _dicts_to_events(dicts, self.name, self.venue, self.town)
 
         log.debug("[%s] Found %d events", self.name, len(events))
         return events
 
 
-class ClaudePlaywrightScraper(BaseScraper):
+class ClaudePlaywrightScraper(ClaudeHTMLScraper):
     """Renders a JS-heavy page with Playwright, then uses Haiku to extract events."""
 
-    def __init__(self, name: str, url: str, venue: str, town: str):
-        self.name = name
-        self.url = url
-        self.venue = venue
-        self.town = town
-
-    def _fetch(self) -> list[Event]:
+    def _get_html(self) -> str:
         try:
             from playwright.sync_api import sync_playwright
         except ImportError:
@@ -185,18 +225,12 @@ class ClaudePlaywrightScraper(BaseScraper):
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page(user_agent=BROWSER_UA)
-            page.goto(self.url, wait_until="networkidle", timeout=30_000)
-            # Wait a beat for any deferred rendering
-            page.wait_for_timeout(2000)
+            # "networkidle" hangs on ad-heavy pages, so wait for DOM + a fixed delay
+            page.goto(self.url, wait_until="domcontentloaded", timeout=30_000)
+            page.wait_for_timeout(4000)
             html = page.content()
             browser.close()
-
-        cleaned = _clean_html(html)
-        dicts = _extract_events(cleaned, self.venue, self.town)
-        events = _dicts_to_events(dicts, self.name, self.venue, self.town)
-
-        log.debug("[%s] Found %d events", self.name, len(events))
-        return events
+        return html
 
 
 def load_claude_scrapers(sources_path: Optional[str] = None) -> list[BaseScraper]:

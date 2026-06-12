@@ -47,7 +47,7 @@ class NEPMCultureScraper(BaseScraper):
         resp2.raise_for_status()
 
         cleaned = _clean_html(resp2.text)
-        dicts = _extract_events(cleaned, "Various Pioneer Valley Venues", self.town)
+        dicts = _extract_events(cleaned, "Various Pioneer Valley Venues", self.town, self.name)
         events = _dicts_to_events(dicts, self.name, "Various Pioneer Valley Venues", self.town)
 
         log.debug("[nepm-culture] Found %d events", len(events))

@@ -8,13 +8,6 @@
       "type": "html"
     },
     {
-      "name": "gateway-city-arts",
-      "url": "https://gatewaycityarts.com/events",
-      "venue": "Gateway City Arts",
-      "town": "Holyoke",
-      "type": "html"
-    },
-    {
       "name": "smith-college",
       "url": "https://www.smith.edu/events",
       "venue": "Smith College",
@@ -44,7 +37,7 @@
     },
     {
       "name": "academy-of-music",
-      "url": "https://aomtheatre.com/events",
+      "url": "https://aomtheatre.com/event-calendar/",
       "venue": "Academy of Music Theatre",
       "town": "Northampton",
       "type": "html"
@@ -54,7 +47,7 @@
       "url": "https://www.nohoarts.org/events",
       "venue": "Northampton Center for the Arts",
       "town": "Northampton",
-      "type": "html"
+      "type": "playwright"
     },
     {
       "name": "northampton-live",
@@ -78,18 +71,11 @@
       "type": "html"
     },
     {
-      "name": "explore-western-mass",
-      "url": "https://explorewesternmass.com/events/",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "type": "html"
-    },
-    {
       "name": "visit-hampshire-county",
       "url": "https://visithampshirecounty.com/calendar",
       "venue": "Various Hampshire County Venues",
       "town": "Pioneer Valley",
-      "type": "html"
+      "type": "playwright"
     }
   ]
 }
