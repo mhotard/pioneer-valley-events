@@ -63,4 +63,7 @@ jobs:
         if: ${{ env.GMAIL_ADDRESS != '' }}
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          # Optional: deliver to a different inbox than the sender. If the
+          # MAIL_TO secret is unset, the digest goes to GMAIL_ADDRESS itself.
+          MAIL_TO: ${{ secrets.MAIL_TO }}
         run: python email_digest.py --days 14
