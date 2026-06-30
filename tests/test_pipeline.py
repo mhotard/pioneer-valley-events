@@ -8,7 +8,7 @@ from datetime import date, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from pipeline import deduplicate, filter_by_date
+from pipeline import api_key_present, deduplicate, filter_by_date
 
 # ---- Helpers ----
 
@@ -87,6 +87,23 @@ class TestDeduplicate:
 
 
 # ---- Date filter tests ----
+
+class TestApiKeyPresent:
+    def test_true_when_pioneer_key_set(self, monkeypatch):
+        monkeypatch.setenv("ANTHROPIC_API_KEY_PIONEER", "sk-test")
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        assert api_key_present() is True
+
+    def test_true_when_fallback_key_set(self, monkeypatch):
+        monkeypatch.delenv("ANTHROPIC_API_KEY_PIONEER", raising=False)
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+        assert api_key_present() is True
+
+    def test_false_when_no_key(self, monkeypatch):
+        monkeypatch.delenv("ANTHROPIC_API_KEY_PIONEER", raising=False)
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        assert api_key_present() is False
+
 
 class TestFilterByDate:
     def test_future_event_kept(self):

@@ -18,12 +18,26 @@ from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
 
 from scrapers import get_all_scrapers
+from scrapers.claude_scraper import ClaudeHTMLScraper
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "logs")
 # Only include events within this window (past 3 days → future 90 days)
 DATE_MIN = (date.today() - timedelta(days=3)).isoformat()
 DATE_MAX = (date.today() + timedelta(days=90)).isoformat()
+
+# Abort (exit non-zero) if more than this fraction of sources error in a full
+# run. This turns a silently-degraded run into a loud failure so the GitHub
+# Action goes red and emails us, instead of publishing a half-empty site.
+MAX_ERROR_FRACTION = 0.34
+
+
+def api_key_present() -> bool:
+    """True if an Anthropic API key is available for the Claude scrapers."""
+    return bool(
+        os.environ.get("ANTHROPIC_API_KEY_PIONEER")
+        or os.environ.get("ANTHROPIC_API_KEY")
+    )
 
 
 def setup_logging():
@@ -135,13 +149,14 @@ def run(scrapers, dry_run=False):
         log.info("")
         log.info("--- DRY RUN (not writing) ---")
         log.info(json.dumps(payload, indent=2)[:2000])
-        return
+        return results
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
     log.info("Wrote %d events to %s", len(all_events), OUTPUT_PATH)
+    return results
 
 
 def main():
@@ -165,7 +180,31 @@ def main():
     else:
         scrapers = all_scrapers
 
-    run(scrapers, dry_run=args.dry_run)
+    # Pre-flight: if any source needs the Anthropic key and it's missing, abort
+    # loudly rather than quietly publishing only the non-Claude sources.
+    needs_key = any(isinstance(s, ClaudeHTMLScraper) for s in scrapers)
+    if needs_key and not api_key_present():
+        log.error(
+            "ANTHROPIC_API_KEY is not set, but %d source(s) need it. Aborting so "
+            "we don't publish a degraded events.json. In GitHub Actions, set the "
+            "ANTHROPIC_API_KEY repository secret; locally, run `source ~/.zshrc` first.",
+            sum(isinstance(s, ClaudeHTMLScraper) for s in scrapers),
+        )
+        sys.exit(1)
+
+    results = run(scrapers, dry_run=args.dry_run)
+
+    # Post-run backstop: in a full run, fail if too many sources errored (e.g. a
+    # bad/expired key, or a widespread outage) so the failure can't hide.
+    if not args.source and results:
+        errored = [r for r in results if r[3]]
+        if len(errored) > len(results) * MAX_ERROR_FRACTION:
+            log.error(
+                "%d of %d sources errored (> %.0f%%). Failing the run so it isn't "
+                "mistaken for a healthy one.",
+                len(errored), len(results), MAX_ERROR_FRACTION * 100,
+            )
+            sys.exit(1)
 
 
 if __name__ == "__main__":
