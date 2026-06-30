@@ -10,9 +10,9 @@
       "source": "nepm-culture",
       "category": "arts",
       "time": "12:00 PM",
-      "end_time": "",
+      "end_time": "6:00 PM",
       "address": "",
-      "description": "Young adults training for careers as dancers under the tutelage of CLI founder and Southampton native Teddy Forance alongside some of the best choreographers in the world of dance. A multimedia year-end show.",
+      "description": "Young adults training for careers as dancers under the tutelage of CLI founder and Southampton native Teddy Forance alongside some of the best choreographers in the world of dance perform a multimedia year-end show.",
       "url": "https://aomtheatre.com/aom_event/cli-conservatory-end-of-year-show/",
       "image_url": null
     },
@@ -23,11 +23,11 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm-culture",
-      "category": "music",
+      "category": "festival",
       "time": "4:00 PM",
       "end_time": "7:00 PM",
       "address": "",
-      "description": "Weathervane Community Arts' free World Music Mini-fest with an afternoon of music, workshops, and food in downtown Turners Falls. The concert lineup includes Myrtle Street Klezmer's exuberant Eastern European music, pipa virtuoso Minqi Wang, and Guachinangos. Food from the El Sotano Taco Truck available.",
+      "description": "Weathervane Community Arts' free World Music Mini-fest returns to Peskeompskut Park with an afternoon of music, workshops, and food. The concert lineup includes Myrtle Street Klezmer, pipa virtuoso Minqi Wang, and Guachinangos. Bring a lawn chair or blanket and look for food from the El Sotano Taco Truck.",
       "url": "https://www.weathervane-arts.org/events",
       "image_url": null
     },
@@ -42,7 +42,7 @@
       "time": "5:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Wide-ranging vocal recital featuring mezzo-soprano Lizzie Shamash, Grammy-winning soprano Ilana Davidson, and pianist Stephen Porter. The program includes works by Monteverdi, Handel, Offenbach, Brahms, Debussy, Irving Berlin, and others.",
+      "description": "A wide-ranging vocal recital featuring mezzo-soprano Lizzie Shamash, Grammy-winning soprano Ilana Davidson, and pianist Stephen Porter. The program includes works by Monteverdi, Handel, Offenbach, Brahms, Debussy, Irving Berlin, and others.",
       "url": "https://www.mohawktrailconcerts.org/2026-season",
       "image_url": null
     },
@@ -57,23 +57,8 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Paul Simon makes his Tanglewood debut with 'A Quiet Celebration,' a two-part concert that opens with Seven Psalms, his Grammy-nominated, 33-minute continuous work for voice and acoustic instruments. After intermission, Simon returns with songs from across his career.",
+      "description": "Paul Simon makes his Tanglewood debut with \"A Quiet Celebration,\" a two-part concert that opens with Seven Psalms, his Grammy-nominated, 33-minute continuous work. After intermission, Simon returns with songs from across his remarkable career, including greatest hits and deeper cuts.",
       "url": "https://www.bso.org/events/paul-simon?performance=2026-06-27-19:30",
-      "image_url": null
-    },
-    {
-      "id": "evt-3dc4c8ca8a",
-      "title": "CLI Conservatory End of Year Show",
-      "date": "2026-06-28",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "nepm-culture",
-      "category": "arts",
-      "time": "12:00 PM",
-      "end_time": "",
-      "address": "",
-      "description": "Young adults training for careers as dancers under the tutelage of CLI founder and Southampton native Teddy Forance alongside some of the best choreographers in the world of dance. A multimedia year-end show.",
-      "url": "https://aomtheatre.com/aom_event/cli-conservatory-end-of-year-show/",
       "image_url": null
     },
     {
@@ -87,7 +72,7 @@
       "time": "6:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Paul Simon makes his Tanglewood debut with 'A Quiet Celebration,' a two-part concert that opens with Seven Psalms, his Grammy-nominated, 33-minute continuous work for voice and acoustic instruments. After intermission, Simon returns with songs from across his career.",
+      "description": "Paul Simon makes his Tanglewood debut with \"A Quiet Celebration,\" a two-part concert that opens with Seven Psalms, his Grammy-nominated, 33-minute continuous work. After intermission, Simon returns with songs from across his remarkable career, including greatest hits and deeper cuts.",
       "url": "https://www.bso.org/events/paul-simon?performance=2026-06-27-19:30",
       "image_url": null
     },
@@ -102,7 +87,7 @@
       "time": "5:30 PM",
       "end_time": "7:30 PM",
       "address": "",
-      "description": "Find the perfect spot to picnic amidst the Berkshire Botanical Garden's beauty while enjoying performances from talented local performers. First up on Monday, June 29: The Rejuvenators with Wanda Houston. Bring a blanket and enjoy music rain or shine.",
+      "description": "Find the perfect spot to picnic amidst the BBG's beauty while enjoying performances from talented local performers. Bring a blanket, sip something cool and let the sweet sounds set the tone for a perfect summer evening. First up: The Rejuvenators with Wanda Houston.",
       "url": "https://www.berkshirebotanical.org/music-mondays-2026",
       "image_url": null
     },
@@ -147,7 +132,7 @@
       "time": "10:00 AM",
       "end_time": "1:00 PM",
       "address": "",
-      "description": "This 6-week class teaches you the traditional methods of handling transparent watercolor in",
+      "description": "This 6-week class teaches you the traditional methods of handling transparent watercolor.",
       "url": "/events/watercolor-painting-for-beginners-with-giselle-harrington",
       "image_url": null
     },
@@ -182,21 +167,6 @@
       "image_url": null
     },
     {
-      "id": "evt-0de1cca827",
-      "title": "Virtual Joint meeting of Amherst, Pelham, and Amherst-Pelham Regional School Committee -- Executive Session",
-      "date": "2026-06-30",
-      "venue": "Various Amherst Venues",
-      "town": "Amherst",
-      "source": "town-of-amherst",
-      "category": "academia",
-      "time": "4:30 PM",
-      "end_time": "5:30 PM",
-      "address": "",
-      "description": "REVISED: 6/26/26 at 12:07 p.m. REVISED: 6/26/26 at 10:09 a.m. RECEIVED: 6/25/26 at 2:32 p.m. LIST OF TOPICS: Click \"More Details\" to view List of Topics.",
-      "url": "/Calendar.aspx?EID=35569&month=6&year=2026&day=30&calType=0",
-      "image_url": null
-    },
-    {
       "id": "evt-73c388cf8b",
       "title": "Thrive at Five - Summer Yoga and Mindfulness Series",
       "date": "2026-06-30",
@@ -225,6 +195,21 @@
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=18468",
       "image_url": "https://www.joneslibrary.org/DocumentCenter/View/9825"
+    },
+    {
+      "id": "evt-a887da0f17",
+      "title": "Virtual Joint meeting of Amherst, Pelham, and Amherst-Pelham Regional School Committee",
+      "date": "2026-06-30",
+      "venue": "Various Amherst Venues",
+      "town": "Amherst",
+      "source": "town-of-amherst",
+      "category": "community",
+      "time": "5:30 PM",
+      "end_time": "7:30 PM",
+      "address": "",
+      "description": "Virtual Zoom webinar. Webinar ID: 992 4552 7768",
+      "url": "https://zoom.us/j/99245527768",
+      "image_url": null
     },
     {
       "id": "evt-c8e6eaef47",
@@ -282,7 +267,7 @@
       "time": "9:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing",
+      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing Grateful Dead music.",
       "url": "/events/dead-night-grateful-dead-cover-2026-06-30",
       "image_url": null
     },
@@ -308,27 +293,12 @@
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "food",
+      "category": "community",
       "time": "",
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=32030&month=6&year=2026&day=30&calType=0",
-      "image_url": null
-    },
-    {
-      "id": "evt-b3e2e31347",
-      "title": "Lyle Pearsons",
-      "date": "2026-07-01",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "valley-arts-newsletter",
-      "category": "arts",
-      "time": "",
-      "end_time": "",
-      "address": "",
-      "description": "A selection of images painted by the late Lyle Pearsons displayed at Agawam Public Library. Hours: Mon-Thur 9am-9pm, Fri 9am-5pm.",
-      "url": "https://www.agawamlibrary.org/",
+      "url": "",
       "image_url": null
     },
     {
@@ -522,7 +492,7 @@
       "time": "6:00 PM",
       "end_time": "",
       "address": "",
-      "description": "The Clark's free summer concert series returns to the Reflecting Pool Lawn with five Wednesday evening concerts connected thematically to the museum's Ground/work 2025 exhibition. First concert: guitar powerhouse Jackie Venson. Food from outdoor Café 7 grill available for purchase beginning at 5 p.m.",
+      "description": "The Clark's free summer concert series returns to the Reflecting Pool Lawn with five Wednesday evening concerts connected thematically to the museum's Ground/work 2025 exhibition. First up: guitar powerhouse Jackie Venson on July 1.",
       "url": "https://berkshires.org/events/clark-art-summer-concert-series/",
       "image_url": null
     },
@@ -612,7 +582,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -867,24 +837,9 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Austin blues-rock guitarist and vocalist Jackie Venson brings her fierce musicianship and genre-hopping sound to De La Luz. Known for blistering guitar work and magnetic vocals that move through blues, soul, electro-funk, rock, and R&B. Shared stages with Gary Clark Jr. and Melissa Etheridge.",
+      "description": "Austin blues-rock guitarist and vocalist Jackie Venson brings her fierce musicianship and genre-hopping sound. Known for blistering guitar work and magnetic vocals that move through blues, soul, electro-funk, rock, and R&B, Venson has shared stages with Gary Clark Jr. and Melissa Etheridge.",
       "url": "https://delaluz.org/events/jackie-venson/",
       "image_url": null
-    },
-    {
-      "id": "evt-6ea9ae3373",
-      "title": "Maddie's Secret",
-      "date": "2026-07-02",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566020~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
     },
     {
       "id": "evt-a064251348",
@@ -897,7 +852,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -943,7 +898,7 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=35555&month=6&year=2026&day=30&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -1022,36 +977,6 @@
       "image_url": null
     },
     {
-      "id": "evt-c6c35acde5",
-      "title": "Rose of Nevada",
-      "date": "2026-07-03",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567265~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
-      "id": "evt-73579bb92b",
-      "title": "Maddie's Secret",
-      "date": "2026-07-03",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566074~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
-    },
-    {
       "id": "evt-a3c09fe2da",
       "title": "Kids Gaming Club",
       "date": "2026-07-03",
@@ -1065,21 +990,6 @@
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/14995677",
       "image_url": null
-    },
-    {
-      "id": "evt-1eef254e51",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-03",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567266~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
     },
     {
       "id": "evt-75b4a0e2d4",
@@ -1107,7 +1017,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -1152,7 +1062,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Shipwrecks, disguises, and mistaken identities spark the joyful chaos of Twelfth Night, Shakespeare's most playful romantic comedy. Love runs amok and nothing is quite what it seems in this sun-soaked tale of music and mischief. Performed outdoors at one of Newsweek's Top 10 Outdoor Theater Venues in the U.S.",
+      "description": "Shipwrecks, disguises, and mistaken identities spark the joyful chaos of Twelfth Night, Shakespeare's most playful romantic comedy. Performed outdoors at one of Newsweek's Top 10 Outdoor Theater Venues in the U.S., this summer production invites audiences to relax, laugh, and revel in Shakespeare under the open sky.",
       "url": "https://shakespeare.org/shows/2026/twelfth-night/",
       "image_url": null
     },
@@ -1247,36 +1157,6 @@
       "image_url": null
     },
     {
-      "id": "evt-bbc8dfafba",
-      "title": "Rose of Nevada",
-      "date": "2026-07-04",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567269~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
-      "id": "evt-9268fcb862",
-      "title": "Maddie's Secret",
-      "date": "2026-07-04",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566078~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
-    },
-    {
       "id": "evt-55109d6f19",
       "title": "VIRTUAL: Spanish Conversation Group",
       "date": "2026-07-04",
@@ -1292,33 +1172,18 @@
       "image_url": null
     },
     {
-      "id": "evt-6630c53714",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-04",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567270~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
-    },
-    {
       "id": "evt-64980883f1",
       "title": "Reading Frederick Douglass Together: Reaffirming Our Unalienable Rights",
       "date": "2026-07-05",
       "venue": "Various Amherst Venues",
       "town": "Amherst",
       "source": "town-of-amherst",
-      "category": "community",
+      "category": "academia",
       "time": "",
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=35473&month=6&year=2026&day=30&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -1333,53 +1198,8 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=35166&month=6&year=2026&day=30&calType=0",
+      "url": "",
       "image_url": null
-    },
-    {
-      "id": "evt-9651fb0970",
-      "title": "Rose of Nevada",
-      "date": "2026-07-05",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "10:40 AM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567273~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
-      "id": "evt-7e0ea90d23",
-      "title": "Maddie's Secret",
-      "date": "2026-07-05",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "10:50 AM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566082~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
-    },
-    {
-      "id": "evt-140a44ca81",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-05",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "11:00 AM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567255~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
     },
     {
       "id": "evt-4c06c4b47d",
@@ -1425,21 +1245,6 @@
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=17204",
       "image_url": null
-    },
-    {
-      "id": "evt-c066b0f48e",
-      "title": "2001: A Space Odyssey",
-      "date": "2026-07-05",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Stanley Kubrick’s dazzling, Oscar-winning achievement is a compelling drama of man vs. machine, a stunning meld of music and motion.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561383~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/2001Web.jpg?itok=j-9pWCqI"
     },
     {
       "id": "evt-ab89238691",
@@ -1572,7 +1377,7 @@
       "time": "11:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "Join us July 6 from 11pm-12am to celebrate the final book in your teen's fav graphic novel series by",
+      "description": "Join us July 6 from 11pm-12am to celebrate the final book in your teen's fav graphic novel series.",
       "url": "/events/heartstopper-vol-6-midnight-release-party",
       "image_url": null
     },
@@ -1592,36 +1397,6 @@
       "image_url": null
     },
     {
-      "id": "evt-3fb7e9967a",
-      "title": "Rose of Nevada",
-      "date": "2026-07-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567241~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
-      "id": "evt-b3a7e8937c",
-      "title": "Maddie's Secret",
-      "date": "2026-07-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566086~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
-    },
-    {
       "id": "evt-284d0230ca",
       "title": "LEGO Club!",
       "date": "2026-07-06",
@@ -1635,21 +1410,6 @@
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/16824000",
       "image_url": null
-    },
-    {
-      "id": "evt-1402ef640e",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567242~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
     },
     {
       "id": "evt-41df7e433e",
@@ -1682,21 +1442,6 @@
       "image_url": null
     },
     {
-      "id": "evt-76a5e69a5a",
-      "title": "All That Jazz",
-      "date": "2026-07-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Director/choreographer Bob Fosse (CABARET) tells his own life story as he details the sordid career of dancer Joe Gideon (Roy Scheider). With music by Ralph Burns and choreography by Fosse himself, ALL THAT JAZZ pushes the musical genre to personal depths and virtuosic aesthetic heights.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561300~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AllThatJazzWeb2.jpg?itok=xuno449N"
-    },
-    {
       "id": "evt-2673c8476f",
       "title": "250th: Iron in the Water - ONLINE",
       "date": "2026-07-06",
@@ -1722,7 +1467,7 @@
       "time": "7:00 PM",
       "end_time": "9:00 PM",
       "address": "",
-      "description": "The City of Northampton, in partnership with Dancenjoy, is proud to announce the return of Salsa in",
+      "description": "The City of Northampton, in partnership with Dancenjoy, is proud to announce the return of Salsa in the Plaza.",
       "url": "/events/salsa-in-the-plaza-2",
       "image_url": null
     },
@@ -1737,7 +1482,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -1768,7 +1513,7 @@
       "end_time": "",
       "address": "",
       "description": "",
-      "url": "/Calendar.aspx?EID=33037&month=6&year=2026&day=30&calType=0",
+      "url": "",
       "image_url": null
     },
     {
@@ -1868,28 +1613,13 @@
       "venue": "Various Hampshire County Venues",
       "town": "Pioneer Valley",
       "source": "visit-hampshire-county",
-      "category": "outdoor",
+      "category": "community",
       "time": "12:00 AM",
       "end_time": "",
       "address": "",
       "description": "",
       "url": "#!/details/binghamton-rumble-ponies-at-hartford-yard-goats/16506825/2026-07-07T00",
       "image_url": null
-    },
-    {
-      "id": "evt-43316583ce",
-      "title": "Rose of Nevada",
-      "date": "2026-07-07",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567244~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
     },
     {
       "id": "evt-7e95393f34",
@@ -1905,21 +1635,6 @@
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/15514107",
       "image_url": null
-    },
-    {
-      "id": "evt-193dca8ee6",
-      "title": "Maddie's Secret",
-      "date": "2026-07-07",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566090~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
     },
     {
       "id": "evt-84c0b7187b",
@@ -1950,21 +1665,6 @@
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=18496",
       "image_url": "https://www.joneslibrary.org/DocumentCenter/View/12628"
-    },
-    {
-      "id": "evt-d32d9a752d",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-07",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567245~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
     },
     {
       "id": "evt-f7d3cf59d3",
@@ -2012,21 +1712,6 @@
       "image_url": null
     },
     {
-      "id": "evt-f35bcf44d0",
-      "title": "2001: A Space Odyssey",
-      "date": "2026-07-07",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Stanley Kubrick’s dazzling, Oscar-winning achievement is a compelling drama of man vs. machine, a stunning meld of music and motion.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561384~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/2001Web.jpg?itok=j-9pWCqI"
-    },
-    {
       "id": "evt-30b7d33d0c",
       "title": "Young@Heart Brass Bash",
       "date": "2026-07-07",
@@ -2037,7 +1722,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Young@Heart Chorus and the Bombyx Brass Collective take the stage at the Sanctuary in Look Park to perform songs from the American songbook with a nuanced look at our country's past. This is the first collaboration between the two groups. Bring your picnics and lawn chairs.",
+      "description": "Young@Heart Chorus and the Bombyx Brass Collective perform songs from the American songbook with a nuanced look at our country's past. This is the first collaboration between the two groups. Bring your picnics and lawn chairs.",
       "url": "https://bombyx.live/events/youngheart-brass-bash/",
       "image_url": null
     },
@@ -2067,7 +1752,7 @@
       "time": "7:30 PM",
       "end_time": "",
       "address": "",
-      "description": "Boston based tenor saxophonist Benny Sharoni is this guest soloist with the Green Street trio",
+      "description": "Boston based tenor saxophonist Benny Sharoni is the guest soloist with the Green Street trio.",
       "url": "/events/benny-sharoni-and-the-green-street-trio-in-concert",
       "image_url": null
     },
@@ -2097,7 +1782,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -2112,7 +1797,7 @@
       "time": "9:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing",
+      "description": "Hosted by Kade Parkin every Tuesday with a rotating collective of live bands and members playing Grateful Dead music.",
       "url": "/events/dead-night-grateful-dead-cover-2026-07-07",
       "image_url": null
     },
@@ -2342,36 +2027,6 @@
       "image_url": null
     },
     {
-      "id": "evt-481e837b82",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-08",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567281~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
-    },
-    {
-      "id": "evt-14bd97fe5d",
-      "title": "Maddie's Secret",
-      "date": "2026-07-08",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566094~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
-    },
-    {
       "id": "evt-42b227be83",
       "title": "Drop-in Chess",
       "date": "2026-07-08",
@@ -2447,21 +2102,6 @@
       "image_url": null
     },
     {
-      "id": "evt-e6edaff4c3",
-      "title": "Rose of Nevada",
-      "date": "2026-07-08",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567282~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
       "id": "evt-2d87305c13",
       "title": "VIRTUAL Herstory Book Group: Reclamation by Gayle Jessup White",
       "date": "2026-07-08",
@@ -2517,7 +2157,7 @@
       "time": "9:00 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Holley Flagg '62: Color and light are my passion. They are the driving force in what I create.",
+      "description": "Holley Flagg '62:Color and light are my passion. They are the driving force in what I create.",
       "url": "https://www.smith.edu/news-events/events/holley-flagg-62-art-exhibition",
       "image_url": null
     },
@@ -2558,7 +2198,7 @@
       "venue": "Various Pioneer Valley Venues",
       "town": "Pioneer Valley",
       "source": "nepm-culture",
-      "category": "music",
+      "category": "festival",
       "time": "",
       "end_time": "",
       "address": "",
@@ -2657,21 +2297,6 @@
       "image_url": null
     },
     {
-      "id": "evt-cdac510bf8",
-      "title": "Rose of Nevada",
-      "date": "2026-07-09",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "30 years ago, the Rose of Nevada disappeared at sea. Now, it has returned. Desperate to make ends meet, two men (George MacKay, Callum Turner) join its crew and set sail once again, but soon discover they’ve been transported back into the past, where they are mistaken for the original crew. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567246~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RoseOfNevadaWeb.jpg?itok=MCq7dozs"
-    },
-    {
       "id": "evt-7acc090849",
       "title": "teen volunteers",
       "date": "2026-07-09",
@@ -2685,21 +2310,6 @@
       "description": "",
       "url": "https://www.joneslibrary.org/Calendar.aspx?EID=18581",
       "image_url": null
-    },
-    {
-      "id": "evt-fa67790f60",
-      "title": "Maddie's Secret",
-      "date": "2026-07-09",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:40 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "MADDIE’S SECRET is comedian, writer, and actor John Early’s critically acclaimed directorial debut starring himself as Maddie, a plucky dishwasher who leaps to viral superstardom at a trendy food content creation company. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=566096~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/MaddiesSecretWeb.jpg?itok=g07fdBHw"
     },
     {
       "id": "evt-ffeb5fe907",
@@ -2747,21 +2357,6 @@
       "image_url": null
     },
     {
-      "id": "evt-1b3cc4dfb1",
-      "title": "Kids Like Me",
-      "date": "2026-07-09",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Meet Oliver, a 12-year-old murder-mystery buff who is growing up with a rare genetic condition. Together with his family, they reframe what it means to live with disabilities, while embarking on an exciting adventure to create a murder-mystery caper. Join us for a sneak preview of this new doc, partially filmed in Amherst, MA. Post-film Q&A with filmmaker Cynthia Lowen. Free to Amherst Cinema Members.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=564042~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/KidsLikeMeWeb.jpg?itok=y49MrJaO"
-    },
-    {
       "id": "evt-2a87e06147",
       "title": "Kids Crafternoon with Farmer Leila",
       "date": "2026-07-09",
@@ -2805,21 +2400,6 @@
       "description": "As part of Summer at The Carle enjoy a late evening at The Carle full of nature, art, and music!",
       "url": "https://carlemuseum.org/visit/events/sunset-thursdays-9",
       "image_url": null
-    },
-    {
-      "id": "evt-5becfeac26",
-      "title": "The Sheep Detectives",
-      "date": "2026-07-09",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:15 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this witty, new breed of mystery, George (Hugh Jackman) is a shepherd who reads detective novels to his beloved sheep every night, assuming they can’t possibly understand. But when a mysterious incident disrupts life on the farm, the sheep realize they must become the detectives. A New York Times Critic's Pick!",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=567283~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheSheepDetectivesWeb.jpg?itok=wVpOTqOV"
     },
     {
       "id": "evt-a4ad96e723",
@@ -2877,7 +2457,7 @@
       "time": "7:00 PM",
       "end_time": "9:00 PM",
       "address": "",
-      "description": "Join us for a supportive, queer-affirming monthly Song Share session dedicated to nonbinary, trans,",
+      "description": "Join us for a supportive, queer-affirming monthly Song Share session dedicated to nonbinary, trans and women singer-songwriters.",
       "url": "/events/song-share-sessions-for-nonbinary-trans-and-women-singer-songwr2026-07-09",
       "image_url": null
     },
@@ -2892,7 +2472,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "+++This event takes place at The Sanctuary at Look Park+++ A Soundbath with KAMAUU is unlike any",
+      "description": "A Soundbath with KAMAUU is unlike any other. This event takes place at The Sanctuary at Look Park.",
       "url": "/events/a-quiet-moment-with-kamauu-7-9-26",
       "image_url": null
     },
@@ -2922,7 +2502,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "In the summer of 1774, seeds of revolution begin to germinate in Deerfield when a Liberty Pole is brought to town. The characters in three new one-act plays explore the political divisions, tangled family relations, and the complexities of enslavement from all sides. Performed outdoors at historic locations.",
+      "description": "In the summer of 1774, seeds of revolution begin to germinate in Deerfield when a Liberty Pole is brought to town. The characters in three new one-act plays explore the political divisions, tangled family relations, and the complexities of enslavement from all sides. Performed outdoors.",
       "url": "https://www.historic-deerfield.org/events/a-stake-in-the-ground-1774/",
       "image_url": null
     },
@@ -2937,7 +2517,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Join us for the July 10 Second Friday at SCMA from 4–8 p.m. and spend an evening investigating the",
+      "description": "Join us for the July 10 Second Friday at SCMA from 4–8 p.m. and spend an evening investigating the color blue.",
       "url": "/events/an-evening-in-blue-at-the-july-10-second-friday",
       "image_url": null
     },
@@ -3147,23 +2727,8 @@
       "time": "5:00 PM",
       "end_time": "8:00 PM",
       "address": "",
-      "description": "ARTS NIGHT OUT AT 33 HAWLEY Friday, July 10th, 5:00-8:00 PM Artist talk at 7 pm with Jay Rathaus",
+      "description": "ARTS NIGHT OUT AT 33 HAWLEY with artist talk at 7 pm with Jay Rathaus.",
       "url": "/events/july-arts-night-out-2026-07-10",
-      "image_url": null
-    },
-    {
-      "id": "evt-62e1e0e78b",
-      "title": "Worcester Red Sox vs. Rochester Red Wings",
-      "date": "2026-07-10",
-      "venue": "Various Hampshire County Venues",
-      "town": "Pioneer Valley",
-      "source": "visit-hampshire-county",
-      "category": "outdoor",
-      "time": "6:00 PM",
-      "end_time": "",
-      "address": "",
-      "description": "",
-      "url": "#!/details/worcester-red-sox-vs-rochester-red-wings/17066132/2026-07-10T18",
       "image_url": null
     },
     {
@@ -3192,7 +2757,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "+++ This event takes place at The Sanctuary at Look Park +++ The Etchings Festival, now in its 17th",
+      "description": "The Etchings Festival, now in its 17th summer, showcases cutting edge contemporary music. This event takes place at The Sanctuary at Look Park.",
       "url": "/events/etchings-festival-day-1-ecce-ensemble-king-klave-trio",
       "image_url": null
     },
@@ -3222,7 +2787,7 @@
       "time": "8:00 PM",
       "end_time": "12:00 AM",
       "address": "",
-      "description": "Friday, July 10, 2026, Jerry's Middle Finger, the world's most electrifying Jerry Garcia Band",
+      "description": "Friday, July 10, 2026, Jerry's Middle Finger, the world's most electrifying Jerry Garcia Band tribute.",
       "url": "/events/middle-finger-returns",
       "image_url": null
     },
@@ -3447,7 +3012,7 @@
       "time": "10:30 AM",
       "end_time": "4:00 PM",
       "address": "",
-      "description": "Dance, 5Rhythms",
+      "description": "Dance - 5Rhythms",
       "url": "",
       "image_url": null
     },
@@ -3465,36 +3030,6 @@
       "description": "Famous Author Bob Shea will read one or two of his beloved stories and then share his proprietary drawing secrets.",
       "url": "https://carlemuseum.org/visit/events/special-storytime-bob-shea-0",
       "image_url": null
-    },
-    {
-      "id": "evt-2cdf38d773",
-      "title": "Beginning Stained Glass Class at Dragonfly Stained Glass Studio",
-      "date": "2026-07-11",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "valley-arts-newsletter",
-      "category": "arts",
-      "time": "1:00 PM",
-      "end_time": "5:30 PM",
-      "address": "",
-      "description": "Create stained glass art using copper foil technique. All levels welcome. Glass and supplies included. Additional dates: 7/12, 8/8, 8/9.",
-      "url": "https://www.DragonflyStainedGlassStudio.com",
-      "image_url": null
-    },
-    {
-      "id": "evt-fbb2838838",
-      "title": "Turner & Constable",
-      "date": "2026-07-11",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Two of Britain’s greatest painters, J.M.W. Turner and John Constable were also the greatest of rivals. Celebrating the 250th anniversary of their births, with Turner born in 1775 and Constable in 1776, this film explores their lives and legacies alongside a groundbreaking Tate Britain exhibition.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561298~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TurnerConstableWeb2.jpg?itok=ev-ADGWn"
     },
     {
       "id": "evt-4731b0a3a3",
@@ -3567,8 +3102,23 @@
       "time": "4:00 PM",
       "end_time": "7:00 PM",
       "address": "",
-      "description": "Save the date! July 11th from 4-7  84 And A Half is proud to show the newest works of Eli",
+      "description": "July 11th from 4-7 PM. 84 And A Half is proud to show the newest works of Eli Neugeboren.",
       "url": "/events/art-show-at-84-and-a-half-works-of-eli-neugeboren",
+      "image_url": null
+    },
+    {
+      "id": "evt-b38b6e34d3",
+      "title": "Worcester Red Sox vs. Rochester Red Wings",
+      "date": "2026-07-11",
+      "venue": "Various Hampshire County Venues",
+      "town": "Pioneer Valley",
+      "source": "visit-hampshire-county",
+      "category": "community",
+      "time": "4:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "",
+      "url": "#!/details/worcester-red-sox-vs-rochester-red-wings/17066133/2026-07-11T16",
       "image_url": null
     },
     {
@@ -3597,7 +3147,7 @@
       "time": "7:00 PM",
       "end_time": "8:00 PM",
       "address": "",
-      "description": "\"walk on air\" So counsels Seamus Heaney in The Gravel Walks. Walk on air? The great Irish poet",
+      "description": "walk on air. So counsels Seamus Heaney in The Gravel Walks. Walk on air? The great Irish poet.",
       "url": "/events/lisa-leizman-dance-company-presents-walk-on-air",
       "image_url": null
     },
@@ -3612,7 +3162,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "+++This event takes place at The Sanctuary at Look Park+++ The Etchings Festival, now in its 17th",
+      "description": "The Etchings Festival, now in its 17th summer, showcases cutting edge contemporary music. This event takes place at The Sanctuary at Look Park.",
       "url": "/events/etchings-festival-day-2-ecce-ensemble-surface-of-sphere",
       "image_url": null
     },
@@ -3692,21 +3242,6 @@
       "image_url": null
     },
     {
-      "id": "evt-5a451ce5bb",
-      "title": "Something's Gotta Give",
-      "date": "2026-07-12",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "An aging music mogul (Jack Nicholson) falls for his young girlfriend’s mother (Diane Keaton) after a heart attack forces him to stay at her Hamptons beach house. Cited by Keaton as a personal favorite within her filmography, this rom-com earned her a fourth Oscar nomination.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561381~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SomethingsGottaGiveWeb2.jpg?itok=dH1iUx6c"
-    },
-    {
       "id": "evt-18c78e7f88",
       "title": "Etchings Festival Day 3 | Sonic Translations",
       "date": "2026-07-12",
@@ -3717,7 +3252,7 @@
       "time": "3:00 PM",
       "end_time": "",
       "address": "",
-      "description": "The Etchings Festival, now in its 17th summer, showcases cutting edge contemporary music across",
+      "description": "The Etchings Festival, now in its 17th summer, showcases cutting edge contemporary music.",
       "url": "/events/etchings-festival-day-3-sonic-transla2026-07-12",
       "image_url": null
     },
@@ -4007,21 +3542,6 @@
       "image_url": null
     },
     {
-      "id": "evt-4bb6660b96",
-      "title": "NT Live: Les Liaisons Dangereuses",
-      "date": "2026-07-13",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscar nominee Lesley Manville (PHANTOM THREAD) joins Aidan Turner (Rivals) and Monica Barbaro (A COMPLETE UNKNOWN) in a new staging of Christopher Hampton’s celebrated adaptation of the classic novel.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561357~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/NTL_Liaisons_Web.jpg?itok=lENQ_IS6"
-    },
-    {
       "id": "evt-ea2f5a2119",
       "title": "Celebrating Americas 250th: The Two Nerdy History Girls Discuss Everyday Life in 1776",
       "date": "2026-07-13",
@@ -4079,6 +3599,21 @@
       "address": "20 West St, Northampton, MA 01060",
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/14995605",
+      "image_url": null
+    },
+    {
+      "id": "evt-191213eadf",
+      "title": "Summer Cooling Kit Collection Drive - Three County CoC and PLE Action Board",
+      "date": "2026-07-14",
+      "venue": "Forbes Library",
+      "town": "Northampton",
+      "source": "forbes-library",
+      "category": "community",
+      "time": "10:00 AM",
+      "end_time": "1:00 PM",
+      "address": "20 West St, Northampton, MA 01060",
+      "description": "",
+      "url": "https://forbeslibrary.libcal.com/event/17134513",
       "image_url": null
     },
     {
@@ -4200,21 +3735,6 @@
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/16437521",
       "image_url": null
-    },
-    {
-      "id": "evt-2b9f2cddda",
-      "title": "Something's Gotta Give",
-      "date": "2026-07-14",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "An aging music mogul (Jack Nicholson) falls for his young girlfriend’s mother (Diane Keaton) after a heart attack forces him to stay at her Hamptons beach house. Cited by Keaton as a personal favorite within her filmography, this rom-com earned her a fourth Oscar nomination.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561382~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SomethingsGottaGiveWeb2.jpg?itok=dH1iUx6c"
     },
     {
       "id": "evt-fa2327c407",
@@ -4652,21 +4172,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/02/museum-school-adults-castellanos.jpg"
     },
     {
-      "id": "evt-27c22d71aa",
-      "title": "The Odyssey",
-      "date": "2026-07-16",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562513~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
-    },
-    {
       "id": "evt-e40e3ddf32",
       "title": "Drop-in Tech Help",
       "date": "2026-07-16",
@@ -4862,21 +4367,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2025/05/Bubbles.jpg"
     },
     {
-      "id": "evt-aba77b64ff",
-      "title": "The Odyssey",
-      "date": "2026-07-17",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562517~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
-    },
-    {
       "id": "evt-eef7512156",
       "title": "HYBRID: Afternoon Book Discussion: Heartwood",
       "date": "2026-07-17",
@@ -5042,21 +4532,6 @@
       "image_url": null
     },
     {
-      "id": "evt-e29eed6535",
-      "title": "The Odyssey",
-      "date": "2026-07-18",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562521~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
-    },
-    {
       "id": "evt-fd242d075c",
       "title": "Middle Grade Book Club: Unplugged by Gordon Korman",
       "date": "2026-07-18",
@@ -5147,21 +4622,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-f0093bbc4b",
-      "title": "Fargo",
-      "date": "2026-07-19",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Things go terribly awry when a car salesman hires two thugs to kidnap his wife in order to collect the ransom. This pitch-black comedy from the Coen brothers won Frances McDormand her first Oscar.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561389~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/FargoWeb.jpg?itok=9QNQC7Tz"
-    },
-    {
       "id": "evt-95c50539b8",
       "title": "Reading Buddies",
       "date": "2026-07-19",
@@ -5190,21 +4650,6 @@
       "description": "",
       "url": "",
       "image_url": null
-    },
-    {
-      "id": "evt-3a9cba4e7b",
-      "title": "The Odyssey",
-      "date": "2026-07-19",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "9:55 AM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562525~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
     },
     {
       "id": "evt-7d68ae8817",
@@ -5295,21 +4740,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/meet-the-cat-in-the-hat/2026-07-20/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/06/Meet-Cat.jpg"
-    },
-    {
-      "id": "evt-7a7f31f5a4",
-      "title": "The Odyssey",
-      "date": "2026-07-20",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562529~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
     },
     {
       "id": "evt-f4e0283a87",
@@ -5447,21 +4877,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2025/05/friday-activities.jpg"
     },
     {
-      "id": "evt-de9d804310",
-      "title": "The Odyssey",
-      "date": "2026-07-21",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562533~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
-    },
-    {
       "id": "evt-77abcac8f7",
       "title": "Drop-in Tech Help",
       "date": "2026-07-21",
@@ -5505,21 +4920,6 @@
       "description": "",
       "url": "https://forbeslibrary.libcal.com/event/16437522",
       "image_url": null
-    },
-    {
-      "id": "evt-971e28e517",
-      "title": "Fargo",
-      "date": "2026-07-21",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Things go terribly awry when a car salesman hires two thugs to kidnap his wife in order to collect the ransom. This pitch-black comedy from the Coen brothers won Frances McDormand her first Oscar.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561390~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/FargoWeb.jpg?itok=9QNQC7Tz"
     },
     {
       "id": "evt-0a7af18d2d",
@@ -5715,21 +5115,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/professor-knows-a-lot/2026-07-22/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/06/professor.jpg"
-    },
-    {
-      "id": "evt-d165bf13b6",
-      "title": "The Odyssey",
-      "date": "2026-07-22",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562537~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
     },
     {
       "id": "evt-e93352e8e1",
@@ -5942,21 +5327,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2025/05/friday-activities.jpg"
     },
     {
-      "id": "evt-4a3b76284d",
-      "title": "The Odyssey",
-      "date": "2026-07-23",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:10 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Christopher Nolan’s new film brings Homer’s foundational saga to film screens for the first time, starring Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, and Lupita Nyong’o, with Zendaya and Charlize Theron.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=562541~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheOdysseyWeb.jpg?itok=w5GW2K9A"
-    },
-    {
       "id": "evt-9c6b7d4449",
       "title": "Healthy Bones & Balance",
       "date": "2026-07-23",
@@ -6002,21 +5372,6 @@
       "image_url": null
     },
     {
-      "id": "evt-38cc50454d",
-      "title": "Sherman's March",
-      "date": "2026-07-23",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Armed with a grant to make a documentary about Sherman’s 1864 march to the sea, Ross McElwee gets sidetracked, shifting his attention to the battlefield of modern love. This 1985 landmark of first-person filmmaking is newly re-released in a 4K restoration. Director Ross McElwee joins us for a post-screening conversation. Free to Amherst Cinema Members.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561650~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/ShermansMarchWeb2.jpg?itok=aZg6t85e"
-    },
-    {
       "id": "evt-caaeac6ac7",
       "title": "NEPM Book Club: 'Seek Immediate Shelter' with author Vincent Yu",
       "date": "2026-07-23",
@@ -6027,7 +5382,7 @@
       "time": "7:00 PM",
       "end_time": "",
       "address": "",
-      "description": "Join the NEPM Book Club for a Q&A with author Vincent Yu about his debut novel, \"Seek Immediate Shelter.\"",
+      "description": "Join the NEPM Book Club Thursday, July 23 at 7 p.m. for a Q&A with author Vincent Yu about his debut novel, \"Seek Immediate Shelter.\"",
       "url": "https://www.nepm.org/nepm-events/2026-05-04/nepm-book-club-seek-immediate-shelter-with-author-vincent-yu",
       "image_url": null
     },
@@ -6137,6 +5492,21 @@
       "image_url": null
     },
     {
+      "id": "evt-7132df1552",
+      "title": "NEPM Book Club: 'The Bluest Eye'",
+      "date": "2026-07-24",
+      "venue": "Various Pioneer Valley Venues",
+      "town": "Pioneer Valley",
+      "source": "nepm",
+      "category": "academia",
+      "time": "7:00 PM",
+      "end_time": "",
+      "address": "",
+      "description": "Don't miss the next meeting of the NEPM Book Club on Thursday, July 24 at 7 p.m. to discuss \"The Bluest Eye\" by Toni Morrison.",
+      "url": "https://www.nepm.org/nepm-events/2025-05-01/nepm-book-club-the-bluest-eye-by-toni-morrison",
+      "image_url": null
+    },
+    {
       "id": "evt-75cf6e0e78",
       "title": "An American Revolution Celebration: Concord Museum & The Old Manse",
       "date": "2026-07-24",
@@ -6242,21 +5612,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-1b44726696",
-      "title": "Whale Rider",
-      "date": "2026-07-25",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "A young Maori girl fights to fulfill a destiny her grandfather refuses to recognize in this contemporary story of love, rejection, and triumph.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561353~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/WhaleRiderWeb.jpg?itok=j-tKeJ92"
-    },
-    {
       "id": "evt-15b81efced",
       "title": "Magic Show with Scott Martell!",
       "date": "2026-07-25",
@@ -6360,21 +5715,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-07-26/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-2803ec93e4",
-      "title": "All the President's Men",
-      "date": "2026-07-26",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Robert Redford and Dustin Hoffman star as Washington Post reporters Bob Woodward and Carl Bernstein in this ripped-from-the-headlines political thriller, one of the great movies about journalism and winner of four Oscars.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561392~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AllThePresidentsMenWeb.jpg?itok=mKk8x3r9"
     },
     {
       "id": "evt-9e58f0f5b7",
@@ -6707,21 +6047,6 @@
       "image_url": null
     },
     {
-      "id": "evt-aac9f73f12",
-      "title": "All the President's Men",
-      "date": "2026-07-28",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Robert Redford and Dustin Hoffman star as Washington Post reporters Bob Woodward and Carl Bernstein in this ripped-from-the-headlines political thriller, one of the great movies about journalism and winner of four Oscars.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561393~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AllThePresidentsMenWeb.jpg?itok=mKk8x3r9"
-    },
-    {
       "id": "evt-6dd28ce376",
       "title": "VIRTUAL: Poetry Discussion:",
       "date": "2026-07-28",
@@ -7047,7 +6372,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "Bang on a Can's LOUD Weekend brings more than 70 adventurous musicians to MASS MoCA for three packed days of experimental music in the museum's galleries, stages, and outdoor spaces. Lineup includes the Bang on a Can All-Stars performing a new arrangement of Philip Glass's Glassworks and guitarist Yasmin Williams.",
+      "description": "Bang on a Can's LOUD Weekend brings more than 70 adventurous musicians to MASS MoCA for three packed days of experimental music in the museum's galleries, stages, and outdoor spaces. Lineup includes the Bang on a Can All-Stars, guitarist Yasmin Williams, and more.",
       "url": "https://massmoca.org/event/bang-on-a-can-loud-weekend-2026/",
       "image_url": null
     },
@@ -7127,21 +6452,6 @@
       "image_url": null
     },
     {
-      "id": "evt-08d0ca1f01",
-      "title": "Network",
-      "date": "2026-07-30",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "2:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "This media satire, directed by Sidney Lumet from a brilliantly incisive script by Paddy Chayefsky, is an X-ray of the corrupted soul of a corporate-dominated America, startlingly prescient in its anticipation of today’s outrage-driven news cycle. New 4K restoration.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=564642~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/NetworkWeb.jpg?itok=JTJjl3tc"
-    },
-    {
       "id": "evt-99d272e90b",
       "title": "Drop-in Tech Help",
       "date": "2026-07-30",
@@ -7185,36 +6495,6 @@
       "description": "As part of Summer at The Carle enjoy a late evening at The Carle full of nature, art, and music!",
       "url": "https://carlemuseum.org/visit/events/sunset-thursdays-12",
       "image_url": null
-    },
-    {
-      "id": "evt-269f195a88",
-      "title": "Sugar Island",
-      "date": "2026-07-30",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "4:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Director Johanné Gómez Terrero masterfully blends social realism, spirituality, and Afro-futurism in SUGAR ISLAND, immersing us in the Dominican Republic’s sugarcane fields, where Makenya, a Dominican-Haitian teenager, battles for her future.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=564644~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SugarIslandWeb2.jpg?itok=j3ogQ2zm"
-    },
-    {
-      "id": "evt-de31fbc632",
-      "title": "Sorry To Bother You",
-      "date": "2026-07-30",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In this no-holds-barred, madcap satire, a Black telemarketer rockets to success after learning how to use his “white voice,” elevating him to the surreal and sinister world of power sellers. Includes an exclusive, pre-recorded Q&A with director Boots Riley.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=564645~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/SorryToBotherYouWeb.jpg?itok=ECCTv8qe"
     },
     {
       "id": "evt-b5fa88e58c",
@@ -7382,21 +6662,6 @@
       "image_url": null
     },
     {
-      "id": "evt-442414b7a1",
-      "title": "NT Live: Les Liaisons Dangereuses",
-      "date": "2026-08-01",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscar nominee Lesley Manville (PHANTOM THREAD) joins Aidan Turner (Rivals) and Monica Barbaro (A COMPLETE UNKNOWN) in a new staging of Christopher Hampton’s celebrated adaptation of the classic novel.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561358~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/NTL_Liaisons_Web.jpg?itok=lENQ_IS6"
-    },
-    {
       "id": "evt-827138363d",
       "title": "Little Lies: A Tribute to Fleetwood Mac",
       "date": "2026-08-01",
@@ -7457,21 +6722,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-6abf03e273",
-      "title": "The Princess Bride",
-      "date": "2026-08-02",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "“As you wish.” A delightfully postmodern fairy tale, this deft, intelligent mix of swashbuckling, romance, and comedy takes an age-old damsel-in-distress story and makes it fresh.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561449~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/PrincessBrideWeb.jpg?itok=ZZ24NLEG"
-    },
-    {
       "id": "evt-f5a310cb58",
       "title": "America In Color",
       "date": "2026-08-03",
@@ -7517,21 +6767,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/06/Meet-Cat.jpg"
     },
     {
-      "id": "evt-014bd385bc",
-      "title": "10-Alarm Fire: We Won't Shut Up!",
-      "date": "2026-08-03",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "10-ALARM FIRE is Young @ Heart's most urgent show yet—protest songs spanning continents and decades, sung in the here and now. Post-film Q&A with Young @ Heart co-director Julia van IJken. Free to Amherst Cinema Members.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561313~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/10AlarmFireWeb.jpg?itok=FCmszvsT"
-    },
-    {
       "id": "evt-98d3074c33",
       "title": "America In Color",
       "date": "2026-08-04",
@@ -7560,21 +6795,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/hands-on-family-activities-summer-market/2026-08-04/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2025/05/friday-activities.jpg"
-    },
-    {
-      "id": "evt-9f87039a22",
-      "title": "The Princess Bride",
-      "date": "2026-08-04",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "“As you wish.” A delightfully postmodern fairy tale, this deft, intelligent mix of swashbuckling, romance, and comedy takes an age-old damsel-in-distress story and makes it fresh.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561450~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/PrincessBrideWeb.jpg?itok=ZZ24NLEG"
     },
     {
       "id": "evt-ab62886d5f",
@@ -7710,21 +6930,6 @@
       "description": "As part of Summer at The Carle enjoy a late evening at The Carle full of nature, art, and music!",
       "url": "https://carlemuseum.org/visit/events/sunset-thursdays-13",
       "image_url": null
-    },
-    {
-      "id": "evt-28761b2068",
-      "title": "Remake",
-      "date": "2026-08-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "An ever-expanding hall of mirrors incorporating material captured across decades, REMAKE is filmmaker Ross McElwee’s attempt to hold onto his son, and to let him go.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561652~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/RemakeWeb.jpg?itok=JQdGBOx-"
     },
     {
       "id": "evt-db88d635a8",
@@ -7937,21 +7142,6 @@
       "image_url": null
     },
     {
-      "id": "evt-1242b766ab",
-      "title": "CatVideoFest 2026",
-      "date": "2026-08-08",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscilloscope Laboratories presents CatVideoFest 2026, a compilation of the latest and best cat videos culled from countless hours of unique submissions and sourced animations, music videos, and classic internet powerhouses.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561574~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CVF2026_web.jpg?itok=YghSmZy3"
-    },
-    {
       "id": "evt-5b4060362e",
       "title": "Michael Kosta - 7:00pm Show",
       "date": "2026-08-08",
@@ -8010,21 +7200,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-08-09/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-457a692284",
-      "title": "Volver",
-      "date": "2026-08-09",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Equal parts tragedy, melodrama, and farce, this story of three generations of working-class Spanish women is a comedic and compassionate tribute to resilience in the face of life’s most outrageous tribulations. Penélope Cruz delivers an Oscar-nominated performance in Almodóvar’s modern masterpiece.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561452~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/VolverWeb.jpg?itok=PyZ-ceOm"
     },
     {
       "id": "evt-019763ae6d",
@@ -8117,21 +7292,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2025/05/friday-activities.jpg"
     },
     {
-      "id": "evt-2f8c24c4c4",
-      "title": "Volver",
-      "date": "2026-08-11",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Equal parts tragedy, melodrama, and farce, this story of three generations of working-class Spanish women is a comedic and compassionate tribute to resilience in the face of life’s most outrageous tribulations. Penélope Cruz delivers an Oscar-nominated performance in Almodóvar’s modern masterpiece.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561453~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/VolverWeb.jpg?itok=PyZ-ceOm"
-    },
-    {
       "id": "evt-2071285a15",
       "title": "Jon Carroll Band - Album Release Party",
       "date": "2026-08-11",
@@ -8220,21 +7380,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/professor-knows-a-lot/2026-08-12/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/06/professor.jpg"
-    },
-    {
-      "id": "evt-20cc0a993b",
-      "title": "CatVideoFest 2026",
-      "date": "2026-08-12",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscilloscope Laboratories presents CatVideoFest 2026, a compilation of the latest and best cat videos culled from countless hours of unique submissions and sourced animations, music videos, and classic internet powerhouses.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561577~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CVF2026_web.jpg?itok=YghSmZy3"
     },
     {
       "id": "evt-fbf70f4195",
@@ -8537,21 +7682,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2024/10/museum-school-adults-wire-wrapping.jpg"
     },
     {
-      "id": "evt-c781b30cf8",
-      "title": "The Iron Giant",
-      "date": "2026-08-15",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:45 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "A young boy befriends a giant space robot that a paranoid government agent wants to destroy.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561355~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheIronGiantWeb.jpg?itok=Ym8t8eXy"
-    },
-    {
       "id": "evt-46f818a20b",
       "title": "An Evening with Samirah Evans & Wanda Houston 'Classic Duets'",
       "date": "2026-08-15",
@@ -8597,21 +7727,6 @@
       "image_url": null
     },
     {
-      "id": "evt-bb6561dfd8",
-      "title": "After Hours",
-      "date": "2026-08-16",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Martin Scorsese directs Griffin Dunne as an office worker who experiences the wildest night of his life. Scene-stealing support comes from Catherine O’Hara, John Heard, Terri Garr, and more.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561455~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AfterHoursWeb.jpg?itok=0C9BLppC"
-    },
-    {
       "id": "evt-ce29f90b30",
       "title": "America In Color",
       "date": "2026-08-17",
@@ -8625,21 +7740,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-08-17/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-d15bd86d4d",
-      "title": "The Making of Casablanca: Film School in 60 Minutes",
-      "date": "2026-08-17",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "6:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "If you don’t know a pan from a dolly, or an over-the-shoulder from a two-shot, this program is for you! Local filmmaker and film expert Nina Kleinberg walks us through the making of CASABLANCA, followed by a screening of the film.",
-      "url": "https://prod1.agileticketing.net/websales/pages/entrypoint.aspx?guid=9e779e78-6b7d-4a05-93a3-71f6f8454e79&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CasablancaWeb.jpg?itok=uUHIxwYW"
     },
     {
       "id": "evt-6a18e26847",
@@ -8700,21 +7800,6 @@
       "description": "Join President Holley and members of college leadership for ice cream following the staff forum!",
       "url": "https://events.mtholyoke.edu/event/staff-ice-cream-social-august-2026",
       "image_url": "https://localist-images.azureedge.net/photos/53294647375170/huge/64fba1479da8852be818aace38e7e5e483ebcde4.jpg"
-    },
-    {
-      "id": "evt-96861438ea",
-      "title": "After Hours",
-      "date": "2026-08-18",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Martin Scorsese directs Griffin Dunne as an office worker who experiences the wildest night of his life. Scene-stealing support comes from Catherine O’Hara, John Heard, Terri Garr, and more.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561456~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AfterHoursWeb.jpg?itok=0C9BLppC"
     },
     {
       "id": "evt-9b5faad00a",
@@ -8832,7 +7917,7 @@
       "time": "",
       "end_time": "",
       "address": "",
-      "description": "NEPM's Smart and Funny People brings Shankar Vendantam, creator and host of the podcast Hidden Brain, to the Academy of Music.",
+      "description": "NEPM's Smart and Funny People brings Shankar Vendantam, creator and host of the podcast Hidden Brain, to the Academy of Music on Friday, Aug. 21.",
       "url": "https://www.nepm.org/nepm-events/2026-05-26/hidden-brain-on-stage-with-shankar-vendantam",
       "image_url": null
     },
@@ -8912,36 +7997,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-eb03ec3dd7",
-      "title": "8th Annual Northeast Fine Arts Exhibition",
-      "date": "2026-08-22",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "source": "valley-arts-newsletter",
-      "category": "arts",
-      "time": "1:00 PM",
-      "end_time": "5:00 PM",
-      "address": "",
-      "description": "Exhibition showcasing art that embodies principles of realism. Cash prizes in various categories, including $1000 for Best in Show. Juror: Scott Prior. Show runs Aug 22-Sep 6, Saturdays & Sundays, 1-4pm.",
-      "url": "https://workshop13.org/exhibitions/2026-nefae-call-for-art/",
-      "image_url": null
-    },
-    {
-      "id": "evt-75a3c1bbb8",
-      "title": "CatVideoFest 2026",
-      "date": "2026-08-22",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscilloscope Laboratories presents CatVideoFest 2026, a compilation of the latest and best cat videos culled from countless hours of unique submissions and sourced animations, music videos, and classic internet powerhouses.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561576~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CVF2026_web.jpg?itok=YghSmZy3"
-    },
-    {
       "id": "evt-aa1710f562",
       "title": "The Super 70's Rock Show",
       "date": "2026-08-22",
@@ -8985,21 +8040,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-08-23/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-1c88419d50",
-      "title": "The Third Man",
-      "date": "2026-08-23",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Pulp novelist Holly Martins (Joseph Cotten) travels to shadowy post-war Vienna, only to find himself investigating the mysterious sudden death of old friend Harry Lime (Orson Welles).",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561458~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheThirdManWeb.jpg?itok=R7oXa1mT"
     },
     {
       "id": "evt-e1474112da",
@@ -9047,21 +8087,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-819ea83927",
-      "title": "CatVideoFest 2026",
-      "date": "2026-08-24",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Oscilloscope Laboratories presents CatVideoFest 2026, a compilation of the latest and best cat videos culled from countless hours of unique submissions and sourced animations, music videos, and classic internet powerhouses.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561578~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CVF2026_web.jpg?itok=YghSmZy3"
-    },
-    {
       "id": "evt-ae2f85e84c",
       "title": "Jake Shimabukuro",
       "date": "2026-08-24",
@@ -9090,21 +8115,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-08-25/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-df67b61141",
-      "title": "The Third Man",
-      "date": "2026-08-25",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Pulp novelist Holly Martins (Joseph Cotten) travels to shadowy post-war Vienna, only to find himself investigating the mysterious sudden death of old friend Harry Lime (Orson Welles).",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561459~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/TheThirdManWeb.jpg?itok=R7oXa1mT"
     },
     {
       "id": "evt-423ad65bdf",
@@ -9227,21 +8237,6 @@
       "image_url": null
     },
     {
-      "id": "evt-aefa666a4c",
-      "title": "Shinyribs w/ Scott Strickland",
-      "date": "2026-08-28",
-      "venue": "Iron Horse Music Hall",
-      "town": "Northampton",
-      "source": "iron-horse",
-      "category": "music",
-      "time": "8:00 PM",
-      "end_time": "",
-      "address": "",
-      "description": "",
-      "url": "",
-      "image_url": null
-    },
-    {
       "id": "evt-80c6086b89",
       "title": "Stride For Change: Supporting Our Veterans and Military Families",
       "date": "2026-08-29",
@@ -9287,21 +8282,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-8caa780321",
-      "title": "NT Live: All My Sons (2026)",
-      "date": "2026-08-29",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "12:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Bryan Cranston and Marianne Jean-Baptiste feature in the triumphantly acclaimed new production of Arthur Miller’s classic play.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=558218~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AllMySonsWeb2_0.jpg?itok=PLqlU19N"
-    },
-    {
       "id": "evt-801dd318a8",
       "title": "BIG YELLOW TAXI / THRASHER WHEAT",
       "date": "2026-08-29",
@@ -9330,21 +8310,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-08-30/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-bd02c40e82",
-      "title": "When Harry Met Sally...",
-      "date": "2026-08-30",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "With an Oscar-nominated script by Nora Ephron, this foundational rom-com follows friends Harry Burns (Billy Crystal) and Sally Albright (Meg Ryan) as they attempt to navigate their way around romantic entanglement.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561461~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/WhenHarryMetSallyWeb.jpg?itok=HalhsJnM"
     },
     {
       "id": "evt-11243bb312",
@@ -9390,21 +8355,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-09-01/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-37badc8455",
-      "title": "When Harry Met Sally...",
-      "date": "2026-09-01",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "With an Oscar-nominated script by Nora Ephron, this foundational rom-com follows friends Harry Burns (Billy Crystal) and Sally Albright (Meg Ryan) as they attempt to navigate their way around romantic entanglement.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561462~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/WhenHarryMetSallyWeb.jpg?itok=HalhsJnM"
     },
     {
       "id": "evt-9ea14a5031",
@@ -9495,21 +8445,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-09-03/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-91cb6108d8",
-      "title": "A Body To Live In",
-      "date": "2026-09-03",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "A BODY TO LIVE IN offers an uncompromising look at the rise of BDSM performance art, body modification and the “modern primitives” cultural movement through the agonies and ecstasies of transgressive artist Fakir Musafar and the communities that surrounded him. Director Angelo Madsen joins us for a post-film discussion. Free to Amherst Cinema Members.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561656~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/ABTLI_web.jpg?itok=6INiESv7"
     },
     {
       "id": "evt-65ec5b8958",
@@ -9632,21 +8567,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-44c2dc2c48",
-      "title": "City of God",
-      "date": "2026-09-06",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In the favelas of 1970s Rio de Janeiro, two young men choose different paths. Rocket is a budding photographer, while Zé is an ambitious drug dealer diving into a dangerous life of crime.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561466~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CityOfGodWeb.jpg?itok=ofoUpgU_"
-    },
-    {
       "id": "evt-4c21548bcf",
       "title": "Labor Day",
       "date": "2026-09-07",
@@ -9675,21 +8595,6 @@
       "description": "Welcome MoHome! If you have already lived on campus you are considered a returning student, this includes international students.",
       "url": "https://events.mtholyoke.edu/event/returning-students-arrive-26",
       "image_url": "https://localist-images.azureedge.net/photos/51499510706012/huge/014d55e70364b1bc9f0091f6ef92a9c498bb0a3b.jpg"
-    },
-    {
-      "id": "evt-0087d40b47",
-      "title": "Awake, My Soul: The Story of the Sacred Harp",
-      "date": "2026-09-07",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "Explore the history, music, and traditions of Sacred Harp singing, which has survived over 200 years tucked away from sight in the rural deep South. This haunting, moving music lives on today at community singing events. Post-film Q&A with filmmaker Matt Hinton.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561315~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/AwakeMySoulWeb.jpg?itok=r_NC6bk3"
     },
     {
       "id": "evt-4bac19222d",
@@ -9735,21 +8640,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-09-08/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-e1297bf2d6",
-      "title": "City of God",
-      "date": "2026-09-08",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "In the favelas of 1970s Rio de Janeiro, two young men choose different paths. Rocket is a budding photographer, while Zé is an ambitious drug dealer diving into a dangerous life of crime.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561467~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/CityOfGodWeb.jpg?itok=ofoUpgU_"
     },
     {
       "id": "evt-589906b99e",
@@ -9818,7 +8708,7 @@
       "venue": "The Drake",
       "town": "Amherst",
       "source": "the-drake",
-      "category": "comedy",
+      "category": "music",
       "time": "8:00 PM",
       "end_time": "11:00 PM",
       "address": "",
@@ -9840,21 +8730,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-09-10/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-ced76b2514",
-      "title": "First They Came for My College",
-      "date": "2026-09-10",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "When Florida Governor Ron DeSantis stages a coup at New College, the state’s beloved public honors college, students and professors confront a new reality: their campus is ground zero in an unprecedented nationwide assault on academic freedom and diversity. Director Patrick Bresnan and producer Harry William Hanbury join us for a post-film discussion. Free to Amherst Cinema Members.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561654~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/FirstTheyCameWeb.jpg?itok=UAFUjjhw"
     },
     {
       "id": "evt-0288f14b1e",
@@ -10022,21 +8897,6 @@
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
     },
     {
-      "id": "evt-b999a29d23",
-      "title": "Boogie Nights",
-      "date": "2026-09-13",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "1:30 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "An idealistic porn producer (Burt Reynolds) aspires to elevate his craft to an art form when he discovers a hot young talent (Mark Wahlberg). A stacked cast includes Julianne Moore, Philip Seymour Hoffman, Heather Graham, John C. Reilly, and more.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561469~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/BoogieNightsWeb.jpg?itok=921ESdiH"
-    },
-    {
       "id": "evt-a817ea1ce5",
       "title": "Sensory Friendly Sunday",
       "date": "2026-09-13",
@@ -10095,21 +8955,6 @@
       "description": "Free with museum admission!",
       "url": "https://springfieldmuseums.org/program/america-in-color/2026-09-15/",
       "image_url": "https://springfieldmuseums.org/wp-content/uploads/2026/05/America_in_Color_03_301_season_3840_2160_GEG333180-scaled.jpg"
-    },
-    {
-      "id": "evt-76b814c84f",
-      "title": "Boogie Nights",
-      "date": "2026-09-15",
-      "venue": "Amherst Cinema",
-      "town": "Amherst",
-      "source": "amherst-cinema",
-      "category": "film",
-      "time": "7:00 PM",
-      "end_time": "",
-      "address": "28 Amity St, Amherst, MA 01002",
-      "description": "An idealistic porn producer (Burt Reynolds) aspires to elevate his craft to an art form when he discovers a hot young talent (Mark Wahlberg). A stacked cast includes Julianne Moore, Philip Seymour Hoffman, Heather Graham, John C. Reilly, and more.",
-      "url": "https://prod1.agileticketing.net/websales/pages/ticketsearchcriteria.aspx?evtinfo=561470~f16f058d-ffdb-4f66-920b-d1ec09df0657&=",
-      "image_url": "https://amherstcinema.org/sites/default/files/styles/1_5_1/public/BoogieNightsWeb.jpg?itok=921ESdiH"
     },
     {
       "id": "evt-23510c53a5",
