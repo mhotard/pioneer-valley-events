@@ -12,6 +12,10 @@ permissions:
 jobs:
   update-events:
     runs-on: ubuntu-latest
+    env:
+      # Exposed at job level so the digest step's `if:` can detect whether the
+      # address secret is configured (and skip the email cleanly if not).
+      GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,3 +55,12 @@ jobs:
           git add docs/data/events.json
           git commit -m "chore: weekly event update $(date -u +'%Y-%m-%d')"
           git push
+
+      # Sends the next-two-weeks digest. Only runs if the pipeline succeeded
+      # (a failed run stops the job earlier), so the email always reflects a
+      # healthy event set. Skipped automatically if GMAIL_ADDRESS isn't set.
+      - name: Email the weekly digest
+        if: ${{ env.GMAIL_ADDRESS != '' }}
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python email_digest.py --days 14

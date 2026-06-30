@@ -30,10 +30,25 @@ The Anthropic key is read from `ANTHROPIC_API_KEY_PIONEER` (falls back to
 var is NOT set unless you `source ~/.zshrc` first. In GitHub Actions the secret
 is named `ANTHROPIC_API_KEY`.
 
+The pipeline now **fails (exit 1) loudly** rather than publishing a degraded
+file: a pre-flight aborts if a Claude source is configured but no API key is
+set, and a post-run check aborts if >34% of sources error (`MAX_ERROR_FRACTION`).
+This turns a silent half-empty run into a red Action that emails the owner.
+
+## Weekly email digest (email_digest.py)
+
+After a successful pipeline run, the Action emails a next-14-days digest of
+upcoming events (grouped by day) via Gmail SMTP. Requires two repo secrets:
+`GMAIL_ADDRESS` (sender; also recipient unless `MAIL_TO` is set) and
+`GMAIL_APP_PASSWORD` (a Gmail App Password, not the account password). The
+digest step is skipped cleanly when `GMAIL_ADDRESS` is unset. Preview locally
+without sending: `python3 email_digest.py --preview /tmp/out.html`.
+
 ## Architecture
 
 ```
 pipeline.py            entry point: run scrapers → date filter → dedupe → sort → write
+email_digest.py        builds + sends the weekly next-14-days email (Gmail SMTP)
 sources.json           config for Claude-powered scrapers (most sources live here)
 scrapers/
   base.py              Event dataclass + BaseScraper (fetch() catches all exceptions)
