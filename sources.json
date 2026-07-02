@@ -15,13 +15,6 @@
       "type": "playwright"
     },
     {
-      "name": "valley-advocate",
-      "url": "https://valleyadvocate.com/events/",
-      "venue": "Various Pioneer Valley Venues",
-      "town": "Pioneer Valley",
-      "type": "playwright"
-    },
-    {
       "name": "smith-college",
       "url": "https://www.smith.edu/events",
       "venue": "Smith College",

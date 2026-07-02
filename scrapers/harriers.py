@@ -42,6 +42,13 @@ class HarriersScraper(BaseScraper):
             if not event_date or event_date < today:
                 continue
 
+            # The calendar accepts submissions from anywhere (Cooperstown NY
+            # has shown up) — keep Massachusetts races only. Blank state is
+            # given the benefit of the doubt (the calendar is WMass-focused).
+            state = (r.get("State") or "").strip().upper()
+            if state and state != "MA":
+                continue
+
             title = (r.get("EventName") or "").strip()
             if not title:
                 continue

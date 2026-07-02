@@ -84,10 +84,30 @@ class TestDeduplicate:
         assert len(result) == 1
         assert result[0]["description"] == e2["description"]
 
-    def test_different_venues_same_title_date_deduped(self):
+    def test_same_venue_spelled_differently_deduped(self):
         # Same event listed by two sources → deduplicated
         e1 = make_event("Jazz Night", FUTURE, venue="Iron Horse")
         e2 = make_event("Jazz Night", FUTURE, venue="Iron Horse Music Hall")
+        result = deduplicate([e1, e2])
+        assert len(result) == 1
+
+    def test_same_title_at_genuinely_different_venues_kept(self):
+        # Both libraries run "Toddler Storytime" — these are distinct events
+        e1 = make_event("Toddler Storytime", FUTURE, venue="Jones Library")
+        e2 = make_event("Toddler Storytime", FUTURE, venue="Forbes Library")
+        result = deduplicate([e1, e2])
+        assert len(result) == 2
+
+    def test_aggregator_venue_still_merges(self):
+        # An aggregator's "Various..." venue must not block cross-source dedup
+        e1 = make_event("Jazz Night", FUTURE, venue="Iron Horse Music Hall")
+        e2 = make_event("Jazz Night", FUTURE, venue="Various Pioneer Valley Venues")
+        result = deduplicate([e1, e2])
+        assert len(result) == 1
+
+    def test_empty_venue_still_merges(self):
+        e1 = make_event("Jazz Night", FUTURE, venue="Iron Horse Music Hall")
+        e2 = make_event("Jazz Night", FUTURE, venue="")
         result = deduplicate([e1, e2])
         assert len(result) == 1
 

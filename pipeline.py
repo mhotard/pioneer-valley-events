@@ -70,9 +70,25 @@ def setup_logging():
     return logger, log_path
 
 
+def venues_compatible(v1: str, v2: str) -> bool:
+    """Could these two venue strings plausibly be the same place?
+
+    Guards dedup against merging same-title events at genuinely different
+    venues (e.g. "Toddler Storytime" at Jones Library AND Forbes Library on
+    the same day). Aggregator entries ("Various ... Venues") and empty venues
+    stay compatible with everything so cross-source dupes still merge.
+    """
+    a, b = v1.strip().lower(), v2.strip().lower()
+    if not a or not b or "various" in a or "various" in b:
+        return True
+    if a in b or b in a:  # "Iron Horse" vs "Iron Horse Music Hall"
+        return True
+    return a.split()[0] == b.split()[0]
+
+
 def deduplicate(events: list) -> list:
     """
-    Remove near-duplicate events using title similarity + same date.
+    Remove near-duplicate events: similar title + same date + compatible venue.
     Keeps the event with the richer description.
     """
     by_date: dict[str, list] = {}
@@ -84,7 +100,9 @@ def deduplicate(events: list) -> list:
                 existing["title"].lower(),
                 ev["title"].lower()
             ).ratio()
-            if similarity > 0.82:
+            if similarity > 0.82 and venues_compatible(
+                existing.get("venue", ""), ev.get("venue", "")
+            ):
                 # Keep the one with more info
                 if len(ev.get("description", "")) > len(existing.get("description", "")):
                     candidates[i] = ev

@@ -139,7 +139,10 @@ def _extract_events(html: str, venue: str, town: str, source_name: str = "") -> 
     client = _get_client()
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=8192,
+        # Generous cap: output tokens only cost what's actually generated, and
+        # big aggregator pages (arts-hub-wma) were losing events at 8192.
+        # _parse_json_array still salvages if this is ever hit.
+        max_tokens=16384,
         messages=[{"role": "user", "content": prompt}],
     )
 
