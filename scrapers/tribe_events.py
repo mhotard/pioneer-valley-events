@@ -134,3 +134,12 @@ class HawksReedScraper(TribeEventsScraper):
     town = "Greenfield"
     default_venue = "Hawks & Reed Performing Arts Center"
     default_category = "music"
+
+
+class HistoricDeerfieldScraper(TribeEventsScraper):
+    name = "historic-deerfield"
+    url = "https://www.historic-deerfield.org/events/"
+    api_base = "https://www.historic-deerfield.org"
+    town = "Deerfield"
+    default_venue = "Historic Deerfield"
+    default_category = "community"

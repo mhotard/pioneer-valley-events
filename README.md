@@ -114,7 +114,13 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 | Eric Carle Museum | Amherst | Special exhibitions and programs |
 | Town of Amherst | Amherst | Community calendar |
 | The Drake | Amherst | Live music venue |
+| Emily Dickinson Museum | Amherst | Tours and programs |
 | Smith College | Northampton | Campus events |
+| The Parlor Room | Northampton | Live music (Iron Horse collective) |
+| Bombyx Center | Florence | Music and arts venue |
+| Look Memorial Park | Florence | Outdoor events and concerts |
+| Shea Theater | Turners Falls | Performing arts |
+| Historic Deerfield | Deerfield | Museum programs (Events Calendar API) |
 | Forbes Library | Northampton | Programs and events (LibCal RSS) |
 | Iron Horse Music Hall | Northampton | Live music (Parlor Room collective) |
 | Academy of Music | Northampton | Theatre and music |

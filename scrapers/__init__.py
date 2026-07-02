@@ -7,7 +7,11 @@ from .harriers import HarriersScraper
 from .jones_library import JonesLibraryScraper
 from .mtholyoke import MountHolyokeScraper
 from .nepm_culture import NEPMCultureScraper
-from .tribe_events import HawksReedScraper, SpringfieldMuseumsScraper
+from .tribe_events import (
+    HawksReedScraper,
+    HistoricDeerfieldScraper,
+    SpringfieldMuseumsScraper,
+)
 from .umass import UMassScraper
 from .umass_athletics import UMassAthleticsScraper
 
@@ -25,6 +29,7 @@ STATIC_SCRAPERS = [
     HarriersScraper,
     SpringfieldMuseumsScraper,
     HawksReedScraper,
+    HistoricDeerfieldScraper,
 ]
 
 

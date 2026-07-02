@@ -1,6 +1,41 @@
 {
   "sources": [
     {
+      "name": "shea-theater",
+      "url": "https://sheatheater.org/calendar",
+      "venue": "Shea Theater Arts Center",
+      "town": "Turners Falls",
+      "type": "html"
+    },
+    {
+      "name": "bombyx",
+      "url": "https://bombyx.live/events/",
+      "venue": "Bombyx Center for Arts & Equity",
+      "town": "Florence",
+      "type": "html"
+    },
+    {
+      "name": "look-park",
+      "url": "https://lookpark.org/events/",
+      "venue": "Look Memorial Park",
+      "town": "Florence",
+      "type": "html"
+    },
+    {
+      "name": "emily-dickinson",
+      "url": "https://www.emilydickinsonmuseum.org/events-news/",
+      "venue": "Emily Dickinson Museum",
+      "town": "Amherst",
+      "type": "html"
+    },
+    {
+      "name": "parlor-room",
+      "url": "https://ironhorse.org/parlorroomshows",
+      "venue": "The Parlor Room",
+      "town": "Northampton",
+      "type": "playwright"
+    },
+    {
       "name": "the-drake",
       "url": "https://www.thedrakeamherst.org/events",
       "venue": "The Drake",

@@ -151,6 +151,13 @@ categories to "community").
 - `valley-advocate` was removed 2026-07-01: valleyadvocate.com/events is a
   CitySpark JS widget whose events never land in scrapeable HTML (0–3 events
   per run). A future static scraper against CitySpark's JSON API is possible.
+- More dead ends checked 2026-07-02: wistariahurst.org 403s even headless
+  Chrome; amherst.edu/news/events renders to an empty shell (Amherst College
+  has no scrapeable central calendar — athletics iCal only);
+  cityspaceeasthampton.org redirects every path to its homepage with no event
+  markup; treehousebrew.com/shows, 33hawley.com, luthiers.coop, and
+  sheatheater.org/events are 404/dead (Shea's real listing is /calendar);
+  mifafestival.org/events is a thin landing page with no listings.
 - Smith College runs 25Live (25live.collegenet.com/smith) with no public feed
   found (checked 2026-07-01) — it stays on the Claude HTML scraper.
 - Dedup requires *venue compatibility* (`venues_compatible` in pipeline.py):
