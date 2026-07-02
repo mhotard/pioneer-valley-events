@@ -182,6 +182,7 @@ select { padding-right: 28px; appearance: none;
 /* ---- Results Bar ---- */
 .results-bar {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0.6rem 1.5rem;
   display: flex;
@@ -571,3 +572,75 @@ footer {
   }
   .modal { padding: 1.25rem; }
 }
+
+/* ── Seasonal guide (seasonal.html) ─────────────────────────── */
+.page-nav .nav-link {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.page-nav .nav-link:hover { background: rgba(255,255,255,0.1); }
+
+.guide-intro {
+  max-width: 640px;
+  margin: 1.25rem auto 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.guide-intro a { color: var(--primary); }
+
+.guide-month {
+  max-width: 640px;
+  margin: 1.75rem auto 0;
+}
+.guide-month h2 {
+  font-size: 1.05rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+.guide-month.current h2 { border-color: var(--primary); }
+.now-chip {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 8px;
+  vertical-align: 2px;
+  margin-left: 6px;
+}
+
+.guide-event {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.guide-event-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.guide-event-name { font-weight: 600; }
+.guide-event-meta {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-top: 2px;
+}
+.guide-event-episodes {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 6px;
+}
+.guide-event-episodes a { color: var(--primary); text-decoration: none; }
+.guide-event-episodes a:hover { text-decoration: underline; }

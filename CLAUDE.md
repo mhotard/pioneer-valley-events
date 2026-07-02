@@ -51,6 +51,28 @@ all of `docs/data/`, so archives persist automatically. Single-source runs
 (`--source X`) are always treated as dry runs and never write events.json or
 the archive.
 
+## Fabulous 413 seasonal guide (fab413_miner.py + fab413_guide.py)
+
+Mines NEPM's "The Fabulous 413" podcast (RSS: publicfeeds.net/f/3459/feed-rss.xml,
+~800 episodes back to Feb 2023) for local-event mentions, then builds a
+seasonal guide of events covered in 2+ different calendar years.
+
+- `fab413_miner.py`: snapshots every raw episode description into
+  fab413_episodes.json (append-only by guid — survives feed truncation, lets
+  us re-mine with better prompts later), then Haiku-extracts event mentions
+  (batches of 8 episodes/call) into fab413_mentions.json. Incremental:
+  re-runs only mine unmined guids (~5 new episodes/week).
+- `fab413_guide.py`: fuzzy-groups mentions across years, keeps groups with
+  ≥2 distinct years whose coverage clusters in a 2-adjacent-month window
+  (≥60% — this filters weekly series like "Live Music Friday"), then one
+  Haiku curation call canonicalizes names/towns and drops non-events.
+  Writes seasonal.json.
+- Surfaces: docs/seasonal.html (month-by-month page, starts at the current
+  month) and an "On your radar" section in the email digest (this month +
+  next month's annual events).
+- Both steps run weekly in the Action with `continue-on-error: true` —
+  podcast mining must never block event publishing.
+
 ## Weekly email digest (email_digest.py)
 
 After a successful pipeline run, the Action emails a next-14-days digest of
@@ -65,6 +87,8 @@ without sending: `python3 email_digest.py --preview /tmp/out.html`.
 ```
 pipeline.py            entry point: run scrapers → date filter → dedupe → sort → write
 email_digest.py        builds + sends the weekly next-14-days email (Gmail SMTP)
+fab413_miner.py        mines The Fabulous 413 podcast feed for event mentions
+fab413_guide.py        turns mined mentions into the seasonal guide (seasonal.json)
 sources.json           config for Claude-powered scrapers (most sources live here)
 scrapers/
   base.py              Event dataclass + BaseScraper (fetch() catches all exceptions)
@@ -86,7 +110,11 @@ scrapers/
   community.py         manually-curated events from community_events.json (supports recurrence)
   __init__.py          get_all_scrapers() — register new static scrapers here
 docs/                  static frontend (vanilla JS) + docs/data/events.json
+docs/seasonal.html     month-by-month annual-events guide (reads seasonal.json)
 docs/data/archive-YYYY.json  append-only historical record, one file per event-year
+docs/data/fab413_episodes.json  raw podcast episode descriptions (append-only)
+docs/data/fab413_mentions.json  Haiku-extracted event mentions per episode
+docs/data/seasonal.json         curated annual events by month
 tests/                 pytest; test_schema.py validates the committed events.json
 logs/                  timestamped log per pipeline run (gitignored)
 ```

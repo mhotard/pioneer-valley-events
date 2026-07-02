@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seasonal Guide — Pioneer Valley Events</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>Seasonal Guide</h1>
+        <p class="tagline">The 413's annual events, as covered by The Fabulous 413</p>
+      </div>
+      <nav class="page-nav">
+        <a href="index.html" class="nav-link">← All events</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="results-bar">
+    <span id="guide-count"></span>
+    <span id="guide-updated"></span>
+  </div>
+
+  <main id="main-content">
+    <p class="guide-intro">
+      Events that <a href="https://www.nepm.org/podcast/the-fabulous-413"
+      target="_blank" rel="noopener">The&nbsp;Fabulous&nbsp;413</a> has covered in
+      multiple years — the things that come back every year, so you can plan
+      ahead. Exact dates land on the <a href="index.html">main calendar</a>
+      once they're announced.
+    </p>
+    <div id="guide-container"></div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>Pioneer Valley Events &mdash; community-built event aggregator</p>
+      <p class="footer-sub">Mined from The Fabulous 413 podcast archive &middot; updated weekly</p>
+    </div>
+  </footer>
+
+  <script>
+    const MONTHS = ["January","February","March","April","May","June",
+                    "July","August","September","October","November","December"];
+
+    function esc(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function eventCard(e) {
+      const yearsLabel = `covered ${e.years.length} year${e.years.length !== 1 ? 's' : ''} (${e.years.join(', ')})`;
+      const links = e.episodes.map(ep =>
+        `<a href="${esc(ep.url)}" target="_blank" rel="noopener" title="${esc(ep.title)}">${esc(ep.date)}</a>`
+      ).join(' · ');
+      return `
+        <div class="guide-event">
+          <div class="guide-event-head">
+            <span class="guide-event-name">${esc(e.name)}</span>
+            <span class="badge badge-${esc(e.event_type)}">${esc(e.event_type)}</span>
+          </div>
+          <div class="guide-event-meta">
+            ${e.town ? esc(e.town) + ' · ' : ''}${yearsLabel}
+          </div>
+          <div class="guide-event-episodes">Episodes: ${links}</div>
+        </div>`;
+    }
+
+    async function boot() {
+      const res = await fetch('data/seasonal.json');
+      const data = await res.json();
+      const thisMonth = new Date().getMonth() + 1; // 1-12
+
+      let total = 0;
+      let html = '';
+      // Start the guide at the current month and wrap around the year
+      for (let off = 0; off < 12; off++) {
+        const m = ((thisMonth - 1 + off) % 12) + 1;
+        const events = data.months[String(m)] || [];
+        if (!events.length) continue;
+        total += events.length;
+        html += `
+          <section class="guide-month${off === 0 ? ' current' : ''}" id="month-${m}">
+            <h2>${MONTHS[m - 1]}${off === 0 ? ' <span class="now-chip">now</span>' : ''}</h2>
+            ${events.map(eventCard).join('')}
+          </section>`;
+      }
+      document.getElementById('guide-container').innerHTML = html;
+      document.getElementById('guide-count').textContent =
+        `${total} annual events`;
+      if (data.generated) {
+        document.getElementById('guide-updated').textContent = `Updated ${data.generated}`;
+      }
+    }
+    boot();
+  </script>
+</body>
+</html>

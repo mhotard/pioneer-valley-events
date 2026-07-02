@@ -143,10 +143,22 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 
 ---
 
+## Seasonal guide
+
+[The Seasonal Guide](https://mhotard.github.io/pioneer-valley-events/seasonal.html)
+lists the 413's annual events — mined from three years of NEPM's
+[The Fabulous 413](https://www.nepm.org/podcast/the-fabulous-413) podcast
+archive. Events covered in multiple years surface with their typical month
+and links to every episode about them; the weekly digest includes an
+"on your radar" preview of the next ~6 weeks.
+
+---
+
 ## Roadmap
 
 - [x] Springfield Museums
 - [x] Weekly email digest
+- [x] Seasonal guide of annual events (Fabulous 413 archive)
 - [ ] Eventbrite API integration for broader coverage
 - [ ] Holyoke coverage (gap since Gateway City Arts closed)
 - [ ] Hampshire College (site blocks scrapers; needs a feed/API)

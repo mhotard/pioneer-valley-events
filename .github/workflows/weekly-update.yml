@@ -42,6 +42,19 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python pipeline.py
 
+      # Podcast mining is a nice-to-have: never block event publishing on it
+      - name: Mine Fabulous 413 podcast (new episodes only)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python fab413_miner.py
+
+      - name: Rebuild seasonal guide
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python fab413_guide.py
+
       - name: Check for changes
         id: diff
         run: |

@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "site",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "docs"],
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd docs && exec python3 -m http.server 8765"],
       "port": 8765
     }
   ]

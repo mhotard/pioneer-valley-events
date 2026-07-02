@@ -30,7 +30,16 @@ from email.mime.text import MIMEText
 from scrapers.base import event_time_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
+SEASONAL_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "seasonal.json")
 SITE_URL = "https://mhotard.github.io/pioneer-valley-events"
+GUIDE_URL = f"{SITE_URL}/seasonal.html"
+
+MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+MAX_RADAR = 8  # annual events shown in the "on your radar" section
 
 # Gmail clips messages over ~102KB, and a 300-event wall defeats the point of
 # a digest. Cap each day's listing; the rest is a "+N more" link to the site.
@@ -46,6 +55,30 @@ CATEGORY_EMOJI = {
 def load_events(path: str) -> list:
     with open(path) as f:
         return json.load(f).get("events", [])
+
+
+def load_seasonal(path: str = SEASONAL_PATH):
+    """The seasonal guide data (built by fab413_guide.py), or None."""
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def radar_events(seasonal, today=None) -> list:
+    """Annual events typically happening this month or next — advance notice
+    for things whose exact dates may not be announced yet."""
+    if not seasonal:
+        return []
+    today = today or date.today()
+    months = [today.month, today.month % 12 + 1]
+    out = []
+    for m in months:
+        for e in seasonal.get("months", {}).get(str(m), []):
+            out.append({**e, "month": m})
+    out.sort(key=lambda e: (-len(e.get("years", [])), -e.get("mention_count", 0)))
+    return out[:MAX_RADAR]
 
 
 def select_upcoming(events: list, days: int) -> list:
@@ -64,7 +97,7 @@ def pretty_day(date_str: str) -> str:
         return date_str
 
 
-def build_html(upcoming: list, total: int, days: int) -> str:
+def build_html(upcoming: list, total: int, days: int, radar: list = ()) -> str:
     esc = html.escape
     today = date.today()
     end = today + timedelta(days=days)
@@ -77,6 +110,27 @@ def build_html(upcoming: list, total: int, days: int) -> str:
         f'<p style="color:#666;margin:0 0 20px;font-size:14px;">{window} · '
         f'{len(upcoming)} events coming up · {total} on the site</p>',
     ]
+
+    if radar:
+        parts.append(
+            '<div style="background:#f0f7f3;border:1px solid #cfe5da;border-radius:10px;'
+            'padding:12px 16px;margin:0 0 8px;">'
+            '<div style="font-size:14px;font-weight:600;margin-bottom:6px;">'
+            '📅 On your radar — annual events usually coming up</div>'
+        )
+        for e in radar:
+            where = f" ({esc(e['town'])})" if e.get("town") else ""
+            years = len(e.get("years", []))
+            parts.append(
+                f'<div style="font-size:13px;line-height:1.5;">• '
+                f'<strong>{esc(e["name"])}</strong>{where} — usually '
+                f'{MONTH_NAMES[e["month"] - 1]} · covered {years} year'
+                f'{"s" if years != 1 else ""}</div>'
+            )
+        parts.append(
+            f'<div style="font-size:12px;margin-top:6px;"><a href="{GUIDE_URL}" '
+            'style="color:#0b5cad;">Browse the full seasonal guide →</a></div></div>'
+        )
 
     if not upcoming:
         parts.append(
@@ -149,7 +203,8 @@ def main():
 
     events = load_events(OUTPUT_PATH)
     upcoming = select_upcoming(events, args.days)
-    html_body = build_html(upcoming, total=len(events), days=args.days)
+    radar = radar_events(load_seasonal())
+    html_body = build_html(upcoming, total=len(events), days=args.days, radar=radar)
 
     end = date.today() + timedelta(days=args.days)
     subject = f"Pioneer Valley Events — {len(upcoming)} events through {end.strftime('%b %-d')}"
