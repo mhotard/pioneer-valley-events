@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await loadEvents();
   populateSourceFilter();
+  populateTownFilter();
   setupFilters();
   setupViewSwitcher();
   setupModal();
@@ -47,6 +48,19 @@ function populateSourceFilter() {
     const opt = document.createElement('option');
     opt.value = s;
     opt.textContent = s;
+    sel.appendChild(opt);
+  });
+}
+
+/* ---- Town dropdown (dynamic — the data has far more towns than any
+       hardcoded list; harriers races especially add small towns) ---- */
+function populateTownFilter() {
+  const sel = document.getElementById('town-filter');
+  const towns = [...new Set(state.events.map(e => e.town).filter(Boolean))].sort();
+  towns.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t === 'Pioneer Valley' ? 'Regionwide' : t;
     sel.appendChild(opt);
   });
 }

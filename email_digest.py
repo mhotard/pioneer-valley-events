@@ -32,6 +32,10 @@ from scrapers.base import event_time_key
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 SITE_URL = "https://mhotard.github.io/pioneer-valley-events"
 
+# Gmail clips messages over ~102KB, and a 300-event wall defeats the point of
+# a digest. Cap each day's listing; the rest is a "+N more" link to the site.
+MAX_PER_DAY = 15
+
 CATEGORY_EMOJI = {
     "music": "🎵", "arts": "🎨", "film": "🎬", "comedy": "😂",
     "community": "🤝", "academia": "🎓", "family": "👨‍👩‍👧", "food": "🍽️",
@@ -80,36 +84,43 @@ def build_html(upcoming: list, total: int, days: int) -> str:
             f'check <a href="{SITE_URL}">the site</a> later in the week.</p>'
         )
     else:
-        current_day = None
+        by_day: dict = {}
         for ev in upcoming:
-            if ev["date"] != current_day:
-                if current_day is not None:
-                    parts.append("</div>")
-                current_day = ev["date"]
-                parts.append(
-                    f'<h2 style="font-size:16px;border-bottom:1px solid #e2e2e2;'
-                    f'padding-bottom:4px;margin:24px 0 10px;">{esc(pretty_day(current_day))}</h2>'
-                    '<div>'
-                )
+            by_day.setdefault(ev["date"], []).append(ev)
 
-            emoji = CATEGORY_EMOJI.get(ev.get("category", ""), "•")
-            time_str = esc(ev.get("time", "").strip()) or "All day"
-            title = esc(ev.get("title", "Untitled"))
-            url = ev.get("url", "")
-            if url:
-                link_style = "color:#0b5cad;text-decoration:none;"
-                title = f'<a href="{esc(url)}" style="{link_style}">{title}</a>'
-            where = " · ".join(
-                p for p in [esc(ev.get("venue", "")), esc(ev.get("town", ""))] if p
-            )
+        for day, day_events in by_day.items():
             parts.append(
-                '<div style="margin:0 0 10px;font-size:15px;line-height:1.4;">'
-                f'<span style="color:#888;">{time_str}</span> &nbsp;{emoji} '
-                f'<strong>{title}</strong>'
-                + (f'<br><span style="color:#666;font-size:13px;">{where}</span>' if where else "")
-                + "</div>"
+                f'<h2 style="font-size:16px;border-bottom:1px solid #e2e2e2;'
+                f'padding-bottom:4px;margin:24px 0 10px;">{esc(pretty_day(day))}</h2>'
+                '<div>'
             )
-        parts.append("</div>")
+            for ev in day_events[:MAX_PER_DAY]:
+                emoji = CATEGORY_EMOJI.get(ev.get("category", ""), "•")
+                time_str = esc(ev.get("time", "").strip()) or "All day"
+                title = esc(ev.get("title", "Untitled"))
+                url = ev.get("url", "")
+                if url:
+                    link_style = "color:#0b5cad;text-decoration:none;"
+                    title = f'<a href="{esc(url)}" style="{link_style}">{title}</a>'
+                where = " · ".join(
+                    p for p in [esc(ev.get("venue", "")), esc(ev.get("town", ""))] if p
+                )
+                parts.append(
+                    '<div style="margin:0 0 10px;font-size:15px;line-height:1.4;">'
+                    f'<span style="color:#888;">{time_str}</span> &nbsp;{emoji} '
+                    f'<strong>{title}</strong>'
+                    + (f'<br><span style="color:#666;font-size:13px;">{where}</span>'
+                       if where else "")
+                    + "</div>"
+                )
+            overflow = len(day_events) - MAX_PER_DAY
+            if overflow > 0:
+                parts.append(
+                    f'<div style="margin:0 0 10px;font-size:13px;">'
+                    f'<a href="{SITE_URL}" style="color:#0b5cad;">+{overflow} more '
+                    f'this day on the site →</a></div>'
+                )
+            parts.append("</div>")
 
     parts.append(
         f'<p style="margin:28px 0 0;font-size:13px;color:#999;">'
