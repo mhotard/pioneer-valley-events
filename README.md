@@ -106,7 +106,6 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 
 | Source | Town | Notes |
 |--------|------|-------|
-| UMass Amherst | Amherst | JSON-LD structured data |
 | UMass Athletics | Amherst | Home game schedule (iCal) |
 | Amherst College Athletics | Amherst | Home game schedule (iCal) |
 | Amherst Cinema | Amherst | Film showtimes |
@@ -121,11 +120,12 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 | Northampton Center for the Arts | Northampton | Arts events |
 | Northampton.live | Northampton | Aggregated listings |
 | Mount Holyoke College | South Hadley | Campus events (Localist API) |
+| UMass Amherst | Amherst | Campus events (Localist API) |
 | Springfield Museums | Springfield | Exhibits, tours, classes (Events Calendar API) |
 | Hawks & Reed | Greenfield | Performing arts (Events Calendar API) |
 | NEPM + Culture to Do | Pioneer Valley | Curated regional events and weekly newsletter |
 | Harriers Race Calendar | Pioneer Valley | Western Mass road races |
-| Arts Hub WMA, Valley Advocate, Valley Arts Newsletter, Visit Hampshire County | Pioneer Valley | Regional calendars |
+| Arts Hub WMA, Valley Arts Newsletter, Visit Hampshire County | Pioneer Valley | Regional calendars |
 | Community events | — | Manually curated in `community_events.json` |
 
 ---
@@ -138,8 +138,8 @@ To trigger manually: **Actions → Weekly Event Update → Run workflow**
 
 ## Roadmap
 
-- [ ] Pleasant Street Theater (Northampton)
-- [ ] Springfield Museums
+- [x] Springfield Museums
+- [x] Weekly email digest
 - [ ] Eventbrite API integration for broader coverage
-- [ ] Email/RSS subscription
-- [ ] Image support
+- [ ] Holyoke coverage (gap since Gateway City Arts closed)
+- [ ] Hampshire College (site blocks scrapers; needs a feed/API)

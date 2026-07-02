@@ -32,8 +32,12 @@ is named `ANTHROPIC_API_KEY`.
 
 The pipeline now **fails (exit 1) loudly** rather than publishing a degraded
 file: a pre-flight aborts if a Claude source is configured but no API key is
-set, and a post-run check aborts if >34% of sources error (`MAX_ERROR_FRACTION`).
-This turns a silent half-empty run into a red Action that emails the owner.
+set (scrapers declare `needs_api_key = True`), and a post-run check aborts if
+>34% of sources are unhealthy (`MAX_ERROR_FRACTION`) — where unhealthy means
+errored OR a **yield regression**: a source that had ≥5 events in the published
+events.json but returned zero without erroring (shown as `ZERO ⚠ was N` in the
+summary). This turns a silent half-empty run into a red Action that emails the
+owner. `hawks-reed` at zero is NOT a regression — it was already zero.
 
 ## Weekly email digest (email_digest.py)
 
@@ -56,8 +60,9 @@ scrapers/
   ical.py              ICalScraper base for .ics feeds
   umass_athletics.py   iCal (subclasses ICalScraper)
   amherst_athletics.py iCal (subclasses ICalScraper)
-  umass.py             JSON-LD from events.umass.edu
-  mtholyoke.py         Localist JSON API (events.mtholyoke.edu/api/2/events)
+  localist.py          LocalistScraper base for schools on Localist (/api/2/events)
+  umass.py             Localist (subclasses LocalistScraper)
+  mtholyoke.py         Localist (subclasses LocalistScraper)
   tribe_events.py      TribeEventsScraper base for WordPress "The Events Calendar"
                        REST API (/wp-json/tribe/events/v1/events) —
                        springfield-museums and hawks-reed subclass it
@@ -96,9 +101,10 @@ logs/                  timestamped log per pipeline run (gitignored)
 
 fetch HTML (requests or Playwright) → `_clean_html` strips scripts/nav/attrs
 and truncates to 20k chars → `_extract_events` sends it to Haiku
-(claude-haiku-4-5, max_tokens 8192) → `_parse_json_array` parses the reply,
-**salvaging complete objects if the output was truncated at max_tokens** →
-`_dicts_to_events` validates (skips missing title/bad date, coerces unknown
+(claude-haiku-4-5, max_tokens 16384 — output tokens only cost what's generated,
+and 8192 truncated big aggregator pages) → `_parse_json_array` parses the
+reply, **salvaging complete objects if the output was truncated at max_tokens**
+→ `_dicts_to_events` validates (skips missing title/bad date, coerces unknown
 categories to "community").
 
 ## Debugging a scraper
@@ -129,3 +135,11 @@ categories to "community").
   calvintheatre.com, pleasantstreettheater.com, ironhorsemusic.com are all
   parked/squatted domains. The real Iron Horse is `ironhorse.org` (Parlor Room
   collective). The Drake is `thedrakeamherst.org` (server-rendered, html type).
+- `valley-advocate` was removed 2026-07-01: valleyadvocate.com/events is a
+  CitySpark JS widget whose events never land in scrapeable HTML (0–3 events
+  per run). A future static scraper against CitySpark's JSON API is possible.
+- Smith College runs 25Live (25live.collegenet.com/smith) with no public feed
+  found (checked 2026-07-01) — it stays on the Claude HTML scraper.
+- Dedup requires *venue compatibility* (`venues_compatible` in pipeline.py):
+  same-title events at genuinely different venues (storytimes at both
+  libraries) are kept; "Various …" aggregator venues merge with anything.

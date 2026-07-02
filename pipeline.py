@@ -46,9 +46,27 @@ def api_key_present() -> bool:
     )
 
 
+MAX_LOG_FILES = 50
+
+
+def prune_old_logs():
+    """Keep only the newest MAX_LOG_FILES logs so logs/ doesn't grow forever."""
+    try:
+        logs = sorted(
+            (os.path.join(LOGS_DIR, f) for f in os.listdir(LOGS_DIR) if f.endswith(".log")),
+            key=os.path.getmtime,
+            reverse=True,
+        )
+        for old in logs[MAX_LOG_FILES:]:
+            os.remove(old)
+    except OSError:
+        pass  # pruning is best-effort; never block a run over it
+
+
 def setup_logging():
     """Configure the 'pipeline' logger to write to console and a timestamped log file."""
     os.makedirs(LOGS_DIR, exist_ok=True)
+    prune_old_logs()
     timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     log_path = os.path.join(LOGS_DIR, f"pipeline_{timestamp}.log")
 
