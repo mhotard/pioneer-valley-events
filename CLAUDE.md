@@ -39,6 +39,18 @@ events.json but returned zero without erroring (shown as `ZERO ⚠ was N` in the
 summary). This turns a silent half-empty run into a red Action that emails the
 owner. `hawks-reed` at zero is NOT a regression — it was already zero.
 
+## Event archive (docs/data/archive-YYYY.json)
+
+Every non-dry full run upserts the published events into a per-year archive
+(`update_archive` in pipeline.py): keyed by event id, bucketed by the event
+date's year, compact JSON. Re-scraped events refresh their details but keep
+their original `first_seen`; **nothing is ever deleted** — this is the
+project's historical record for future analysis. Backfilled 2026-07-02 from
+all git snapshots back to 2026-03-21 (~2k events). The weekly Action commits
+all of `docs/data/`, so archives persist automatically. Single-source runs
+(`--source X`) are always treated as dry runs and never write events.json or
+the archive.
+
 ## Weekly email digest (email_digest.py)
 
 After a successful pipeline run, the Action emails a next-14-days digest of
@@ -74,6 +86,7 @@ scrapers/
   community.py         manually-curated events from community_events.json (supports recurrence)
   __init__.py          get_all_scrapers() — register new static scrapers here
 docs/                  static frontend (vanilla JS) + docs/data/events.json
+docs/data/archive-YYYY.json  append-only historical record, one file per event-year
 tests/                 pytest; test_schema.py validates the committed events.json
 logs/                  timestamped log per pipeline run (gitignored)
 ```

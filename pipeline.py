@@ -21,6 +21,7 @@ from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
+ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "docs", "data")
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "logs")
 # Only include events within this window (constants live in scrapers/base.py)
 DATE_MIN = (date.today() - timedelta(days=DAYS_PAST)).isoformat()
@@ -134,6 +135,49 @@ def filter_by_date(events: list) -> list:
     return [e for e in events if DATE_MIN <= e["date"] <= DATE_MAX]
 
 
+def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = "") -> dict:
+    """Upsert published events into per-year archives (docs/data/archive-YYYY.json).
+
+    Append-only historical record for analysis: keyed by event id, bucketed by
+    the year of the event's date. Re-scraped events refresh their details but
+    keep their original first_seen; nothing is ever deleted. Returns
+    {year: number_of_newly_added_events}.
+    """
+    today = today or date.today().isoformat()
+    by_year: dict = {}
+    for e in events:
+        by_year.setdefault(e["date"][:4], []).append(e)
+
+    added = {}
+    for year, evs in sorted(by_year.items()):
+        path = os.path.join(archive_dir, f"archive-{year}.json")
+        try:
+            with open(path) as f:
+                archive = {a["id"]: a for a in json.load(f).get("events", [])}
+        except (OSError, json.JSONDecodeError):
+            archive = {}
+
+        new = 0
+        for e in evs:
+            existing = archive.get(e["id"])
+            if existing is None:
+                new += 1
+                first_seen = today
+            else:
+                first_seen = existing.get("first_seen", today)
+            archive[e["id"]] = {**e, "first_seen": first_seen}
+
+        records = sorted(archive.values(), key=lambda a: (a["date"], event_time_key(a)))
+        with open(path, "w", encoding="utf-8") as f:
+            # Compact JSON: the archive is for analysis, not reading in diffs
+            json.dump(
+                {"year": year, "count": len(records), "events": records},
+                f, ensure_ascii=False, separators=(",", ":"),
+            )
+        added[year] = new
+    return added
+
+
 def previous_source_counts(path: str = OUTPUT_PATH) -> dict:
     """Per-source event counts from the currently-published events.json."""
     try:
@@ -245,6 +289,11 @@ def run(scrapers, dry_run=False):
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
     log.info("Wrote %d events to %s", len(all_events), OUTPUT_PATH)
+
+    # Append-only historical record (docs/data/archive-YYYY.json) for analysis
+    for year, n in update_archive(all_events).items():
+        log.info("Archive %s: +%d new events", year, n)
+
     return results, regressions
 
 
@@ -266,6 +315,11 @@ def main():
             names = [s.name for s in all_scrapers]
             log.error("Unknown source '%s'. Available: %s", args.source, ", ".join(names))
             sys.exit(1)
+        if not args.dry_run:
+            # A single-source run must never overwrite events.json (it would
+            # contain only that source's events) — force dry-run behavior.
+            log.warning("--source runs never write output; treating as --dry-run.")
+            args.dry_run = True
     else:
         scrapers = all_scrapers
 

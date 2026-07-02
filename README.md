@@ -15,7 +15,8 @@ pioneer-valley-events/
 │   ├── style.css
 │   ├── app.js
 │   └── data/
-│       └── events.json         # Event data, regenerated weekly
+│       ├── events.json         # Event data, regenerated weekly
+│       └── archive-YYYY.json   # Append-only history, one file per year
 ├── scrapers/
 │   ├── base.py                 # BaseScraper + Event dataclass
 │   ├── claude_scraper.py       # Claude Haiku-powered universal scraper
