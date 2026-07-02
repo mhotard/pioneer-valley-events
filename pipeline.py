@@ -18,18 +18,24 @@ from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
 
 from scrapers import get_all_scrapers
-from scrapers.claude_scraper import ClaudeHTMLScraper
+from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "logs")
-# Only include events within this window (past 3 days → future 90 days)
-DATE_MIN = (date.today() - timedelta(days=3)).isoformat()
-DATE_MAX = (date.today() + timedelta(days=90)).isoformat()
+# Only include events within this window (constants live in scrapers/base.py)
+DATE_MIN = (date.today() - timedelta(days=DAYS_PAST)).isoformat()
+DATE_MAX = (date.today() + timedelta(days=DAYS_FUTURE)).isoformat()
 
-# Abort (exit non-zero) if more than this fraction of sources error in a full
-# run. This turns a silently-degraded run into a loud failure so the GitHub
-# Action goes red and emails us, instead of publishing a half-empty site.
+# Abort (exit non-zero) if more than this fraction of sources are unhealthy in
+# a full run — errored, OR silently dropped from a productive yield to zero.
+# This turns a silently-degraded run into a loud failure so the GitHub Action
+# goes red and emails us, instead of publishing a half-empty site.
 MAX_ERROR_FRACTION = 0.34
+
+# A source counts as a "yield regression" if it produced at least this many
+# events in the previous published events.json but returned zero (without
+# erroring) this run. Catches broken extractions that don't raise.
+MIN_PREV_FOR_REGRESSION = 5
 
 
 def api_key_present() -> bool:
@@ -92,10 +98,43 @@ def filter_by_date(events: list) -> list:
     return [e for e in events if DATE_MIN <= e["date"] <= DATE_MAX]
 
 
+def previous_source_counts(path: str = OUTPUT_PATH) -> dict:
+    """Per-source event counts from the currently-published events.json."""
+    try:
+        with open(path) as f:
+            events = json.load(f).get("events", [])
+    except (OSError, json.JSONDecodeError):
+        return {}
+    counts: dict = {}
+    for e in events:
+        src = e.get("source", "")
+        counts[src] = counts.get(src, 0) + 1
+    return counts
+
+
+def find_regressions(results: list, prev_counts: dict) -> list:
+    """Sources that yielded 0 (without erroring) but were recently productive.
+
+    results is a list of (name, url, count, error) tuples. Returns a list of
+    (name, previous_count) pairs.
+    """
+    return [
+        (name, prev_counts[name])
+        for name, _url, count, error in results
+        if count == 0
+        and not error
+        and prev_counts.get(name, 0) >= MIN_PREV_FOR_REGRESSION
+    ]
+
+
 def run(scrapers, dry_run=False):
     log = logging.getLogger("pipeline")
     all_events = []
     results = []  # (name, url, count, error)
+
+    # Snapshot the published per-source counts before we overwrite the file,
+    # so we can flag sources that silently dropped to zero.
+    prev_counts = previous_source_counts()
 
     for scraper in scrapers:
         url_label = getattr(scraper, "url", "") or "(no url)"
@@ -116,16 +155,25 @@ def run(scrapers, dry_run=False):
     all_events = deduplicate(all_events)
     log.info("After deduplication: %d", len(all_events))
 
-    # Sort by date, then time
-    all_events.sort(key=lambda e: (e["date"], e.get("time", "")))
+    # Sort by date, then chronological time (never sort times as raw strings)
+    all_events.sort(key=lambda e: (e["date"], event_time_key(e)))
 
     # ── Summary ──────────────────────────────────────────────────────────────
     log.info("")
     log.info("══ SCRAPER SUMMARY ══════════════════════════════════════")
     errors = [(n, u, e) for n, u, c, e in results if e]
     zeros  = [(n, u) for n, u, c, e in results if c == 0 and not e]
+    regressions = find_regressions(results, prev_counts)
+    regressed = {name for name, _ in regressions}
     for name, url_label, count, error in results:
-        status = "ERROR" if error else ("ZERO" if count == 0 else "OK")
+        if error:
+            status = "ERROR"
+        elif name in regressed:
+            status = f"ZERO ⚠ was {prev_counts[name]}"
+        elif count == 0:
+            status = "ZERO"
+        else:
+            status = "OK"
         log.info("  %-30s  %4d events  [%s]  %s", name, count, status, url_label)
     log.info("")
     log.info("  Scrapers run:    %d", len(results))
@@ -137,6 +185,11 @@ def run(scrapers, dry_run=False):
         log.warning("  Failed scrapers:")
         for name, url_label, err in errors:
             log.warning("    %s (%s): %s", name, url_label, err)
+    if regressions:
+        log.warning("")
+        log.warning("  Yield regressions (produced events last run, zero now):")
+        for name, prev in regressions:
+            log.warning("    %s: %d → 0", name, prev)
     log.info("══════════════════════════════════════════════════════════")
     # ─────────────────────────────────────────────────────────────────────────
 
@@ -149,14 +202,14 @@ def run(scrapers, dry_run=False):
         log.info("")
         log.info("--- DRY RUN (not writing) ---")
         log.info(json.dumps(payload, indent=2)[:2000])
-        return results
+        return results, regressions
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
     log.info("Wrote %d events to %s", len(all_events), OUTPUT_PATH)
-    return results
+    return results, regressions
 
 
 def main():
@@ -182,27 +235,30 @@ def main():
 
     # Pre-flight: if any source needs the Anthropic key and it's missing, abort
     # loudly rather than quietly publishing only the non-Claude sources.
-    needs_key = any(isinstance(s, ClaudeHTMLScraper) for s in scrapers)
-    if needs_key and not api_key_present():
+    needing_key = [s for s in scrapers if getattr(s, "needs_api_key", False)]
+    if needing_key and not api_key_present():
         log.error(
             "ANTHROPIC_API_KEY is not set, but %d source(s) need it. Aborting so "
             "we don't publish a degraded events.json. In GitHub Actions, set the "
             "ANTHROPIC_API_KEY repository secret; locally, run `source ~/.zshrc` first.",
-            sum(isinstance(s, ClaudeHTMLScraper) for s in scrapers),
+            len(needing_key),
         )
         sys.exit(1)
 
-    results = run(scrapers, dry_run=args.dry_run)
+    results, regressions = run(scrapers, dry_run=args.dry_run)
 
-    # Post-run backstop: in a full run, fail if too many sources errored (e.g. a
-    # bad/expired key, or a widespread outage) so the failure can't hide.
+    # Post-run backstop: in a full run, fail if too many sources are unhealthy
+    # (errored, or silently dropped from productive to zero) so the failure
+    # can't hide behind a green checkmark.
     if not args.source and results:
         errored = [r for r in results if r[3]]
-        if len(errored) > len(results) * MAX_ERROR_FRACTION:
+        unhealthy = len(errored) + len(regressions)
+        if unhealthy > len(results) * MAX_ERROR_FRACTION:
             log.error(
-                "%d of %d sources errored (> %.0f%%). Failing the run so it isn't "
-                "mistaken for a healthy one.",
-                len(errored), len(results), MAX_ERROR_FRACTION * 100,
+                "%d of %d sources unhealthy (%d errored, %d yield regressions; "
+                "> %.0f%%). Failing the run so it isn't mistaken for a healthy one.",
+                unhealthy, len(results), len(errored), len(regressions),
+                MAX_ERROR_FRACTION * 100,
             )
             sys.exit(1)
 

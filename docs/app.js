@@ -96,7 +96,7 @@ function applyFilters() {
       if (source && e.source !== source) return false;
       return true;
     })
-    .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''));
+    .sort((a, b) => a.date.localeCompare(b.date) || timeMinutes(a.time) - timeMinutes(b.time));
 }
 
 /* ---- View Switcher ---- */
@@ -413,6 +413,17 @@ function toDateStr(date) {
 
 function truncate(str, len) {
   return str.length > len ? str.slice(0, len).trimEnd() + '…' : str;
+}
+
+// Chronological minutes for a "H:MM AM/PM" time; all-day (no time) sorts first.
+// Never compare times as strings — "12:00 PM" < "9:00 AM" lexicographically.
+function timeMinutes(t) {
+  if (!t) return -1;
+  const m = String(t).match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+  if (!m) return -1;
+  let h = parseInt(m[1], 10) % 12;
+  if (m[3].toUpperCase() === 'PM') h += 12;
+  return h * 60 + (m[2] ? parseInt(m[2], 10) : 0);
 }
 
 function esc(str) {

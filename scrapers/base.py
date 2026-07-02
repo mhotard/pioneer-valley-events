@@ -11,6 +11,28 @@ from typing import Optional
 
 log = logging.getLogger("pipeline")
 
+# The publication window, shared by the pipeline and any scraper that
+# pre-filters (community.py, tribe_events.py): events from DAYS_PAST days ago
+# through DAYS_FUTURE days out are kept. Change it here, nowhere else.
+DAYS_PAST = 3
+DAYS_FUTURE = 90
+
+
+def event_time_key(ev: dict) -> tuple:
+    """Chronological sort key for an event dict's 'time' field.
+
+    All-day events (no/unparseable time) sort first. Never sort times as raw
+    strings — "12:00 PM" < "9:00 AM" lexicographically.
+    """
+    raw = (ev.get("time") or "").strip()
+    for fmt in ("%I:%M %p", "%I %p"):
+        try:
+            t = datetime.strptime(raw, fmt)
+            return (1, t.hour * 60 + t.minute)
+        except ValueError:
+            continue
+    return (0, 0)
+
 
 @dataclass
 class Event:
@@ -45,6 +67,9 @@ class BaseScraper(ABC):
     name: str = "base"
     url: str = ""
     town: str = ""
+    # Set True on scrapers that call the Anthropic API; the pipeline pre-flight
+    # aborts if any such scraper is selected and no API key is set.
+    needs_api_key: bool = False
 
     def fetch(self) -> list[Event]:
         """Fetch and return normalized events. Catches all exceptions gracefully."""

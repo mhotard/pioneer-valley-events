@@ -10,7 +10,7 @@ from datetime import date, timedelta
 import requests
 from bs4 import BeautifulSoup
 
-from .base import BaseScraper, Event
+from .base import DAYS_FUTURE, BaseScraper, Event
 
 log = logging.getLogger("pipeline")
 
@@ -51,7 +51,7 @@ class TribeEventsScraper(BaseScraper):
     def _fetch(self) -> list[Event]:
         headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
         start = date.today().isoformat()
-        end = (date.today() + timedelta(days=90)).isoformat()
+        end = (date.today() + timedelta(days=DAYS_FUTURE)).isoformat()
         next_url = (
             f"{self.api_base}/wp-json/tribe/events/v1/events"
             f"?per_page=50&start_date={start}&end_date={end}"

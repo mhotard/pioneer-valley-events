@@ -189,6 +189,8 @@ def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str)
 class ClaudeHTMLScraper(BaseScraper):
     """Fetches a static HTML page and uses Haiku to extract events."""
 
+    needs_api_key = True
+
     def __init__(self, name: str, url: str, venue: str, town: str):
         self.name = name
         self.url = url

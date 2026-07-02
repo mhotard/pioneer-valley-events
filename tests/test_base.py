@@ -134,3 +134,32 @@ class TestScraperContract:
 
         result = BrokenScraper().fetch()
         assert result == []
+
+
+# ---- event_time_key ----
+
+from scrapers.base import event_time_key  # noqa: E402
+
+
+class TestEventTimeKey:
+    def test_noon_after_morning(self):
+        # The classic lexicographic bug: "12:00 PM" < "9:00 AM" as strings
+        assert event_time_key({"time": "12:00 PM"}) > event_time_key({"time": "9:00 AM"})
+
+    def test_evening_after_morning(self):
+        assert event_time_key({"time": "7:30 PM"}) > event_time_key({"time": "10:00 AM"})
+
+    def test_all_day_sorts_first(self):
+        assert event_time_key({"time": ""}) < event_time_key({"time": "12:01 AM"})
+
+    def test_missing_time_field(self):
+        assert event_time_key({}) == (0, 0)
+
+    def test_unparseable_time_sorts_first(self):
+        assert event_time_key({"time": "sometime"}) == (0, 0)
+
+    def test_hour_only_format(self):
+        assert event_time_key({"time": "7 PM"}) == (1, 19 * 60)
+
+    def test_midnight_is_zero_minutes(self):
+        assert event_time_key({"time": "12:00 AM"}) == (1, 0)

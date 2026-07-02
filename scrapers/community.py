@@ -7,7 +7,7 @@ import os
 import re
 from datetime import date, timedelta
 
-from .base import BaseScraper, Event
+from .base import DAYS_FUTURE, DAYS_PAST, BaseScraper, Event
 
 log = logging.getLogger("pipeline")
 
@@ -114,10 +114,10 @@ class CommunityEventsScraper(BaseScraper):
         entries = data.get("events", [])
         events = []
 
-        # Use the same date window as the pipeline (today-3 to today+90)
+        # Use the same date window as the pipeline
         today = date.today()
-        range_start = today - timedelta(days=3)
-        range_end = today + timedelta(days=90)
+        range_start = today - timedelta(days=DAYS_PAST)
+        range_end = today + timedelta(days=DAYS_FUTURE)
 
         for i, entry in enumerate(entries):
             title = entry.get("title", "").strip()

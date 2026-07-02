@@ -20,6 +20,7 @@ class NEPMCultureScraper(BaseScraper):
     name = "nepm-culture"
     url = LISTING_URL
     town = "Pioneer Valley"
+    needs_api_key = True  # uses claude_scraper._extract_events
 
     def _fetch(self) -> list[Event]:
         headers = {"User-Agent": BROWSER_UA}

@@ -27,6 +27,8 @@ import sys
 from datetime import date, datetime, timedelta
 from email.mime.text import MIMEText
 
+from scrapers.base import event_time_key
+
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 SITE_URL = "https://mhotard.github.io/pioneer-valley-events"
 
@@ -42,24 +44,12 @@ def load_events(path: str) -> list:
         return json.load(f).get("events", [])
 
 
-def time_sort_key(ev: dict):
-    """Sort all-day events (no time) first, then chronologically."""
-    raw = (ev.get("time") or "").strip()
-    for fmt in ("%I:%M %p", "%I %p"):
-        try:
-            t = datetime.strptime(raw, fmt)
-            return (1, t.hour * 60 + t.minute)
-        except ValueError:
-            continue
-    return (0, 0)
-
-
 def select_upcoming(events: list, days: int) -> list:
     today = date.today()
     horizon = (today + timedelta(days=days)).isoformat()
     today_str = today.isoformat()
     upcoming = [e for e in events if today_str <= e.get("date", "") <= horizon]
-    upcoming.sort(key=lambda e: (e["date"], time_sort_key(e)))
+    upcoming.sort(key=lambda e: (e["date"], event_time_key(e)))
     return upcoming
 
 

@@ -8,7 +8,13 @@ from datetime import date, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from pipeline import api_key_present, deduplicate, filter_by_date
+from pipeline import (
+    MIN_PREV_FOR_REGRESSION,
+    api_key_present,
+    deduplicate,
+    filter_by_date,
+    find_regressions,
+)
 
 # ---- Helpers ----
 
@@ -131,3 +137,39 @@ class TestFilterByDate:
         result = filter_by_date(events)
         assert len(result) == 1
         assert result[0]["title"] == "Current Show"
+
+
+# ---- Yield-regression detection tests ----
+
+class TestFindRegressions:
+    # results tuples: (name, url, count, error)
+    def test_productive_to_zero_flagged(self):
+        results = [("forbes-library", "u", 0, None)]
+        prev = {"forbes-library": 154}
+        assert find_regressions(results, prev) == [("forbes-library", 154)]
+
+    def test_errored_source_not_flagged_as_regression(self):
+        results = [("forbes-library", "u", 0, "boom")]
+        prev = {"forbes-library": 154}
+        assert find_regressions(results, prev) == []
+
+    def test_always_zero_source_not_flagged(self):
+        # hawks-reed was 0 last run too — that's a known-OK ZERO, not a regression
+        results = [("hawks-reed", "u", 0, None)]
+        prev = {"hawks-reed": 0}
+        assert find_regressions(results, prev) == []
+
+    def test_low_yield_source_not_flagged(self):
+        # A source that only ever had a couple of events can hit 0 naturally
+        results = [("valley-arts-newsletter", "u", 0, None)]
+        prev = {"valley-arts-newsletter": MIN_PREV_FOR_REGRESSION - 1}
+        assert find_regressions(results, prev) == []
+
+    def test_new_source_not_flagged(self):
+        results = [("brand-new", "u", 0, None)]
+        assert find_regressions(results, {}) == []
+
+    def test_productive_source_still_productive_not_flagged(self):
+        results = [("umass", "u", 12, None)]
+        prev = {"umass": 20}
+        assert find_regressions(results, prev) == []
