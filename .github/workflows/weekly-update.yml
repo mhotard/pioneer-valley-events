@@ -55,19 +55,29 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fab413_guide.py
 
+      - name: Mine Fabulous 413 entities (new episodes only)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python fab413_entities.py
+
+      - name: Rebuild 413 dashboard data
+        continue-on-error: true
+        run: python fab413_stats.py
+
       - name: Check for changes
         id: diff
         run: |
-          # docs/data/ covers events.json AND the archive-YYYY.json files
-          git add -N docs/data/
-          git diff --quiet docs/data/ || echo "changed=true" >> $GITHUB_OUTPUT
+          # docs/data/ = events.json, archives, fab413 files; docs/413/ = dashboard data
+          git add -N docs/data/ docs/413/
+          git diff --quiet docs/data/ docs/413/ || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push updated events
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/data/
+          git add docs/data/ docs/413/
           git commit -m "chore: weekly event update $(date -u +'%Y-%m-%d')"
           git push
 

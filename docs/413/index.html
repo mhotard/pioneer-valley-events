@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fabulous 413 — by the numbers</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <style>
+    :root {
+      --bg: #FAF7F2; --surface: #FFFFFF; --border: #E5DFD6;
+      --text: #1C1917; --muted: #78716C; --accent: #D85A30; --accent-dark: #993C1D;
+      --k-event: #D85A30; --k-venue: #7F77DD; --k-restaurant: #BA7517;
+      --k-place: #1D9E75; --k-business: #378ADD; --k-person: #D4537E; --k-org: #888780;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+           background: var(--bg); color: var(--text); line-height: 1.5; }
+    header { background: #201D1A; color: #fff; padding: 2rem 1.5rem; }
+    .wrap { max-width: 960px; margin: 0 auto; }
+    header h1 { font-size: 1.6rem; letter-spacing: -0.02em; }
+    header h1 span { color: var(--accent); }
+    header p { color: rgba(255,255,255,0.65); font-size: 0.9rem; margin-top: 4px; }
+    header a { color: #F0997B; text-decoration: none; }
+    header a:hover { text-decoration: underline; }
+    main { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+             gap: 12px; margin-bottom: 1.5rem; }
+    .stat { background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1rem; }
+    .stat .n { font-size: 1.7rem; font-weight: 700; }
+    .stat .l { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
+               letter-spacing: 0.04em; }
+    .panel { background: var(--surface); border: 1px solid var(--border);
+             border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+    .panel h2 { font-size: 1.05rem; margin-bottom: 2px; }
+    .panel .sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
+    #map { height: 420px; border-radius: 8px; }
+    .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+               gap: 1.25rem; }
+    .kind-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem;
+                margin-bottom: 6px; }
+    .kind-row .label { width: 90px; color: var(--muted); }
+    .kind-row .bar { height: 12px; border-radius: 6px; }
+    .kind-row .val { color: var(--muted); font-size: 0.8rem; }
+    .board h3 { font-size: 0.9rem; margin: 0.75rem 0 0.35rem; }
+    .board .row { display: flex; justify-content: space-between; font-size: 0.85rem;
+                  padding: 3px 0; border-bottom: 1px dashed var(--border); }
+    .board .row:last-child { border-bottom: none; }
+    .board .row .cnt { color: var(--muted); }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .filters input[type=search] { flex: 1; min-width: 200px; padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem;
+      background: var(--bg); }
+    .filters select { padding: 0.5rem; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 0.85rem; background: var(--bg); }
+    .chip { display: none; align-items: center; gap: 6px; background: var(--accent);
+      color: #fff; border-radius: 99px; padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+    .chip button { background: none; border: none; color: #fff; cursor: pointer;
+      font-size: 1rem; line-height: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { text-align: left; color: var(--muted); font-size: 0.72rem;
+         text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 8px;
+         border-bottom: 2px solid var(--border); }
+    td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    td .note { color: var(--muted); font-size: 0.78rem; }
+    .pill { display: inline-block; font-size: 0.68rem; font-weight: 600; color: #fff;
+            border-radius: 99px; padding: 1px 8px; text-transform: uppercase; }
+    td a { color: var(--accent-dark); text-decoration: none; }
+    td a:hover { text-decoration: underline; }
+    .more-btn { margin-top: 0.75rem; padding: 0.5rem 1rem; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--surface); cursor: pointer; font-size: 0.85rem; }
+    .chart-box { position: relative; height: 240px; }
+    footer { max-width: 960px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem;
+             font-size: 0.8rem; color: var(--muted); }
+    footer a { color: var(--accent-dark); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>The Fabulous <span>413</span> — by the numbers</h1>
+    <p>Every place, event, restaurant, and person covered by
+       <a href="https://www.nepm.org/podcast/the-fabulous-413" target="_blank" rel="noopener">NEPM's The Fabulous 413</a>
+       since February 2023 · part of
+       <a href="../index.html">Pioneer Valley Events</a></p>
+  </div>
+</header>
+
+<main>
+  <div class="stats" id="stats"></div>
+
+  <div class="panel">
+    <h2>Where the 413 gets covered</h2>
+    <div class="sub">Bubble size = mentions. Click a town to filter everything below.</div>
+    <div id="map"></div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <h2>What they talk about</h2>
+      <div class="sub">Mentions by kind, all time</div>
+      <div id="kinds"></div>
+    </div>
+    <div class="panel">
+      <h2>The rhythm of the year</h2>
+      <div class="sub">Mentions by calendar month, all years combined</div>
+      <div class="chart-box"><canvas id="monthChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Coverage over time</h2>
+    <div class="sub">Mentions per quarter, by kind</div>
+    <div class="chart-box"><canvas id="timelineChart"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <h2>Hall of fame <span id="board-scope" style="font-weight:400;font-size:0.8rem;color:var(--muted)"></span></h2>
+    <div class="two-col" id="boards"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Everything explorer</h2>
+    <div class="sub" id="explorer-sub"></div>
+    <div class="filters">
+      <input type="search" id="q" placeholder="Search everything — try Thunderdome, maple, sylvester...">
+      <select id="kind-filter">
+        <option value="">All kinds</option>
+        <option value="event">Events</option>
+        <option value="venue">Venues</option>
+        <option value="restaurant">Restaurants</option>
+        <option value="place">Places</option>
+        <option value="business">Businesses</option>
+        <option value="person">People</option>
+        <option value="org">Organizations</option>
+      </select>
+      <span class="chip" id="town-chip"><span id="town-chip-name"></span>
+        <button id="town-clear" aria-label="Clear town filter">&times;</button></span>
+    </div>
+    <table>
+      <thead><tr><th>Name</th><th>Kind</th><th>Town</th><th>Mentions</th><th>Episodes</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <button class="more-btn" id="more" style="display:none">Show more</button>
+  </div>
+</main>
+
+<footer>
+  Mined weekly from the show's public episode descriptions ·
+  <a href="../seasonal.html">Seasonal guide of annual events</a> ·
+  <a href="https://github.com/mhotard/pioneer-valley-events" target="_blank" rel="noopener">How this is built</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const KIND_COLORS = {
+  event: '#D85A30', venue: '#7F77DD', restaurant: '#BA7517', place: '#1D9E75',
+  business: '#378ADD', person: '#D4537E', org: '#888780',
+};
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const state = { q: '', kind: '', town: '', shown: 50 };
+let DATA = null;
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderStats() {
+  const t = DATA.totals;
+  document.getElementById('stats').innerHTML = [
+    [t.episodes.toLocaleString(), 'episodes'],
+    [t.entities.toLocaleString(), 'total mentions'],
+    [t.unique.toLocaleString(), 'unique things'],
+    [t.towns.toLocaleString(), 'towns'],
+  ].map(([n, l]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+}
+
+function renderMap() {
+  const map = L.map('map', { scrollWheelZoom: false }).setView([42.38, -72.75], 9);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 14,
+  }).addTo(map);
+  const max = Math.max(...DATA.towns.map(t => t.count));
+  DATA.towns.forEach(t => {
+    const r = 6 + 30 * Math.sqrt(t.count / max);
+    const c = L.circleMarker([t.lat, t.lng], {
+      radius: r, color: '#993C1D', weight: 1, fillColor: '#D85A30', fillOpacity: 0.55,
+    }).addTo(map);
+    c.bindTooltip(`${t.town}: ${t.count} mentions`);
+    c.on('click', () => setTown(t.town));
+  });
+}
+
+function setTown(town) {
+  state.town = (state.town === town) ? '' : town;
+  state.shown = 50;
+  const chip = document.getElementById('town-chip');
+  chip.style.display = state.town ? 'inline-flex' : 'none';
+  document.getElementById('town-chip-name').textContent = state.town;
+  document.getElementById('board-scope').textContent =
+    state.town ? `— ${state.town}` : '';
+  renderBoards();
+  renderRows();
+}
+
+function renderKinds() {
+  const max = Math.max(...Object.values(DATA.kinds));
+  document.getElementById('kinds').innerHTML = Object.entries(DATA.kinds).map(([k, v]) => `
+    <div class="kind-row"><span class="label">${k}</span>
+      <div class="bar" style="width:${Math.round(76 * v / max)}%;background:${KIND_COLORS[k] || '#888'}"></div>
+      <span class="val">${v}</span></div>`).join('');
+}
+
+function renderMonthChart() {
+  new Chart(document.getElementById('monthChart'), {
+    type: 'bar',
+    data: { labels: MONTHS,
+      datasets: [{ data: Array.from({length: 12}, (_, i) => DATA.months[String(i + 1)] || 0),
+        backgroundColor: '#7F77DD', borderRadius: 4 }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } },
+  });
+}
+
+function renderTimeline() {
+  const tl = DATA.timeline;
+  new Chart(document.getElementById('timelineChart'), {
+    type: 'bar',
+    data: { labels: tl.quarters,
+      datasets: Object.entries(tl.series).map(([kind, vals]) => ({
+        label: kind, data: vals, backgroundColor: KIND_COLORS[kind] || '#888', stack: 's',
+      })) },
+    options: { maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+      scales: { x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, beginAtZero: true } } },
+  });
+}
+
+function filteredIndex() {
+  const q = state.q.toLowerCase();
+  return DATA.index.filter(r =>
+    (!state.kind || r.kind === state.kind) &&
+    (!state.town || r.town === state.town) &&
+    (!q || r.name.toLowerCase().includes(q) || (r.note || '').toLowerCase().includes(q)
+       || (r.town || '').toLowerCase().includes(q)));
+}
+
+function renderBoards() {
+  const rows = DATA.index.filter(r => !state.town || r.town === state.town);
+  const boards = [
+    ['Most-covered events', 'event'], ['Most-covered restaurants', 'restaurant'],
+    ['Most-covered places', 'place'], ['Most-frequent people', 'person'],
+  ];
+  document.getElementById('boards').innerHTML = boards.map(([title, kind]) => {
+    const top = rows.filter(r => r.kind === kind).slice(0, 8);
+    if (!top.length) return '';
+    return `<div class="board"><h3>${title}</h3>${top.map(r =>
+      `<div class="row"><span>${esc(r.name)}${r.town && !state.town ? ` <span style="color:var(--muted)">· ${esc(r.town)}</span>` : ''}</span>
+       <span class="cnt">${r.count}×</span></div>`).join('')}</div>`;
+  }).join('');
+}
+
+function renderRows() {
+  const rows = filteredIndex();
+  document.getElementById('explorer-sub').textContent =
+    `${rows.length.toLocaleString()} things` +
+    (state.town ? ` in ${state.town}` : '') + (state.kind ? ` · ${state.kind}` : '');
+  const slice = rows.slice(0, state.shown);
+  document.getElementById('rows').innerHTML = slice.map(r => `
+    <tr>
+      <td>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}
+        ${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}</td>
+      <td><span class="pill" style="background:${KIND_COLORS[r.kind] || '#888'}">${r.kind}</span></td>
+      <td>${esc(r.town)}</td>
+      <td>${r.count}</td>
+      <td>${r.episodes.map(e =>
+        `<a href="${esc(e.url)}" target="_blank" rel="noopener">${e.date.slice(0, 7)}</a>`).join(' ')}</td>
+    </tr>`).join('');
+  document.getElementById('more').style.display = rows.length > state.shown ? 'block' : 'none';
+}
+
+async function boot() {
+  const res = await fetch('data.json');
+  DATA = await res.json();
+  renderStats(); renderMap(); renderKinds(); renderMonthChart();
+  renderTimeline(); renderBoards(); renderRows();
+
+  document.getElementById('q').addEventListener('input', e => {
+    state.q = e.target.value.trim(); state.shown = 50; renderRows();
+  });
+  document.getElementById('kind-filter').addEventListener('change', e => {
+    state.kind = e.target.value; state.shown = 50; renderRows();
+  });
+  document.getElementById('town-clear').addEventListener('click', () => setTown(state.town));
+  document.getElementById('more').addEventListener('click', () => {
+    state.shown += 100; renderRows();
+  });
+}
+boot();
+</script>
+</body>
+</html>

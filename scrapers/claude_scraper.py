@@ -81,6 +81,33 @@ def _get_client() -> Anthropic:
     return _client
 
 
+def call_haiku(prompt: str, max_tokens: int = 16384, retries: int = 3) -> str:
+    """One Haiku call with exponential backoff on failure (rate limits etc.).
+
+    Used by the fab413 miners; scrapers keep their own single-shot behavior
+    since BaseScraper.fetch() already isolates their failures per source.
+    """
+    import sys
+    import time
+
+    delay = 20
+    for attempt in range(retries):
+        try:
+            message = _get_client().messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=max_tokens,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return message.content[0].text
+        except Exception as e:
+            if attempt == retries - 1:
+                raise
+            print(f"    retry in {delay}s ({e})", file=sys.stderr)
+            time.sleep(delay)
+            delay *= 3
+    raise RuntimeError("unreachable")
+
+
 def _clean_html(html: str) -> str:
     """Strip scripts, styles, nav, footer — keep main content."""
     soup = BeautifulSoup(html, "html.parser")

@@ -73,6 +73,23 @@ seasonal guide of events covered in 2+ different calendar years.
 - Both steps run weekly in the Action with `continue-on-error: true` —
   podcast mining must never block event publishing.
 
+### The /413/ dashboard (fab413_entities.py + fab413_stats.py)
+
+- `fab413_entities.py` is the broader v2 mine: every named thing (event,
+  venue, restaurant, place, business, person, org) with a ≤10-word note,
+  read from the STORED corpus (fab413_episodes.json), not the feed.
+  Incremental by guid. Batches retry with backoff (`call_haiku` in
+  claude_scraper.py) and the run aborts after 3 consecutive batch failures
+  rather than silently skipping — a rate-limited run once quietly mined only
+  256/795 episodes before this guard existed. Re-running resumes.
+- `fab413_stats.py` (pure Python, no API) aggregates entities into
+  docs/413/data.json: town bubbles (coordinates from the GAZETTEER dict —
+  add new towns there when they show up unmapped), kind/month/quarter
+  histograms, and the deduplicated explorer index.
+- docs/413/index.html is self-contained (own CSS; Leaflet + Chart.js from
+  cdnjs — pin exact versions and verify the URL returns 200; Chart.js 4.4.4
+  does NOT exist on cdnjs, 4.4.1 does).
+
 ## Weekly email digest (email_digest.py)
 
 After a successful pipeline run, the Action emails a next-14-days digest of
@@ -89,6 +106,9 @@ pipeline.py            entry point: run scrapers → date filter → dedupe → 
 email_digest.py        builds + sends the weekly next-14-days email (Gmail SMTP)
 fab413_miner.py        mines The Fabulous 413 podcast feed for event mentions
 fab413_guide.py        turns mined mentions into the seasonal guide (seasonal.json)
+fab413_entities.py     v2 mine: EVERYTHING the show mentions (restaurants, places,
+                       people, orgs...) from the stored episode corpus
+fab413_stats.py        aggregates entities → docs/413/data.json (no API calls)
 sources.json           config for Claude-powered scrapers (most sources live here)
 scrapers/
   base.py              Event dataclass + BaseScraper (fetch() catches all exceptions)
@@ -111,6 +131,7 @@ scrapers/
   __init__.py          get_all_scrapers() — register new static scrapers here
 docs/                  static frontend (vanilla JS) + docs/data/events.json
 docs/seasonal.html     month-by-month annual-events guide (reads seasonal.json)
+docs/413/              standalone data dashboard (Leaflet map, Chart.js, explorer)
 docs/data/archive-YYYY.json  append-only historical record, one file per event-year
 docs/data/fab413_episodes.json  raw podcast episode descriptions (append-only)
 docs/data/fab413_mentions.json  Haiku-extracted event mentions per episode

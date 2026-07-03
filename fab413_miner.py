@@ -26,7 +26,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from scrapers.claude_scraper import BROWSER_UA, _get_client, _parse_json_array
+from scrapers.claude_scraper import BROWSER_UA, _parse_json_array, call_haiku
 
 FEED_URL = "https://publicfeeds.net/f/3459/feed-rss.xml"
 OUTPUT_PATH = os.path.join(
@@ -137,13 +137,7 @@ def mine_batch(batch: list[dict]) -> list[dict]:
         f"[Episode {i} | {ep['date']} | {ep['title']}]\n{ep['text']}"
         for i, ep in enumerate(batch)
     )
-    client = _get_client()
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=16384,
-        messages=[{"role": "user", "content": EXTRACT_PROMPT.format(episodes=rendered)}],
-    )
-    raw = _parse_json_array(message.content[0].text)
+    raw = _parse_json_array(call_haiku(EXTRACT_PROMPT.format(episodes=rendered)))
 
     mentions = []
     for m in raw:

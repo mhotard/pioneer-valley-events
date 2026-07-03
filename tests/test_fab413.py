@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from email_digest import radar_events
 from fab413_guide import candidates, normalize, seasonality
+from fab413_stats import build_payload
 
 
 def mention(name, episode_date, town="Greenfield", event_type="festival"):
@@ -58,6 +59,53 @@ class TestCandidates:
         ms = [mention("Live Music Friday", f"{y}-{m:02d}-05")
               for y in (2023, 2024) for m in (1, 3, 5, 7, 9, 11)]
         assert candidates(ms) == []
+
+
+def entity(name, kind, town, episode_date, note="", url=""):
+    return {
+        "name": name, "kind": kind, "town": town, "note": note, "url": url,
+        "episode_date": episode_date, "episode_title": "ep",
+        "episode_url": "https://nepm.org/ep",
+    }
+
+
+class TestBuildPayload:
+    ENTITIES = [
+        entity("The Iron Horse", "venue", "Northampton", "2024-06-01"),
+        entity("Iron Horse", "venue", "Northampton", "2025-06-10"),  # same thing
+        entity("Green River Festival", "event", "Greenfield", "2024-07-01"),
+        entity("Mystery Spot", "place", "Atlantis", "2024-08-01"),  # unmapped town
+    ]
+
+    def test_index_dedupes_name_variants(self):
+        p = build_payload(self.ENTITIES, n_episodes=10)
+        venues = [r for r in p["index"] if r["kind"] == "venue"]
+        assert len(venues) == 1
+        assert venues[0]["count"] == 2
+        assert venues[0]["first"] == "2024-06-01"
+        assert venues[0]["last"] == "2025-06-10"
+
+    def test_mapped_towns_get_coordinates(self):
+        p = build_payload(self.ENTITIES, n_episodes=10)
+        noho = next(t for t in p["towns"] if t["town"] == "Northampton")
+        assert 42 < noho["lat"] < 43 and -73 < noho["lng"] < -72
+        assert noho["count"] == 2
+
+    def test_unmapped_town_listed_not_dropped(self):
+        p = build_payload(self.ENTITIES, n_episodes=10)
+        assert {"town": "Atlantis", "count": 1} in p["unmapped_towns"]
+        assert p["totals"]["towns"] == 3  # unmapped still counts
+
+    def test_totals_and_kinds(self):
+        p = build_payload(self.ENTITIES, n_episodes=10)
+        assert p["totals"] == {"episodes": 10, "entities": 4, "unique": 3, "towns": 3}
+        assert p["kinds"]["venue"] == 2
+
+    def test_timeline_series_align_with_quarters(self):
+        p = build_payload(self.ENTITIES, n_episodes=10)
+        tl = p["timeline"]
+        for series in tl["series"].values():
+            assert len(series) == len(tl["quarters"])
 
 
 class TestRadarEvents:
