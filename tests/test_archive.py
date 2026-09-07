@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from pipeline import update_archive
+from pipeline import publish_payload, update_archive
 
 
 def make_event(eid, title, event_date, **kw):
@@ -84,3 +84,27 @@ class TestUpdateArchive:
         update_archive(events, archive_dir=str(tmp_path), today="2026-07-02")
         dates = [e["date"] for e in load_archive(tmp_path, "2026")["events"]]
         assert dates == sorted(dates)
+
+
+def test_publish_payload_uses_final_events_and_generated_date(tmp_path):
+    output_path = tmp_path / "published" / "events.json"
+    archive_dir = tmp_path / "archives"
+    events = [
+        make_event("evt-dec", "Décember Show", "2026-12-30"),
+        make_event("evt-jan", "January Show", "2027-01-02"),
+    ]
+    payload = {"generated": "2026-12-20", "events": events}
+
+    publish_payload(
+        payload,
+        output_path=str(output_path),
+        archive_dir=str(archive_dir),
+    )
+
+    published = output_path.read_text()
+    assert json.loads(published) == payload
+    assert "Décember Show" in published
+    assert '\n  "events": [' in published
+    for year in ("2026", "2027"):
+        archive = load_archive(archive_dir, year)
+        assert archive["events"][0]["first_seen"] == "2026-12-20"

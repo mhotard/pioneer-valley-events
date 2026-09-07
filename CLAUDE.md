@@ -30,14 +30,26 @@ The Anthropic key is read from `ANTHROPIC_API_KEY_PIONEER` (falls back to
 var is NOT set unless you `source ~/.zshrc` first. In GitHub Actions the secret
 is named `ANTHROPIC_API_KEY`.
 
-The pipeline now **fails (exit 1) loudly** rather than publishing a degraded
-file: a pre-flight aborts if a Claude source is configured but no API key is
-set (scrapers declare `needs_api_key = True`), and a post-run check aborts if
->34% of sources are unhealthy (`MAX_ERROR_FRACTION`) — where unhealthy means
+The pipeline **fails (exit 1) loudly** rather than publishing a degraded file:
+a pre-flight aborts if a Claude source is configured but no API key is set
+(scrapers declare `needs_api_key = True`), and a pre-publication check aborts
+if >34% of sources are unhealthy (`MAX_ERROR_FRACTION`) — where unhealthy means
 errored OR a **yield regression**: a source that had ≥5 events in the published
 events.json but returned zero without erroring (shown as `ZERO ⚠ was N` in the
 summary). This turns a silent half-empty run into a red Action that emails the
-owner. `hawks-reed` at zero is NOT a regression — it was already zero.
+owner. A rejected run leaves both `events.json` and yearly archives untouched.
+`hawks-reed` at zero is NOT a regression — it was already zero.
+
+Pipeline responsibilities stay separated inside `pipeline.py`:
+`prepare_payload()` performs the pure filter → deduplicate → chronological-sort
+transformation; `run()` fetches sources, delegates preparation, and returns the
+payload plus source-health facts; `is_unhealthy()` applies the threshold;
+`publish_payload()` writes current events and updates archives; and `main()` owns
+CLI policy and calls publication only after health passes. The run date and
+publication paths are explicit seams for offline tests.
+Publication is intentionally not an atomic transaction across `events.json` and
+multiple archives, and corrupt-archive handling remains best-effort legacy
+behavior.
 
 ## Event archive (docs/data/archive-YYYY.json)
 
@@ -102,7 +114,7 @@ without sending: `python3 email_digest.py --preview /tmp/out.html`.
 ## Architecture
 
 ```
-pipeline.py            entry point: run scrapers → date filter → dedupe → sort → write
+pipeline.py            collect → prepare → assess health → preview or publish/archive
 email_digest.py        builds + sends the weekly next-14-days email (Gmail SMTP)
 fab413_miner.py        mines The Fabulous 413 podcast feed for event mentions
 fab413_guide.py        turns mined mentions into the seasonal guide (seasonal.json)

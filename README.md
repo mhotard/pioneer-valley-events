@@ -37,8 +37,16 @@ pioneer-valley-events/
 
 1. **Static scrapers** (`umass.py`, `amherst_cinema.py`) use hand-written parsers for reliable structured sources.
 2. **Claude-powered scrapers** (`claude_scraper.py`) fetch each URL in `sources.json`, clean the HTML, and send it to Claude Haiku for event extraction — no custom parser needed per site.
-3. `pipeline.py` merges all results, deduplicates near-identical events, filters to the next 90 days, and writes `docs/data/events.json`.
-4. GitHub Pages serves `docs/` as the static site. GitHub Actions re-runs the pipeline every Sunday and commits any changes.
+3. `pipeline.py` collects normalized events, filters them to 3 days back through
+   90 days ahead, deduplicates near-identical events, then sorts them
+   chronologically.
+4. Before publishing, the pipeline checks source health. A full run fails
+   without changing `events.json` or archives when more than 34% of sources
+   errored or regressed from at least 5 published events to zero.
+5. Healthy full runs write `docs/data/events.json` and update the append-only
+   yearly archives. Dry runs and single-source runs only preview results.
+6. GitHub Pages serves `docs/` as the static site. GitHub Actions re-runs the
+   pipeline every Sunday and commits any changes.
 
 ---
 

@@ -9,11 +9,14 @@ Usage:
     python pipeline.py --source umass  # run a single scraper by name
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import logging
 import os
 import sys
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
 
@@ -23,9 +26,6 @@ from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "docs", "data")
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "logs")
-# Only include events within this window (constants live in scrapers/base.py)
-DATE_MIN = (date.today() - timedelta(days=DAYS_PAST)).isoformat()
-DATE_MAX = (date.today() + timedelta(days=DAYS_FUTURE)).isoformat()
 
 # Abort (exit non-zero) if more than this fraction of sources are unhealthy in
 # a full run — errored, OR silently dropped from a productive yield to zero.
@@ -131,8 +131,20 @@ def deduplicate(events: list) -> list:
     return [ev for group in by_date.values() for ev in group]
 
 
-def filter_by_date(events: list) -> list:
-    return [e for e in events if DATE_MIN <= e["date"] <= DATE_MAX]
+def filter_by_date(events: list, *, run_date: date | None = None) -> list:
+    """Return events within the publication window for one pipeline date."""
+    run_date = run_date or date.today()
+    date_min = (run_date - timedelta(days=DAYS_PAST)).isoformat()
+    date_max = (run_date + timedelta(days=DAYS_FUTURE)).isoformat()
+    return [e for e in events if date_min <= e["date"] <= date_max]
+
+
+def prepare_payload(events: list, *, run_date: date) -> dict:
+    """Filter, deduplicate, and chronologically sort event dictionaries."""
+    prepared = filter_by_date([event.copy() for event in events], run_date=run_date)
+    prepared = deduplicate(prepared)
+    prepared.sort(key=lambda event: (event["date"], event_time_key(event)))
+    return {"generated": run_date.isoformat(), "events": prepared}
 
 
 def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = "") -> dict:
@@ -207,14 +219,27 @@ def find_regressions(results: list, prev_counts: dict) -> list:
     ]
 
 
-def run(scrapers, dry_run=False):
+def is_unhealthy(results: list, regressions: list) -> bool:
+    """Whether a full run exceeds the established unhealthy-source threshold."""
+    errored = {name for name, _url, _count, error in results if error}
+    regressed = {name for name, _previous_count in regressions}
+    return len(errored | regressed) > len(results) * MAX_ERROR_FRACTION
+
+
+@dataclass
+class PipelineResult:
+    """Collected pipeline data and the source-health facts derived from it."""
+
+    payload: dict
+    results: list
+    regressions: list
+
+
+def run(scrapers, *, previous_counts: dict, run_date: date) -> PipelineResult:
+    """Collect and transform events without reading or writing publication files."""
     log = logging.getLogger("pipeline")
     all_events = []
     results = []  # (name, url, count, error)
-
-    # Snapshot the published per-source counts before we overwrite the file,
-    # so we can flag sources that silently dropped to zero.
-    prev_counts = previous_source_counts()
 
     for scraper in scrapers:
         url_label = getattr(scraper, "url", "") or "(no url)"
@@ -229,27 +254,25 @@ def run(scrapers, dry_run=False):
     log.info("")
     log.info("Total raw events: %d", len(all_events))
 
-    all_events = filter_by_date(all_events)
-    log.info("After date filter (%s – %s): %d", DATE_MIN, DATE_MAX, len(all_events))
-
-    all_events = deduplicate(all_events)
-    log.info("After deduplication: %d", len(all_events))
-
-    # Sort by date, then chronological time (never sort times as raw strings)
-    all_events.sort(key=lambda e: (e["date"], event_time_key(e)))
+    date_min = (run_date - timedelta(days=DAYS_PAST)).isoformat()
+    date_max = (run_date + timedelta(days=DAYS_FUTURE)).isoformat()
+    date_filtered_count = len(filter_by_date(all_events, run_date=run_date))
+    payload = prepare_payload(all_events, run_date=run_date)
+    log.info("After date filter (%s – %s): %d", date_min, date_max, date_filtered_count)
+    log.info("After deduplication: %d", len(payload["events"]))
 
     # ── Summary ──────────────────────────────────────────────────────────────
     log.info("")
     log.info("══ SCRAPER SUMMARY ══════════════════════════════════════")
     errors = [(n, u, e) for n, u, c, e in results if e]
     zeros  = [(n, u) for n, u, c, e in results if c == 0 and not e]
-    regressions = find_regressions(results, prev_counts)
+    regressions = find_regressions(results, previous_counts)
     regressed = {name for name, _ in regressions}
     for name, url_label, count, error in results:
         if error:
             status = "ERROR"
         elif name in regressed:
-            status = f"ZERO ⚠ was {prev_counts[name]}"
+            status = f"ZERO ⚠ was {previous_counts[name]}"
         elif count == 0:
             status = "ZERO"
         else:
@@ -259,7 +282,7 @@ def run(scrapers, dry_run=False):
     log.info("  Scrapers run:    %d", len(results))
     log.info("  Errors:          %d", len(errors))
     log.info("  Returned zero:   %d (excluding errors)", len(zeros))
-    log.info("  Final events:    %d", len(all_events))
+    log.info("  Final events:    %d", len(payload["events"]))
     if errors:
         log.warning("")
         log.warning("  Failed scrapers:")
@@ -273,35 +296,36 @@ def run(scrapers, dry_run=False):
     log.info("══════════════════════════════════════════════════════════")
     # ─────────────────────────────────────────────────────────────────────────
 
-    payload = {
-        "generated": date.today().isoformat(),
-        "events": all_events,
-    }
+    return PipelineResult(payload=payload, results=results, regressions=regressions)
 
-    if dry_run:
-        log.info("")
-        log.info("--- DRY RUN (not writing) ---")
-        log.info(json.dumps(payload, indent=2)[:2000])
-        return results, regressions
 
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+def publish_payload(payload: dict, *, output_path: str, archive_dir: str) -> None:
+    """Write the current payload, then upsert its final events into archives."""
+    log = logging.getLogger("pipeline")
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+    os.makedirs(archive_dir, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
-    log.info("Wrote %d events to %s", len(all_events), OUTPUT_PATH)
+    log.info("Wrote %d events to %s", len(payload["events"]), output_path)
 
     # Append-only historical record (docs/data/archive-YYYY.json) for analysis
-    for year, n in update_archive(all_events).items():
+    for year, n in update_archive(
+        payload["events"], archive_dir=archive_dir, today=payload["generated"]
+    ).items():
         log.info("Archive %s: +%d new events", year, n)
 
-    return results, regressions
 
-
-def main():
+def main(argv=None, *, output_path=None, archive_dir=None, run_date=None) -> int:
+    """Orchestrate source selection, health assessment, preview, and publication."""
     parser = argparse.ArgumentParser(description="Pioneer Valley Events pipeline")
     parser.add_argument("--dry-run", action="store_true", help="Don't write output")
     parser.add_argument("--source", help="Run only this scraper (by name)")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+
+    output_path = output_path or OUTPUT_PATH
+    archive_dir = archive_dir or ARCHIVE_DIR
+    run_date = run_date or date.today()
 
     log, log_path = setup_logging()
     log.info("Pioneer Valley Events pipeline  [%s]", datetime.now().isoformat(timespec="seconds"))
@@ -314,7 +338,7 @@ def main():
         if not scrapers:
             names = [s.name for s in all_scrapers]
             log.error("Unknown source '%s'. Available: %s", args.source, ", ".join(names))
-            sys.exit(1)
+            return 1
         if not args.dry_run:
             # A single-source run must never overwrite events.json (it would
             # contain only that source's events) — force dry-run behavior.
@@ -333,25 +357,35 @@ def main():
             "ANTHROPIC_API_KEY repository secret; locally, run `source ~/.zshrc` first.",
             len(needing_key),
         )
-        sys.exit(1)
+        return 1
 
-    results, regressions = run(scrapers, dry_run=args.dry_run)
+    previous_counts = previous_source_counts(output_path)
+    result = run(scrapers, previous_counts=previous_counts, run_date=run_date)
 
-    # Post-run backstop: in a full run, fail if too many sources are unhealthy
-    # (errored, or silently dropped from productive to zero) so the failure
-    # can't hide behind a green checkmark.
-    if not args.source and results:
-        errored = [r for r in results if r[3]]
-        unhealthy = len(errored) + len(regressions)
-        if unhealthy > len(results) * MAX_ERROR_FRACTION:
-            log.error(
-                "%d of %d sources unhealthy (%d errored, %d yield regressions; "
-                "> %.0f%%). Failing the run so it isn't mistaken for a healthy one.",
-                unhealthy, len(results), len(errored), len(regressions),
-                MAX_ERROR_FRACTION * 100,
-            )
-            sys.exit(1)
+    # Reject unhealthy full runs before either publication destination is touched.
+    if not args.source and is_unhealthy(result.results, result.regressions):
+        errored = [item for item in result.results if item[3]]
+        unhealthy = len(errored) + len(result.regressions)
+        log.error(
+            "%d of %d sources unhealthy (%d errored, %d yield regressions; "
+            "> %.0f%%). Failing the run so it isn't mistaken for a healthy one.",
+            unhealthy,
+            len(result.results),
+            len(errored),
+            len(result.regressions),
+            MAX_ERROR_FRACTION * 100,
+        )
+        return 1
+
+    if args.dry_run:
+        log.info("")
+        log.info("--- DRY RUN (not writing) ---")
+        log.info(json.dumps(result.payload, indent=2)[:2000])
+        return 0
+
+    publish_payload(result.payload, output_path=output_path, archive_dir=archive_dir)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

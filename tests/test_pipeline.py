@@ -1,5 +1,6 @@
-"""Tests for pipeline deduplication and date-filtering logic."""
+"""Tests for pipeline transformation and source-health logic."""
 
+import copy
 import os
 
 # Import the functions under test directly
@@ -14,6 +15,8 @@ from pipeline import (
     deduplicate,
     filter_by_date,
     find_regressions,
+    is_unhealthy,
+    prepare_payload,
 )
 
 # ---- Helpers ----
@@ -158,6 +161,76 @@ class TestFilterByDate:
         assert len(result) == 1
         assert result[0]["title"] == "Current Show"
 
+    def test_fixed_date_boundaries_are_inclusive(self):
+        run_date = date(2026, 7, 10)
+        events = [
+            make_event("Too Old", "2026-07-06"),
+            make_event("Old Boundary", "2026-07-07"),
+            make_event("Future Boundary", "2026-10-08"),
+            make_event("Too New", "2026-10-09"),
+        ]
+
+        assert [e["title"] for e in filter_by_date(events, run_date=run_date)] == [
+            "Old Boundary",
+            "Future Boundary",
+        ]
+
+    def test_explicit_date_is_evaluated_per_call(self):
+        event = make_event("Moving Window", "2026-07-01")
+
+        assert filter_by_date([event], run_date=date(2026, 7, 4)) == [event]
+        assert filter_by_date([event], run_date=date(2026, 7, 5)) == []
+
+
+class TestPreparePayload:
+    def test_filters_then_deduplicates_then_sorts_without_mutating_input(self):
+        run_date = date(2026, 7, 10)
+        events = [
+            make_event("Jazz Night", "2026-07-11", description="short"),
+            {
+                **make_event(
+                    "Jazz Night!",
+                    "2026-07-11",
+                    description="a much richer event description",
+                ),
+                "source": "other",
+                "time": "7:00 PM",
+            },
+            {**make_event("No Time", "2026-07-11"), "time": ""},
+            {**make_event("Morning", "2026-07-11"), "time": "9:00 AM"},
+            {**make_event("Noon", "2026-07-11"), "time": "12:00 PM"},
+            {**make_event("Midnight", "2026-07-11"), "time": "12:00 AM"},
+            make_event("Outside Window", "2026-10-09"),
+            make_event("Jazz Night", "2026-07-11", venue="Forbes Library"),
+        ]
+        original = copy.deepcopy(events)
+
+        payload = prepare_payload(events, run_date=run_date)
+
+        assert payload["generated"] == "2026-07-10"
+        assert [event["title"] for event in payload["events"]] == [
+            "No Time",
+            "Midnight",
+            "Morning",
+            "Noon",
+            "Jazz Night!",
+            "Jazz Night",
+        ]
+        assert payload["events"][-2]["description"] == "a much richer event description"
+        assert payload["events"][-1]["venue"] == "Forbes Library"
+        assert events == original
+
+    def test_equal_description_duplicate_keeps_first(self):
+        first = make_event("Jazz Night", "2026-07-11", description="same")
+        second = {
+            **make_event("Jazz Night!", "2026-07-11", description="same"),
+            "source": "other",
+        }
+
+        payload = prepare_payload([first, second], run_date=date(2026, 7, 10))
+
+        assert payload["events"] == [first]
+
 
 # ---- Yield-regression detection tests ----
 
@@ -193,3 +266,31 @@ class TestFindRegressions:
         results = [("umass", "u", 12, None)]
         prev = {"umass": 20}
         assert find_regressions(results, prev) == []
+
+    @staticmethod
+    def _results(total, errors=0):
+        return [
+            (f"source-{i}", "u", 0 if i < errors else 1, "boom" if i < errors else None)
+            for i in range(total)
+        ]
+
+    def test_regression_threshold_is_inclusive_at_five(self):
+        results = [("low", "u", 0, None), ("boundary", "u", 0, None)]
+        assert find_regressions(results, {"low": 4, "boundary": 5}) == [("boundary", 5)]
+
+    def test_health_threshold_preserves_strict_greater_than(self):
+        assert is_unhealthy(self._results(3, errors=1), []) is False
+        assert is_unhealthy(self._results(3, errors=2), []) is True
+        assert is_unhealthy(self._results(50, errors=17), []) is False
+        assert is_unhealthy(self._results(50, errors=18), []) is True
+
+    def test_mixed_errors_and_regressions_determine_health(self):
+        results = self._results(3, errors=1)
+        assert is_unhealthy(results, [("source-2", 5)]) is True
+
+    def test_errored_source_is_not_counted_twice_if_also_listed_as_regression(self):
+        results = self._results(3, errors=1)
+        assert is_unhealthy(results, [("source-0", 5)]) is False
+
+    def test_no_sources_is_not_unhealthy(self):
+        assert is_unhealthy([], []) is False
