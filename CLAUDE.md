@@ -48,8 +48,10 @@ payload plus source-health facts; `is_unhealthy()` applies the threshold;
 CLI policy and calls publication only after health passes. The run date and
 publication paths are explicit seams for offline tests.
 Publication is intentionally not an atomic transaction across `events.json` and
-multiple archives, and corrupt-archive handling remains best-effort legacy
-behavior.
+multiple archives. Each persistent JSON destination is instead written through
+a temporary sibling and atomically replaced only after complete serialization,
+flush, and file sync. Existing corrupt, unreadable, or structurally unsafe
+archives fail the run rather than being mistaken for empty history.
 
 ## Event archive (docs/data/archive-YYYY.json)
 
@@ -73,7 +75,9 @@ seasonal guide of events covered in 2+ different calendar years.
   fab413_episodes.json (append-only by guid — survives feed truncation, lets
   us re-mine with better prompts later), then Haiku-extracts event mentions
   (batches of 8 episodes/call) into fab413_mentions.json. Incremental:
-  re-runs only mine unmined guids (~5 new episodes/week).
+  re-runs only mine unmined guids (~5 new episodes/week). Snapshot and
+  checkpoint writes use the same per-file atomic replacement boundary as event
+  publication; damaged existing stores fail without being reset.
 - `fab413_guide.py`: fuzzy-groups mentions across years, keeps groups with
   ≥2 distinct years whose coverage clusters in a 2-adjacent-month window
   (≥60% — this filters weekly series like "Live Music Friday"), then one
@@ -93,7 +97,8 @@ seasonal guide of events covered in 2+ different calendar years.
   Incremental by guid. Batches retry with backoff (`call_haiku` in
   claude_scraper.py) and the run aborts after 3 consecutive batch failures
   rather than silently skipping — a rate-limited run once quietly mined only
-  256/795 episodes before this guard existed. Re-running resumes.
+  256/795 episodes before this guard existed. Re-running resumes from the last
+  complete checkpoint; an uncommitted batch may be extracted again.
 - `fab413_stats.py` (pure Python, no API) aggregates entities into
   docs/413/data.json: town bubbles (coordinates from the GAZETTEER dict —
   add new towns there when they show up unmapped), kind/month/quarter

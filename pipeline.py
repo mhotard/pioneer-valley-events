@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
 
+from json_storage import read_json, write_json_atomic
 from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
 
@@ -163,11 +164,9 @@ def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = ""
     added = {}
     for year, evs in sorted(by_year.items()):
         path = os.path.join(archive_dir, f"archive-{year}.json")
-        try:
-            with open(path) as f:
-                archive = {a["id"]: a for a in json.load(f).get("events", [])}
-        except (OSError, json.JSONDecodeError):
-            archive = {}
+        stored = read_json(path, default_factory=lambda: {"events": []})
+        stored_events = _validated_archive_events(stored, path)
+        archive = {record["id"]: record for record in stored_events}
 
         new = 0
         for e in evs:
@@ -180,14 +179,35 @@ def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = ""
             archive[e["id"]] = {**e, "first_seen": first_seen}
 
         records = sorted(archive.values(), key=lambda a: (a["date"], event_time_key(a)))
-        with open(path, "w", encoding="utf-8") as f:
-            # Compact JSON: the archive is for analysis, not reading in diffs
-            json.dump(
-                {"year": year, "count": len(records), "events": records},
-                f, ensure_ascii=False, separators=(",", ":"),
-            )
+        # Compact JSON: the archive is for analysis, not reading in diffs
+        write_json_atomic(
+            path,
+            {"year": year, "count": len(records), "events": records},
+            separators=(",", ":"),
+        )
         added[year] = new
     return added
+
+
+def _validated_archive_events(value: object, path: str) -> list[dict]:
+    """Return archive rows after checking the shape needed for safe merging."""
+    if not isinstance(value, dict) or not isinstance(value.get("events"), list):
+        raise ValueError(f"Invalid archive structure in {path}: expected an events list")
+
+    seen_ids = set()
+    for index, record in enumerate(value["events"]):
+        if not isinstance(record, dict):
+            raise ValueError(f"Invalid archive row {index} in {path}: expected an object")
+        event_id = record.get("id")
+        event_date = record.get("date")
+        if not isinstance(event_id, str) or not event_id.strip():
+            raise ValueError(f"Invalid archive row {index} in {path}: unusable event id")
+        if not isinstance(event_date, str) or not event_date.strip():
+            raise ValueError(f"Invalid archive row {index} in {path}: unusable event date")
+        if event_id in seen_ids:
+            raise ValueError(f"Duplicate archive event id {event_id!r} in {path}")
+        seen_ids.add(event_id)
+    return value["events"]
 
 
 def previous_source_counts(path: str = OUTPUT_PATH) -> dict:
@@ -304,8 +324,7 @@ def publish_payload(payload: dict, *, output_path: str, archive_dir: str) -> Non
     log = logging.getLogger("pipeline")
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     os.makedirs(archive_dir, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
+    write_json_atomic(output_path, payload, indent=2)
 
     log.info("Wrote %d events to %s", len(payload["events"]), output_path)
 

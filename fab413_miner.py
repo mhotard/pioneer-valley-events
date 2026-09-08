@@ -17,7 +17,6 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import re
 import sys
@@ -26,6 +25,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+from json_storage import read_json, write_json_atomic
 from scrapers.claude_scraper import BROWSER_UA, _parse_json_array, call_haiku
 
 FEED_URL = "https://publicfeeds.net/f/3459/feed-rss.xml"
@@ -104,31 +104,79 @@ def fetch_feed() -> list[dict]:
     return episodes
 
 
-def load_store() -> dict:
-    try:
-        with open(OUTPUT_PATH) as f:
-            return json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return {"mined_guids": [], "mentions": []}
+def _validated_checkpoint(value: object, path: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected an object")
+    mined_guids = value.get("mined_guids")
+    mentions = value.get("mentions")
+    if not isinstance(mined_guids, list) or not all(
+        isinstance(guid, str) for guid in mined_guids
+    ):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected string mined_guids")
+    if not isinstance(mentions, list) or not all(isinstance(row, dict) for row in mentions):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected object mentions")
+    return value
 
 
-def save_episodes(episodes: list[dict]):
+def load_store(path=None) -> dict:
+    path = path or OUTPUT_PATH
+    value = read_json(
+        path, default_factory=lambda: {"mined_guids": [], "mentions": []}
+    )
+    return _validated_checkpoint(value, path)
+
+
+def validated_episode_rows(
+    value: object, path: str, *, reject_duplicate_guids: bool = True
+) -> list[dict]:
+    if not isinstance(value, dict) or not isinstance(value.get("episodes"), list):
+        raise ValueError(f"Invalid episode snapshot in {path}: expected an episodes list")
+
+    seen_guids = set()
+    for index, episode in enumerate(value["episodes"]):
+        if not isinstance(episode, dict):
+            raise ValueError(f"Invalid episode row {index} in {path}: expected an object")
+        guid = episode.get("guid")
+        if not isinstance(guid, str) or not guid.strip():
+            raise ValueError(f"Invalid episode row {index} in {path}: unusable guid")
+        for field in ("date", "title", "link", "text"):
+            item = episode.get(field)
+            if not isinstance(item, str):
+                raise ValueError(
+                    f"Invalid episode row {index} in {path}: expected string {field}"
+                )
+        if reject_duplicate_guids and guid in seen_guids:
+            raise ValueError(f"Duplicate episode guid {guid!r} in {path}")
+        seen_guids.add(guid)
+    return value["episodes"]
+
+
+def save_episodes(episodes: list[dict], path=None):
     """Merge fetched episodes into the raw-episode snapshot (append-only by
     guid — episodes already saved survive even if the feed later drops them)."""
-    try:
-        with open(EPISODES_PATH) as f:
-            known = {e["guid"]: e for e in json.load(f).get("episodes", [])}
-    except (OSError, json.JSONDecodeError):
-        known = {}
-    for ep in episodes:
+    path = path or EPISODES_PATH
+    stored = read_json(path, default_factory=lambda: {"episodes": []})
+    known = {episode["guid"]: episode for episode in validated_episode_rows(stored, path)}
+    incoming = validated_episode_rows(
+        {"episodes": episodes},
+        "fetched episode feed",
+        reject_duplicate_guids=False,
+    )
+    for ep in incoming:
         known[ep["guid"]] = ep  # newest fetch wins for existing guids
     merged = sorted(known.values(), key=lambda e: e["date"], reverse=True)
-    with open(EPISODES_PATH, "w", encoding="utf-8") as f:
-        json.dump(
-            {"count": len(merged), "episodes": merged},
-            f, ensure_ascii=False, separators=(",", ":"),
-        )
+    write_json_atomic(
+        path,
+        {"count": len(merged), "episodes": merged},
+        separators=(",", ":"),
+    )
     return len(merged)
+
+
+def save_store(store: dict, path=None) -> None:
+    path = path or OUTPUT_PATH
+    _validated_checkpoint(store, path)
+    write_json_atomic(path, store, separators=(",", ":"))
 
 
 def mine_batch(batch: list[dict]) -> list[dict]:
@@ -163,16 +211,19 @@ def mine_batch(batch: list[dict]) -> list[dict]:
     return mentions
 
 
-def main():
+def main(argv=None, *, output_path=None, episodes_path=None):
     parser = argparse.ArgumentParser(description="Mine Fabulous 413 episodes for events")
     parser.add_argument("--limit", type=int, help="Only mine the N newest unmined episodes")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    store = load_store()
+    output_path = output_path or OUTPUT_PATH
+    episodes_path = episodes_path or EPISODES_PATH
+
+    store = load_store(output_path)
     mined = set(store["mined_guids"])
 
     episodes = fetch_feed()
-    total_saved = save_episodes(episodes)
+    total_saved = save_episodes(episodes, episodes_path)
     todo = [ep for ep in episodes if ep["guid"] not in mined]
     if args.limit:
         todo = todo[: args.limit]
@@ -193,15 +244,12 @@ def main():
             continue
         store["mentions"].extend(mentions)
         store["mined_guids"].extend(ep["guid"] for ep in batch)
+        save_store(store, output_path)
         total_new += len(mentions)
         done = min(start + BATCH_SIZE, len(todo))
         print(f"  {done}/{len(todo)} episodes → {total_new} mentions so far")
 
-        # Save incrementally so an interrupted run loses nothing
-        with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-            json.dump(store, f, ensure_ascii=False, separators=(",", ":"))
-
-    print(f"\nDone: {total_new} new mentions, {len(store['mentions'])} total → {OUTPUT_PATH}")
+    print(f"\nDone: {total_new} new mentions, {len(store['mentions'])} total → {output_path}")
 
 
 if __name__ == "__main__":

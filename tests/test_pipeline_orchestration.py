@@ -89,11 +89,21 @@ def seed_archive(path, record=None):
     return archive
 
 
-def test_collection_returns_result_and_has_no_publication_side_effects(tmp_path):
+def test_collection_returns_result_and_has_no_publication_side_effects(
+    monkeypatch, tmp_path
+):
     inside = event("Inside", "alpha")
     outside = event("Outside", "alpha", "2027-01-01")
     duplicate = event("Inside!", "beta", description="richer description")
     scrapers = [FakeScraper("alpha", [inside, outside]), FakeScraper("beta", [duplicate])]
+
+    def fail_io(*args, **kwargs):
+        pytest.fail("collection attempted file I/O")
+
+    monkeypatch.setattr("builtins.open", fail_io)
+    monkeypatch.setattr(pipeline, "read_json", fail_io)
+    monkeypatch.setattr(pipeline, "write_json_atomic", fail_io)
+    monkeypatch.setattr(pipeline, "publish_payload", fail_io)
 
     result = pipeline.run(scrapers, previous_counts={}, run_date=RUN_DATE)
 
@@ -290,7 +300,12 @@ def test_unknown_source_exits_before_fetch_or_publication(monkeypatch, tmp_path)
 
 @pytest.mark.parametrize(
     "args",
-    [["--source", "claude"], ["--source", "claude", "--dry-run"]],
+    [
+        [],
+        ["--dry-run"],
+        ["--source", "claude"],
+        ["--source", "claude", "--dry-run"],
+    ],
 )
 def test_missing_api_key_exits_before_fetch(monkeypatch, tmp_path, args):
     scraper = FakeScraper("claude", needs_api_key=True)

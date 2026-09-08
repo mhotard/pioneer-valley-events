@@ -48,6 +48,22 @@ pioneer-valley-events/
 6. GitHub Pages serves `docs/` as the static site. GitHub Actions re-runs the
    pipeline every Sunday and commits any changes.
 
+Persistent JSON writes use a temporary file beside the destination, flush and
+sync the complete serialization, and then atomically replace that one file.
+Readers therefore see either the old complete file or the new complete file;
+a serialization, sync, or replacement failure leaves the previous destination
+unchanged. Existing malformed, unreadable, or structurally unsafe archives,
+podcast snapshots, and mining checkpoints fail loudly instead of being treated
+as empty history. Missing optional stores still start with an empty envelope,
+while the entity miner's episode corpus remains required.
+
+This is a per-file guarantee, not a transaction across `events.json` and all
+yearly archives. It does not add directory-sync power-loss guarantees or protect
+against concurrent writers. A hard process kill can leave an ignored temporary
+file, and a mining batch whose checkpoint was not replaced may be extracted
+again on the next run. Damaged historical data is reported, not automatically
+repaired.
+
 ---
 
 ## Run the pipeline manually

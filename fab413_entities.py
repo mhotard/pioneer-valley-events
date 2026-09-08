@@ -15,10 +15,11 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import sys
 
+from fab413_miner import validated_episode_rows
+from json_storage import read_json, write_json_atomic
 from scrapers.claude_scraper import _parse_json_array, call_haiku
 
 MAX_CONSECUTIVE_FAILS = 3  # abort the run instead of silently skipping the rest
@@ -63,17 +64,37 @@ Episodes:
 {episodes}"""
 
 
-def load_episodes() -> list[dict]:
-    with open(EPISODES_PATH) as f:
-        return json.load(f)["episodes"]
+def load_episodes(path=None) -> list[dict]:
+    path = path or EPISODES_PATH
+    return validated_episode_rows(read_json(path), path)
 
 
-def load_store() -> dict:
-    try:
-        with open(OUTPUT_PATH) as f:
-            return json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return {"mined_guids": [], "entities": []}
+def _validated_checkpoint(value: object, path: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected an object")
+    mined_guids = value.get("mined_guids")
+    entities = value.get("entities")
+    if not isinstance(mined_guids, list) or not all(
+        isinstance(guid, str) for guid in mined_guids
+    ):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected string mined_guids")
+    if not isinstance(entities, list) or not all(isinstance(row, dict) for row in entities):
+        raise ValueError(f"Invalid mining checkpoint in {path}: expected object entities")
+    return value
+
+
+def load_store(path=None) -> dict:
+    path = path or OUTPUT_PATH
+    value = read_json(
+        path, default_factory=lambda: {"mined_guids": [], "entities": []}
+    )
+    return _validated_checkpoint(value, path)
+
+
+def save_store(store: dict, path=None) -> None:
+    path = path or OUTPUT_PATH
+    _validated_checkpoint(store, path)
+    write_json_atomic(path, store, separators=(",", ":"))
 
 
 def mine_batch(batch: list[dict]) -> list[dict]:
@@ -107,14 +128,17 @@ def mine_batch(batch: list[dict]) -> list[dict]:
     return entities
 
 
-def main():
+def main(argv=None, *, output_path=None, episodes_path=None):
     parser = argparse.ArgumentParser(description="Mine Fabulous 413 episodes for all entities")
     parser.add_argument("--limit", type=int, help="Only mine the N newest unmined episodes")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    store = load_store()
+    output_path = output_path or OUTPUT_PATH
+    episodes_path = episodes_path or EPISODES_PATH
+
+    store = load_store(output_path)
     mined = set(store["mined_guids"])
-    episodes = load_episodes()
+    episodes = load_episodes(episodes_path)
     todo = [ep for ep in episodes if ep["guid"] not in mined]
     if args.limit:
         todo = todo[: args.limit]
@@ -141,14 +165,12 @@ def main():
             continue
         store["entities"].extend(entities)
         store["mined_guids"].extend(ep["guid"] for ep in batch)
+        save_store(store, output_path)
         total_new += len(entities)
         done = min(start + BATCH_SIZE, len(todo))
         print(f"  {done}/{len(todo)} episodes → {total_new} entities so far")
 
-        with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-            json.dump(store, f, ensure_ascii=False, separators=(",", ":"))
-
-    print(f"\nDone: {total_new} new entities, {len(store['entities'])} total → {OUTPUT_PATH}")
+    print(f"\nDone: {total_new} new entities, {len(store['entities'])} total → {output_path}")
 
 
 if __name__ == "__main__":
