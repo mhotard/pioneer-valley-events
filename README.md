@@ -94,6 +94,33 @@ git push
 
 ---
 
+## Preview and test the frontend
+
+The frontend uses browser-native JavaScript modules, so preview it over HTTP
+rather than opening `docs/index.html` directly:
+
+```bash
+python3 -m http.server 8000 --directory docs
+```
+
+Then open [http://localhost:8000](http://localhost:8000). To install Chromium
+and run the isolated frontend tests (which use fixed fixture data and never
+overwrite `docs/data/events.json`):
+
+```bash
+python3 -m playwright install chromium
+PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider tests/test_frontend_data.py tests/test_frontend_ui.py
+```
+
+Run the complete test and lint suite with:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider
+python3 -m ruff check --no-cache .
+```
+
+---
+
 ## Adding a new event source
 
 Just add an entry to `sources.json` — no code required:

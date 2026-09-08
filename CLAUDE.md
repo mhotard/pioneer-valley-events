@@ -18,8 +18,12 @@ source ~/.zshrc && python3 pipeline.py --dry-run
 source ~/.zshrc && python3 pipeline.py --source umass
 
 # Tests and lint (no API key needed — Claude calls are mocked)
+python3 -m playwright install chromium
 python3 -m pytest -q
 python3 -m ruff check .
+
+# Preview the ES-module frontend (do not open docs/index.html as a file URL)
+python3 -m http.server 8000 --directory docs
 
 # Dump raw HTML from a source to inspect its structure
 python3 debug_scraper.py amherst-cinema

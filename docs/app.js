@@ -1,3 +1,5 @@
+import { buildCalendarCells, filterEvents, groupEventsByDate } from './event-data.js';
+
 /* ============================================================
    Pioneer Valley Events — App
    ============================================================ */
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupFilters();
   setupViewSwitcher();
   setupModal();
+  setupEventInteractions();
   render();
 });
 
@@ -94,25 +97,6 @@ function setupFilters() {
   });
 }
 
-function applyFilters() {
-  const { q, dateFrom, dateTo, category, town, source } = state.filters;
-  const ql = q.toLowerCase();
-
-  return state.events
-    .filter(e => {
-      if (q && !e.title.toLowerCase().includes(ql) &&
-                !((e.description || '').toLowerCase().includes(ql)) &&
-                !((e.venue || '').toLowerCase().includes(ql))) return false;
-      if (dateFrom && e.date < dateFrom) return false;
-      if (dateTo && e.date > dateTo) return false;
-      if (category && e.category !== category) return false;
-      if (town && e.town !== town) return false;
-      if (source && e.source !== source) return false;
-      return true;
-    })
-    .sort((a, b) => a.date.localeCompare(b.date) || timeMinutes(a.time) - timeMinutes(b.time));
-}
-
 /* ---- View Switcher ---- */
 function setupViewSwitcher() {
   document.querySelectorAll('.view-btn').forEach(btn => {
@@ -128,7 +112,7 @@ function setupViewSwitcher() {
 
 /* ---- Render ---- */
 function render() {
-  const events = applyFilters();
+  const events = filterEvents(state.events, state.filters);
   const count = document.getElementById('result-count');
   count.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
 
@@ -144,12 +128,7 @@ function render() {
 function renderList(container, events) {
   if (!events.length) { container.innerHTML = emptyState(); return; }
 
-  // Group by date
-  const byDate = {};
-  events.forEach(e => {
-    if (!byDate[e.date]) byDate[e.date] = [];
-    byDate[e.date].push(e);
-  });
+  const byDate = groupEventsByDate(events);
 
   let html = '<div class="list-view">';
   for (const date of Object.keys(byDate).sort()) {
@@ -163,7 +142,6 @@ function renderList(container, events) {
   }
   html += '</div>';
   container.innerHTML = html;
-  attachEventListeners(container);
 }
 
 function listItem(e) {
@@ -191,7 +169,6 @@ function renderCards(container, events) {
   html += events.map(e => card(e)).join('');
   html += '</div>';
   container.innerHTML = html;
-  attachEventListeners(container);
 }
 
 function card(e) {
@@ -220,20 +197,11 @@ function renderCalendar(container, events) {
   const year = month.getFullYear();
   const mo = month.getMonth();
 
-  // Build index: date string -> events[]
-  const byDate = {};
-  events.forEach(e => {
-    if (!byDate[e.date]) byDate[e.date] = [];
-    byDate[e.date].push(e);
-  });
+  const byDate = groupEventsByDate(events);
+  const cells = buildCalendarCells(year, mo);
 
   const monthLabel = month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   const todayStr = toDateStr(new Date());
-
-  // First day of month and how many days
-  const firstDay = new Date(year, mo, 1).getDay(); // 0=Sun
-  const daysInMonth = new Date(year, mo + 1, 0).getDate();
-  const daysInPrev = new Date(year, mo, 0).getDate();
 
   const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -251,17 +219,15 @@ function renderCalendar(container, events) {
         </div>
         <div class="cal-days">`;
 
-  // Leading days from previous month
-  for (let i = firstDay - 1; i >= 0; i--) {
-    html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev - i}</div></div>`;
-  }
+  for (const cell of cells) {
+    if (!cell.inCurrentMonth) {
+      html += `<div class="cal-day other-month"><div class="cal-day-num">${cell.day}</div></div>`;
+      continue;
+    }
 
-  // Days of this month
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(mo + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dayEvents = byDate[dateStr] || [];
-    const isToday = dateStr === todayStr;
-    const isSelected = dateStr === state.calendarSelectedDay;
+    const dayEvents = byDate[cell.date] || [];
+    const isToday = cell.date === todayStr;
+    const isSelected = cell.date === state.calendarSelectedDay;
     const hasEvents = dayEvents.length > 0;
 
     const classes = [
@@ -279,16 +245,10 @@ function renderCalendar(container, events) {
       ? `<div class="cal-more">+${dayEvents.length - MAX_PILLS} more</div>` : '';
 
     html += `
-      <div class="${classes}" data-date="${dateStr}" data-id="${dayEvents.length === 1 ? dayEvents[0].id : ''}">
-        <div class="cal-day-num">${d}</div>
+      <div class="${classes}" data-date="${cell.date}">
+        <div class="cal-day-num">${cell.day}</div>
         <div class="cal-events">${pillsHtml}${more}</div>
       </div>`;
-  }
-
-  // Trailing days to fill grid
-  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-  for (let i = 1; i <= totalCells - firstDay - daysInMonth; i++) {
-    html += `<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
   }
 
   html += `</div></div>`;
@@ -305,57 +265,63 @@ function renderCalendar(container, events) {
 
   html += '</div>';
   container.innerHTML = html;
-
-  // Calendar nav buttons
-  document.getElementById('cal-prev').addEventListener('click', () => {
-    state.calendarMonth = new Date(year, mo - 1, 1);
-    state.calendarSelectedDay = null;
-    render();
-  });
-  document.getElementById('cal-next').addEventListener('click', () => {
-    state.calendarMonth = new Date(year, mo + 1, 1);
-    state.calendarSelectedDay = null;
-    render();
-  });
-  document.getElementById('cal-today').addEventListener('click', () => {
-    state.calendarMonth = new Date();
-    state.calendarMonth.setDate(1);
-    state.calendarSelectedDay = null;
-    render();
-  });
-
-  // Day click: single event → open modal, multiple → show detail panel
-  container.querySelectorAll('.cal-day:not(.other-month)').forEach(cell => {
-    cell.addEventListener('click', (ev) => {
-      const dateStr = cell.dataset.date;
-      const dayEvts = byDate[dateStr] || [];
-      if (!dayEvts.length) return;
-
-      // If clicking a pill, open that specific event
-      const pill = ev.target.closest('.cal-pill');
-      if (pill && pill.dataset.id) { openModal(pill.dataset.id); return; }
-
-      if (dayEvts.length === 1) {
-        openModal(dayEvts[0].id);
-      } else {
-        state.calendarSelectedDay = (state.calendarSelectedDay === dateStr) ? null : dateStr;
-        render();
-      }
-    });
-  });
-
-  attachEventListeners(container);
 }
 
-/* ---- Event listeners for clickable items ---- */
-function attachEventListeners(container) {
-  container.querySelectorAll('[data-id]').forEach(el => {
-    if (!el.dataset.id) return;
-    // Skip calendar days (handled separately)
-    if (el.classList.contains('cal-day')) return;
-    const handler = () => openModal(el.dataset.id);
-    el.addEventListener('click', handler);
-    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') handler(); });
+/* ---- Stable delegated interactions ---- */
+function setupEventInteractions(openEvent = openModal) {
+  const container = document.getElementById('events-container');
+
+  container.addEventListener('click', event => {
+    const nav = event.target.closest('#cal-prev, #cal-next, #cal-today');
+    if (nav && container.contains(nav)) {
+      const month = state.calendarMonth;
+      if (nav.id === 'cal-prev') {
+        state.calendarMonth = new Date(month.getFullYear(), month.getMonth() - 1, 1);
+      } else if (nav.id === 'cal-next') {
+        state.calendarMonth = new Date(month.getFullYear(), month.getMonth() + 1, 1);
+      } else {
+        state.calendarMonth = new Date();
+        state.calendarMonth.setDate(1);
+      }
+      state.calendarSelectedDay = null;
+      render();
+      return;
+    }
+
+    const eventTarget = event.target.closest('.list-item, .card, .cal-pill');
+    if (eventTarget && container.contains(eventTarget) && eventTarget.dataset.id) {
+      const visibleEvents = filterEvents(state.events, state.filters);
+      if (visibleEvents.some(item => item.id === eventTarget.dataset.id)) {
+        openEvent(eventTarget.dataset.id);
+      }
+      return;
+    }
+
+    const day = event.target.closest('.cal-day:not(.other-month)');
+    if (!day || !container.contains(day)) return;
+
+    const byDate = groupEventsByDate(filterEvents(state.events, state.filters));
+    const dayEvents = byDate[day.dataset.date] || [];
+    if (dayEvents.length === 1) {
+      openEvent(dayEvents[0].id);
+    } else if (dayEvents.length > 1) {
+      state.calendarSelectedDay = state.calendarSelectedDay === day.dataset.date
+        ? null
+        : day.dataset.date;
+      render();
+    }
+  });
+
+  container.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const eventTarget = event.target.closest('.list-item, .card');
+    if (!eventTarget || !container.contains(eventTarget) || !eventTarget.dataset.id) return;
+
+    event.preventDefault();
+    const visibleEvents = filterEvents(state.events, state.filters);
+    if (visibleEvents.some(item => item.id === eventTarget.dataset.id)) {
+      openEvent(eventTarget.dataset.id);
+    }
   });
 }
 
@@ -427,17 +393,6 @@ function toDateStr(date) {
 
 function truncate(str, len) {
   return str.length > len ? str.slice(0, len).trimEnd() + '…' : str;
-}
-
-// Chronological minutes for a "H:MM AM/PM" time; all-day (no time) sorts first.
-// Never compare times as strings — "12:00 PM" < "9:00 AM" lexicographically.
-function timeMinutes(t) {
-  if (!t) return -1;
-  const m = String(t).match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
-  if (!m) return -1;
-  let h = parseInt(m[1], 10) % 12;
-  if (m[3].toUpperCase() === 'PM') h += 12;
-  return h * 60 + (m[2] ? parseInt(m[2], 10) : 0);
 }
 
 function esc(str) {
