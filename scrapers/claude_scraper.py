@@ -12,6 +12,7 @@ import json
 import logging
 import os
 import re
+import time
 from typing import Optional
 
 import requests
@@ -23,6 +24,9 @@ from .base import BaseScraper, Event
 log = logging.getLogger("pipeline")
 
 _client: Optional[Anthropic] = None
+
+# The one model every extraction, mining, and curation call uses.
+HAIKU_MODEL = "claude-haiku-4-5-20251001"
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -68,10 +72,15 @@ HTML:
 MAX_HTML_CHARS = 20_000  # ~5k tokens — enough for a full event listing page
 
 
+def resolve_api_key() -> Optional[str]:
+    """The Anthropic key for this project, or None if neither env var is set."""
+    return os.environ.get("ANTHROPIC_API_KEY_PIONEER") or os.environ.get("ANTHROPIC_API_KEY")
+
+
 def _get_client() -> Anthropic:
     global _client
     if _client is None:
-        api_key = os.environ.get("ANTHROPIC_API_KEY_PIONEER") or os.environ.get("ANTHROPIC_API_KEY")
+        api_key = resolve_api_key()
         if not api_key:
             raise EnvironmentError(
                 "ANTHROPIC_API_KEY_PIONEER environment variable is not set. "
@@ -81,31 +90,39 @@ def _get_client() -> Anthropic:
     return _client
 
 
-def call_haiku(prompt: str, max_tokens: int = 16384, retries: int = 3) -> str:
-    """One Haiku call with exponential backoff on failure (rate limits etc.).
+def call_haiku(
+    prompt: str, *, label: str = "", max_tokens: int = 16384, retries: int = 3
+) -> str:
+    """One Haiku call; the single path every Claude request in this project takes.
 
-    Used by the fab413 miners; scrapers keep their own single-shot behavior
-    since BaseScraper.fetch() already isolates their failures per source.
+    Retries with exponential backoff (20s, 60s, ...) on any exception, up to
+    `retries` attempts. Scrapers pass retries=1 because BaseScraper.fetch()
+    already isolates a failed source and a retry would just slow the run.
+    If the reply was cut off at max_tokens a warning names `label`; the
+    partial text is still returned so _parse_json_array can salvage it.
     """
-    import sys
-    import time
-
     delay = 20
     for attempt in range(retries):
         try:
             message = _get_client().messages.create(
-                model="claude-haiku-4-5-20251001",
+                model=HAIKU_MODEL,
                 max_tokens=max_tokens,
                 messages=[{"role": "user", "content": prompt}],
             )
-            return message.content[0].text
+            break
         except Exception as e:
             if attempt == retries - 1:
                 raise
-            print(f"    retry in {delay}s ({e})", file=sys.stderr)
+            log.warning("[%s] Haiku call failed, retry in %ds: %s", label or "haiku", delay, e)
             time.sleep(delay)
             delay *= 3
-    raise RuntimeError("unreachable")
+
+    if message.stop_reason == "max_tokens":
+        log.warning(
+            "[%s] Haiku output hit max_tokens — salvaging partial output",
+            label or "haiku",
+        )
+    return message.content[0].text
 
 
 def _clean_html(html: str) -> str:
@@ -162,24 +179,9 @@ def _extract_events(html: str, venue: str, town: str, source_name: str = "") -> 
     prompt = EXTRACT_PROMPT.format(
         venue=venue, town=town, today=today, year=year, html=html
     )
-
-    client = _get_client()
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        # Generous cap: output tokens only cost what's actually generated, and
-        # big aggregator pages (arts-hub-wma) were losing events at 8192.
-        # _parse_json_array still salvages if this is ever hit.
-        max_tokens=16384,
-        messages=[{"role": "user", "content": prompt}],
-    )
-
-    raw = message.content[0].text
-    if message.stop_reason == "max_tokens":
-        log.warning(
-            "[%s] Haiku output hit max_tokens — salvaging partial event list",
-            source_name or venue,
-        )
-
+    # Generous cap: output tokens only cost what's actually generated, and
+    # big aggregator pages (arts-hub-wma) were losing events at 8192.
+    raw = call_haiku(prompt, label=source_name or venue, max_tokens=16384, retries=1)
     return _parse_json_array(raw)
 
 

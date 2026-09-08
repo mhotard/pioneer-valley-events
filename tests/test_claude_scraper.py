@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 import pytest
 
+from scrapers import claude_scraper
 from scrapers.claude_scraper import (
     ClaudeHTMLScraper,
     _clean_html,
@@ -302,3 +303,68 @@ class TestLoadClaudeScrapers:
         p.write_text(json.dumps(config))
         scrapers = load_claude_scrapers(str(p))
         assert isinstance(scrapers[0], ClaudePlaywrightScraper)
+
+
+# ---- call_haiku / resolve_api_key ----
+
+class TestCallHaiku:
+    @staticmethod
+    def _message(text="[]", stop_reason="end_turn"):
+        message = MagicMock()
+        message.content = [MagicMock(text=text)]
+        message.stop_reason = stop_reason
+        return message
+
+    def test_warns_with_label_when_output_is_truncated(self, caplog):
+        with patch("scrapers.claude_scraper._get_client") as mock_client_fn:
+            mock_client_fn.return_value.messages.create.return_value = self._message(
+                '[{"title": "x"', stop_reason="max_tokens"
+            )
+            with caplog.at_level("WARNING", logger="pipeline"):
+                text = claude_scraper.call_haiku("prompt", label="my-source", retries=1)
+
+        assert text == '[{"title": "x"'
+        assert any("my-source" in r.message and "max_tokens" in r.message for r in caplog.records)
+
+    def test_single_attempt_raises_without_sleeping(self):
+        with (
+            patch("scrapers.claude_scraper._get_client") as mock_client_fn,
+            patch("scrapers.claude_scraper.time.sleep") as sleep,
+        ):
+            mock_client_fn.return_value.messages.create.side_effect = RuntimeError("429")
+            with pytest.raises(RuntimeError, match="429"):
+                claude_scraper.call_haiku("prompt", retries=1)
+
+        sleep.assert_not_called()
+
+    def test_retries_with_backoff_then_succeeds(self):
+        message = self._message("[1]")
+        with (
+            patch("scrapers.claude_scraper._get_client") as mock_client_fn,
+            patch("scrapers.claude_scraper.time.sleep") as sleep,
+        ):
+            mock_client_fn.return_value.messages.create.side_effect = [
+                RuntimeError("first"), RuntimeError("second"), message,
+            ]
+            assert claude_scraper.call_haiku("prompt", retries=3) == "[1]"
+
+        assert [call.args[0] for call in sleep.call_args_list] == [20, 60]
+        create = mock_client_fn.return_value.messages.create
+        assert create.call_args.kwargs["model"] == claude_scraper.HAIKU_MODEL
+
+
+class TestResolveApiKey:
+    def test_pioneer_key_wins(self, monkeypatch):
+        monkeypatch.setenv("ANTHROPIC_API_KEY_PIONEER", "pioneer")
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "generic")
+        assert claude_scraper.resolve_api_key() == "pioneer"
+
+    def test_falls_back_to_generic_key(self, monkeypatch):
+        monkeypatch.delenv("ANTHROPIC_API_KEY_PIONEER", raising=False)
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "generic")
+        assert claude_scraper.resolve_api_key() == "generic"
+
+    def test_none_when_unset(self, monkeypatch):
+        monkeypatch.delenv("ANTHROPIC_API_KEY_PIONEER", raising=False)
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        assert claude_scraper.resolve_api_key() is None

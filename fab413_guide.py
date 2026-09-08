@@ -20,7 +20,7 @@ from datetime import date
 from difflib import SequenceMatcher
 
 from json_storage import write_json_atomic
-from scrapers.claude_scraper import _get_client, _parse_json_array
+from scrapers.claude_scraper import _parse_json_array, call_haiku
 
 MENTIONS_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "fab413_mentions.json")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "seasonal.json")
@@ -136,13 +136,8 @@ def curate(cands: list[dict]) -> list[dict]:
         f"years: {c['years']}"
         for i, c in enumerate(cands)
     )
-    client = _get_client()
-    message = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=16384,
-        messages=[{"role": "user", "content": CURATE_PROMPT.format(groups=rendered)}],
-    )
-    verdicts = {int(v["index"]): v for v in _parse_json_array(message.content[0].text)
+    raw = call_haiku(CURATE_PROMPT.format(groups=rendered), label="seasonal curation")
+    verdicts = {int(v["index"]): v for v in _parse_json_array(raw)
                 if isinstance(v, dict) and "index" in v}
 
     kept = []

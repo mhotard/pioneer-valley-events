@@ -6,6 +6,7 @@ from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+import fab413_guide
 from email_digest import radar_events
 from fab413_guide import candidates, normalize, seasonality
 from fab413_stats import build_payload
@@ -59,6 +60,33 @@ class TestCandidates:
         ms = [mention("Live Music Friday", f"{y}-{m:02d}-05")
               for y in (2023, 2024) for m in (1, 3, 5, 7, 9, 11)]
         assert candidates(ms) == []
+
+
+class TestCurate:
+    CANDS = [
+        {"name_variants": ["27th Green River Festival"], "town_guesses": ["Greenfield"],
+         "month": 7, "years": ["2023", "2024"], "mention_count": 5,
+         "event_type": "festival", "episodes": []},
+        {"name_variants": ["Live Music Friday"], "town_guesses": [],
+         "month": 3, "years": ["2023", "2024"], "mention_count": 2,
+         "event_type": "other", "episodes": []},
+    ]
+
+    def test_goes_through_call_haiku_and_applies_verdicts(self, monkeypatch):
+        calls = []
+
+        def fake_call_haiku(prompt, **kwargs):
+            calls.append(kwargs)
+            return ('[{"index": 0, "canonical_name": "Green River Festival", '
+                    '"town": "Greenfield", "keep": true}, '
+                    '{"index": 1, "canonical_name": "Live Music Friday", "keep": false}]')
+
+        monkeypatch.setattr(fab413_guide, "call_haiku", fake_call_haiku)
+        kept = fab413_guide.curate(self.CANDS)
+
+        assert [e["name"] for e in kept] == ["Green River Festival"]
+        assert kept[0]["town"] == "Greenfield"
+        assert calls and calls[0]["label"]
 
 
 def entity(name, kind, town, episode_date, note="", url=""):

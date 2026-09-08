@@ -23,6 +23,7 @@ from difflib import SequenceMatcher
 from json_storage import read_json, write_json_atomic
 from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
+from scrapers.claude_scraper import resolve_api_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "docs", "data")
@@ -42,10 +43,7 @@ MIN_PREV_FOR_REGRESSION = 5
 
 def api_key_present() -> bool:
     """True if an Anthropic API key is available for the Claude scrapers."""
-    return bool(
-        os.environ.get("ANTHROPIC_API_KEY_PIONEER")
-        or os.environ.get("ANTHROPIC_API_KEY")
-    )
+    return bool(resolve_api_key())
 
 
 MAX_LOG_FILES = 50
