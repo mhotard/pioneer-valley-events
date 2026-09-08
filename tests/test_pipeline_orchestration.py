@@ -109,8 +109,8 @@ def test_collection_returns_result_and_has_no_publication_side_effects(
 
     assert [scraper.fetch_count for scraper in scrapers] == [1, 1]
     assert result.results == [
-        ("alpha", "https://example.com/alpha", 2, None),
-        ("beta", "https://example.com/beta", 1, None),
+        pipeline.SourceResult("alpha", "https://example.com/alpha", 2, None),
+        pipeline.SourceResult("beta", "https://example.com/beta", 1, None),
     ]
     assert result.regressions == []
     assert result.payload == {
@@ -372,3 +372,19 @@ def test_publication_error_propagates_without_false_success(monkeypatch, tmp_pat
         )
 
     assert "Wrote" not in caplog.text
+
+
+def test_corrupt_published_history_means_no_regressions_but_run_proceeds(
+    monkeypatch, tmp_path, caplog
+):
+    output_path = tmp_path / "published" / "events.json"
+    output_path.parent.mkdir()
+    output_path.write_bytes(b"{not json")
+    # alpha yields zero; with readable history of >=5 it would be a regression.
+    scrapers = [FakeScraper("alpha"), FakeScraper("beta", [event("Beta", "beta")])]
+
+    status, output_path, _archive_dir = invoke(monkeypatch, tmp_path, scrapers)
+
+    assert status == 0
+    assert "Yield regressions" not in caplog.text
+    assert json.loads(output_path.read_text())["events"][0]["title"] == "Beta"

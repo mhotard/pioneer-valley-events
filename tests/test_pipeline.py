@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from pipeline import (
     MIN_PREV_FOR_REGRESSION,
+    SourceResult,
     api_key_present,
     deduplicate,
     filter_by_date,
@@ -237,45 +238,50 @@ class TestPreparePayload:
 class TestFindRegressions:
     # results tuples: (name, url, count, error)
     def test_productive_to_zero_flagged(self):
-        results = [("forbes-library", "u", 0, None)]
+        results = [SourceResult("forbes-library", "u", 0, None)]
         prev = {"forbes-library": 154}
         assert find_regressions(results, prev) == [("forbes-library", 154)]
 
     def test_errored_source_not_flagged_as_regression(self):
-        results = [("forbes-library", "u", 0, "boom")]
+        results = [SourceResult("forbes-library", "u", 0, "boom")]
         prev = {"forbes-library": 154}
         assert find_regressions(results, prev) == []
 
     def test_always_zero_source_not_flagged(self):
         # hawks-reed was 0 last run too — that's a known-OK ZERO, not a regression
-        results = [("hawks-reed", "u", 0, None)]
+        results = [SourceResult("hawks-reed", "u", 0, None)]
         prev = {"hawks-reed": 0}
         assert find_regressions(results, prev) == []
 
     def test_low_yield_source_not_flagged(self):
         # A source that only ever had a couple of events can hit 0 naturally
-        results = [("valley-arts-newsletter", "u", 0, None)]
+        results = [SourceResult("valley-arts-newsletter", "u", 0, None)]
         prev = {"valley-arts-newsletter": MIN_PREV_FOR_REGRESSION - 1}
         assert find_regressions(results, prev) == []
 
     def test_new_source_not_flagged(self):
-        results = [("brand-new", "u", 0, None)]
+        results = [SourceResult("brand-new", "u", 0, None)]
         assert find_regressions(results, {}) == []
 
     def test_productive_source_still_productive_not_flagged(self):
-        results = [("umass", "u", 12, None)]
+        results = [SourceResult("umass", "u", 12, None)]
         prev = {"umass": 20}
         assert find_regressions(results, prev) == []
 
     @staticmethod
     def _results(total, errors=0):
         return [
-            (f"source-{i}", "u", 0 if i < errors else 1, "boom" if i < errors else None)
+            SourceResult(
+                name=f"source-{i}",
+                url="u",
+                count=0 if i < errors else 1,
+                error="boom" if i < errors else None,
+            )
             for i in range(total)
         ]
 
     def test_regression_threshold_is_inclusive_at_five(self):
-        results = [("low", "u", 0, None), ("boundary", "u", 0, None)]
+        results = [SourceResult("low", "u", 0, None), SourceResult("boundary", "u", 0, None)]
         assert find_regressions(results, {"low": 4, "boundary": 5}) == [("boundary", 5)]
 
     def test_health_threshold_preserves_strict_greater_than(self):

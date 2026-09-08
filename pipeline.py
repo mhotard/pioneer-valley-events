@@ -19,8 +19,9 @@ import sys
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
+from typing import NamedTuple, Optional
 
-from json_storage import read_json, write_json_atomic
+from json_storage import JsonStorageError, read_json, write_json_atomic
 from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
 from scrapers.claude_scraper import resolve_api_key
@@ -209,11 +210,14 @@ def _validated_archive_events(value: object, path: str) -> list[dict]:
 
 
 def previous_source_counts(path: str = OUTPUT_PATH) -> dict:
-    """Per-source event counts from the currently-published events.json."""
+    """Per-source event counts from the currently-published events.json.
+
+    A missing or unreadable file means "no history": nothing can be flagged
+    as a yield regression, but the run itself proceeds.
+    """
     try:
-        with open(path) as f:
-            events = json.load(f).get("events", [])
-    except (OSError, json.JSONDecodeError):
+        events = read_json(path, default_factory=dict).get("events", [])
+    except JsonStorageError:
         return {}
     counts: dict = {}
     for e in events:
@@ -222,24 +226,32 @@ def previous_source_counts(path: str = OUTPUT_PATH) -> dict:
     return counts
 
 
-def find_regressions(results: list, prev_counts: dict) -> list:
+class SourceResult(NamedTuple):
+    """What one scraper produced this run."""
+
+    name: str
+    url: str
+    count: int
+    error: Optional[str]
+
+
+def find_regressions(results: list[SourceResult], prev_counts: dict) -> list:
     """Sources that yielded 0 (without erroring) but were recently productive.
 
-    results is a list of (name, url, count, error) tuples. Returns a list of
-    (name, previous_count) pairs.
+    Returns a list of (name, previous_count) pairs.
     """
     return [
-        (name, prev_counts[name])
-        for name, _url, count, error in results
-        if count == 0
-        and not error
-        and prev_counts.get(name, 0) >= MIN_PREV_FOR_REGRESSION
+        (r.name, prev_counts[r.name])
+        for r in results
+        if r.count == 0
+        and not r.error
+        and prev_counts.get(r.name, 0) >= MIN_PREV_FOR_REGRESSION
     ]
 
 
-def is_unhealthy(results: list, regressions: list) -> bool:
+def is_unhealthy(results: list[SourceResult], regressions: list) -> bool:
     """Whether a full run exceeds the established unhealthy-source threshold."""
-    errored = {name for name, _url, _count, error in results if error}
+    errored = {r.name for r in results if r.error}
     regressed = {name for name, _previous_count in regressions}
     return len(errored | regressed) > len(results) * MAX_ERROR_FRACTION
 
@@ -249,25 +261,63 @@ class PipelineResult:
     """Collected pipeline data and the source-health facts derived from it."""
 
     payload: dict
-    results: list
+    results: list[SourceResult]
     regressions: list
+
+
+def log_summary(
+    results: list[SourceResult], regressions: list, previous_counts: dict, final_count: int
+) -> None:
+    """The per-scraper status table that closes every run's log."""
+    log = logging.getLogger("pipeline")
+    errors = [r for r in results if r.error]
+    zeros = [r for r in results if r.count == 0 and not r.error]
+    regressed = {name for name, _ in regressions}
+
+    log.info("")
+    log.info("══ SCRAPER SUMMARY ══════════════════════════════════════")
+    for r in results:
+        if r.error:
+            status = "ERROR"
+        elif r.name in regressed:
+            status = f"ZERO ⚠ was {previous_counts[r.name]}"
+        elif r.count == 0:
+            status = "ZERO"
+        else:
+            status = "OK"
+        log.info("  %-30s  %4d events  [%s]  %s", r.name, r.count, status, r.url)
+    log.info("")
+    log.info("  Scrapers run:    %d", len(results))
+    log.info("  Errors:          %d", len(errors))
+    log.info("  Returned zero:   %d (excluding errors)", len(zeros))
+    log.info("  Final events:    %d", final_count)
+    if errors:
+        log.warning("")
+        log.warning("  Failed scrapers:")
+        for r in errors:
+            log.warning("    %s (%s): %s", r.name, r.url, r.error)
+    if regressions:
+        log.warning("")
+        log.warning("  Yield regressions (produced events last run, zero now):")
+        for name, prev in regressions:
+            log.warning("    %s: %d → 0", name, prev)
+    log.info("══════════════════════════════════════════════════════════")
 
 
 def run(scrapers, *, previous_counts: dict, run_date: date) -> PipelineResult:
     """Collect and transform events without reading or writing publication files."""
     log = logging.getLogger("pipeline")
     all_events = []
-    results = []  # (name, url, count, error)
+    results: list[SourceResult] = []
 
     for scraper in scrapers:
         url_label = getattr(scraper, "url", "") or "(no url)"
         log.info("─── %s  %s", scraper.name, url_label)
         events = scraper.fetch()
-        count = len(events)
         error = getattr(scraper, "last_error", None)
-        results.append((scraper.name, url_label, count, error))
+        results.append(SourceResult(scraper.name, url_label, len(events), error))
         all_events.extend(e.to_dict() for e in events)
-        log.info("    └─ found %d events%s", count, f"  [ERROR: {error}]" if error else "")
+        log.info("    └─ found %d events%s", len(events), f"  [ERROR: {error}]" if error else "")
 
     log.info("")
     log.info("Total raw events: %d", len(all_events))
@@ -279,41 +329,8 @@ def run(scrapers, *, previous_counts: dict, run_date: date) -> PipelineResult:
     log.info("After date filter (%s – %s): %d", date_min, date_max, date_filtered_count)
     log.info("After deduplication: %d", len(payload["events"]))
 
-    # ── Summary ──────────────────────────────────────────────────────────────
-    log.info("")
-    log.info("══ SCRAPER SUMMARY ══════════════════════════════════════")
-    errors = [(n, u, e) for n, u, c, e in results if e]
-    zeros  = [(n, u) for n, u, c, e in results if c == 0 and not e]
     regressions = find_regressions(results, previous_counts)
-    regressed = {name for name, _ in regressions}
-    for name, url_label, count, error in results:
-        if error:
-            status = "ERROR"
-        elif name in regressed:
-            status = f"ZERO ⚠ was {previous_counts[name]}"
-        elif count == 0:
-            status = "ZERO"
-        else:
-            status = "OK"
-        log.info("  %-30s  %4d events  [%s]  %s", name, count, status, url_label)
-    log.info("")
-    log.info("  Scrapers run:    %d", len(results))
-    log.info("  Errors:          %d", len(errors))
-    log.info("  Returned zero:   %d (excluding errors)", len(zeros))
-    log.info("  Final events:    %d", len(payload["events"]))
-    if errors:
-        log.warning("")
-        log.warning("  Failed scrapers:")
-        for name, url_label, err in errors:
-            log.warning("    %s (%s): %s", name, url_label, err)
-    if regressions:
-        log.warning("")
-        log.warning("  Yield regressions (produced events last run, zero now):")
-        for name, prev in regressions:
-            log.warning("    %s: %d → 0", name, prev)
-    log.info("══════════════════════════════════════════════════════════")
-    # ─────────────────────────────────────────────────────────────────────────
-
+    log_summary(results, regressions, previous_counts, len(payload["events"]))
     return PipelineResult(payload=payload, results=results, regressions=regressions)
 
 
@@ -381,7 +398,7 @@ def main(argv=None, *, output_path=None, archive_dir=None, run_date=None) -> int
 
     # Reject unhealthy full runs before either publication destination is touched.
     if not args.source and is_unhealthy(result.results, result.regressions):
-        errored = [item for item in result.results if item[3]]
+        errored = [r for r in result.results if r.error]
         unhealthy = len(errored) + len(result.regressions)
         log.error(
             "%d of %d sources unhealthy (%d errored, %d yield regressions; "
