@@ -31,8 +31,6 @@ def load_sources() -> dict:
     return sources
 
 
-SOURCES = load_sources()
-
 HEADERS = {"User-Agent": BROWSER_UA}
 CHARS = 4000  # how many chars of HTML to print per source
 
@@ -71,7 +69,12 @@ def probe(name, url):
         print(f"ERROR: {e}")
 
 
-targets = sys.argv[1:]
-for name, url in SOURCES.items():
-    if not targets or name in targets:
-        probe(name, url)
+def main(argv=None):
+    targets = sys.argv[1:] if argv is None else argv
+    for name, url in load_sources().items():
+        if not targets or name in targets:
+            probe(name, url)
+
+
+if __name__ == "__main__":
+    main()

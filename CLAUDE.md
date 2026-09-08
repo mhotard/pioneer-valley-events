@@ -82,6 +82,12 @@ seasonal guide of events covered in 2+ different calendar years.
   re-runs only mine unmined guids (~5 new episodes/week). Snapshot and
   checkpoint writes use the same per-file atomic replacement boundary as event
   publication; damaged existing stores fail without being reset.
+- `fab413_common.py` holds what both miners share: the checkpoint validator,
+  the batch renderer, and `mine_incrementally` — the mine → extend →
+  checkpoint loop. It aborts (exit 1) after 3 consecutive batch failures
+  rather than silently skipping; a rate-limited run once quietly mined only
+  256/795 episodes before this guard existed. Re-running resumes from the
+  last complete checkpoint; an uncommitted batch may be extracted again.
 - `fab413_guide.py`: fuzzy-groups mentions across years, keeps groups with
   ≥2 distinct years whose coverage clusters in a 2-adjacent-month window
   (≥60% — this filters weekly series like "Live Music Friday"), then one
@@ -98,11 +104,8 @@ seasonal guide of events covered in 2+ different calendar years.
 - `fab413_entities.py` is the broader v2 mine: every named thing (event,
   venue, restaurant, place, business, person, org) with a ≤10-word note,
   read from the STORED corpus (fab413_episodes.json), not the feed.
-  Incremental by guid. Batches retry with backoff (`call_haiku` in
-  claude_scraper.py) and the run aborts after 3 consecutive batch failures
-  rather than silently skipping — a rate-limited run once quietly mined only
-  256/795 episodes before this guard existed. Re-running resumes from the last
-  complete checkpoint; an uncommitted batch may be extracted again.
+  Incremental by guid, same shared loop and failure guard as the events
+  miner (see `fab413_common.py` above).
 - `fab413_stats.py` (pure Python, no API) aggregates entities into
   docs/413/data.json: town bubbles (coordinates from the GAZETTEER dict —
   add new towns there when they show up unmapped), kind/month/quarter
@@ -126,14 +129,17 @@ without sending: `python3 email_digest.py --preview /tmp/out.html`.
 pipeline.py            collect → prepare → assess health → preview or publish/archive
 email_digest.py        builds + sends the weekly next-14-days email (Gmail SMTP)
 fab413_miner.py        mines The Fabulous 413 podcast feed for event mentions
+fab413_common.py       shared miner plumbing: checkpoint format + incremental loop
 fab413_guide.py        turns mined mentions into the seasonal guide (seasonal.json)
 fab413_entities.py     v2 mine: EVERYTHING the show mentions (restaurants, places,
                        people, orgs...) from the stored episode corpus
 fab413_stats.py        aggregates entities → docs/413/data.json (no API calls)
 sources.json           config for Claude-powered scrapers (most sources live here)
 scrapers/
-  base.py              Event dataclass + BaseScraper (fetch() catches all exceptions)
-  claude_scraper.py    ClaudeHTMLScraper / ClaudePlaywrightScraper — generic, config-driven
+  base.py              Event dataclass + BaseScraper (fetch() catches all exceptions;
+                       get() is the shared HTTP fetch with POLITE_UA / BROWSER_UA)
+  claude_scraper.py    ClaudeHTMLScraper / ClaudePlaywrightScraper — generic, config-driven;
+                       call_haiku() is the ONE path every Claude request takes
   ical.py              ICalScraper base for .ics feeds
   umass_athletics.py   iCal (subclasses ICalScraper)
   amherst_athletics.py iCal (subclasses ICalScraper)
@@ -158,6 +164,7 @@ docs/data/fab413_episodes.json  raw podcast episode descriptions (append-only)
 docs/data/fab413_mentions.json  Haiku-extracted event mentions per episode
 docs/data/seasonal.json         curated annual events by month
 tests/                 pytest; test_schema.py validates the committed events.json
+plans/                 handoff plans for the refactors already landed (history, not TODO)
 logs/                  timestamped log per pipeline run (gitignored)
 ```
 
@@ -183,12 +190,23 @@ logs/                  timestamped log per pipeline run (gitignored)
 ## How Claude scrapers work (claude_scraper.py)
 
 fetch HTML (requests or Playwright) → `_clean_html` strips scripts/nav/attrs
-and truncates to 20k chars → `_extract_events` sends it to Haiku
-(claude-haiku-4-5, max_tokens 16384 — output tokens only cost what's generated,
-and 8192 truncated big aggregator pages) → `_parse_json_array` parses the
-reply, **salvaging complete objects if the output was truncated at max_tokens**
-→ `_dicts_to_events` validates (skips missing title/bad date, coerces unknown
-categories to "community").
+and truncates to 20k chars → `_extract_events` sends it to Haiku via
+`call_haiku` (`HAIKU_MODEL`, max_tokens 16384 — output tokens only cost what's
+generated, and 8192 truncated big aggregator pages) → `_parse_json_array`
+parses the reply, **salvaging complete objects if the output was truncated at
+max_tokens** → `_dicts_to_events` validates (skips missing title/bad date,
+coerces unknown categories to "community").
+
+`call_haiku` is the only place that builds an Anthropic request. It retries
+with backoff (20s, 60s) and logs a warning naming the caller when output hits
+max_tokens. Scrapers pass `retries=1` — `BaseScraper.fetch()` already isolates
+a failed source, and a retry would only slow the run. The miners and the
+seasonal-guide curation use the default 3 attempts.
+
+The three keyword→category maps (localist, tribe_events, jones_library) are
+deliberately separate. Merging them was tried 2026-09-07 and changed 17/526
+committed events, mostly false positives from keywords crossing scrapers
+("class" hitting "Classics", "story" hitting "History"). Don't re-merge.
 
 ## Debugging a scraper
 
