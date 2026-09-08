@@ -16,6 +16,8 @@ import re
 from collections import Counter, defaultdict
 from datetime import date
 
+from json_storage import write_json_atomic
+
 BASE = os.path.dirname(__file__)
 ENTITIES_PATH = os.path.join(BASE, "docs", "data", "fab413_entities.json")
 EPISODES_PATH = os.path.join(BASE, "docs", "data", "fab413_episodes.json")
@@ -139,19 +141,21 @@ def build_payload(entities: list[dict], n_episodes: int) -> dict:
     }
 
 
-def main():
-    with open(ENTITIES_PATH) as f:
+def main(*, entities_path=None, episodes_path=None, output_path=None):
+    entities_path = entities_path or ENTITIES_PATH
+    episodes_path = episodes_path or EPISODES_PATH
+    output_path = output_path or OUTPUT_PATH
+    with open(entities_path) as f:
         entities = json.load(f)["entities"]
-    with open(EPISODES_PATH) as f:
+    with open(episodes_path) as f:
         n_episodes = json.load(f)["count"]
 
     payload = build_payload(entities, n_episodes)
 
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    write_json_atomic(output_path, payload, separators=(",", ":"))
     print(
-        f"Wrote {OUTPUT_PATH}: {len(entities)} mentions, "
+        f"Wrote {output_path}: {len(entities)} mentions, "
         f"{payload['totals']['unique']} unique things, "
         f"{len(payload['towns'])} mapped towns"
     )

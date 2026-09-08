@@ -19,6 +19,7 @@ from collections import Counter
 from datetime import date
 from difflib import SequenceMatcher
 
+from json_storage import write_json_atomic
 from scrapers.claude_scraper import _get_client, _parse_json_array
 
 MENTIONS_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "fab413_mentions.json")
@@ -161,8 +162,10 @@ def curate(cands: list[dict]) -> list[dict]:
     return kept
 
 
-def main():
-    with open(MENTIONS_PATH) as f:
+def main(*, mentions_path=None, output_path=None):
+    mentions_path = mentions_path or MENTIONS_PATH
+    output_path = output_path or OUTPUT_PATH
+    with open(mentions_path) as f:
         mentions = json.load(f)["mentions"]
 
     cands = candidates(mentions)
@@ -176,9 +179,8 @@ def main():
         months[str(e["month"])].append(e)
 
     payload = {"generated": date.today().isoformat(), "months": months}
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
-    print(f"Wrote {sum(len(v) for v in months.values())} events to {OUTPUT_PATH}")
+    write_json_atomic(output_path, payload, separators=(",", ":"))
+    print(f"Wrote {sum(len(v) for v in months.values())} events to {output_path}")
 
     for m in range(1, 13):
         evs = months[str(m)]

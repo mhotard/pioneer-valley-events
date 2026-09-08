@@ -16,13 +16,15 @@ Usage:
 
 import argparse
 import os
-import sys
 
+from fab413_common import (
+    empty_checkpoint,
+    extract_rows,
+    mine_incrementally,
+    validated_checkpoint,
+)
 from fab413_miner import validated_episode_rows
 from json_storage import read_json, write_json_atomic
-from scrapers.claude_scraper import _parse_json_array, call_haiku
-
-MAX_CONSECUTIVE_FAILS = 3  # abort the run instead of silently skipping the rest
 
 EPISODES_PATH = os.path.join(
     os.path.dirname(__file__), "docs", "data", "fab413_episodes.json"
@@ -69,43 +71,21 @@ def load_episodes(path=None) -> list[dict]:
     return validated_episode_rows(read_json(path), path)
 
 
-def _validated_checkpoint(value: object, path: str) -> dict:
-    if not isinstance(value, dict):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected an object")
-    mined_guids = value.get("mined_guids")
-    entities = value.get("entities")
-    if not isinstance(mined_guids, list) or not all(
-        isinstance(guid, str) for guid in mined_guids
-    ):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected string mined_guids")
-    if not isinstance(entities, list) or not all(isinstance(row, dict) for row in entities):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected object entities")
-    return value
-
-
 def load_store(path=None) -> dict:
     path = path or OUTPUT_PATH
-    value = read_json(
-        path, default_factory=lambda: {"mined_guids": [], "entities": []}
-    )
-    return _validated_checkpoint(value, path)
+    value = read_json(path, default_factory=lambda: empty_checkpoint("entities"))
+    return validated_checkpoint(value, path, result_key="entities")
 
 
 def save_store(store: dict, path=None) -> None:
     path = path or OUTPUT_PATH
-    _validated_checkpoint(store, path)
+    validated_checkpoint(store, path, result_key="entities")
     write_json_atomic(path, store, separators=(",", ":"))
 
 
 def mine_batch(batch: list[dict]) -> list[dict]:
-    rendered = "\n\n".join(
-        f"[Episode {i} | {ep['date']} | {ep['title']}]\n{ep['text']}"
-        for i, ep in enumerate(batch)
-    )
-    raw = _parse_json_array(call_haiku(EXTRACT_PROMPT.format(episodes=rendered)))
-
     entities = []
-    for e in raw:
+    for e in extract_rows(batch, EXTRACT_PROMPT):
         try:
             idx = int(e.get("episode", -1))
             name = str(e.get("name", "")).strip()
@@ -146,30 +126,14 @@ def main(argv=None, *, output_path=None, episodes_path=None):
     if not todo:
         return
 
-    total_new = 0
-    consecutive_fails = 0
-    for start in range(0, len(todo), BATCH_SIZE):
-        batch = todo[start : start + BATCH_SIZE]
-        try:
-            entities = mine_batch(batch)
-            consecutive_fails = 0
-        except Exception as e:
-            consecutive_fails += 1
-            print(f"  batch at {start}: ERROR {e} — skipping", file=sys.stderr)
-            if consecutive_fails >= MAX_CONSECUTIVE_FAILS:
-                print(
-                    f"  {consecutive_fails} consecutive failures — aborting "
-                    "(progress is saved; re-run to resume)", file=sys.stderr,
-                )
-                sys.exit(1)
-            continue
-        store["entities"].extend(entities)
-        store["mined_guids"].extend(ep["guid"] for ep in batch)
-        save_store(store, output_path)
-        total_new += len(entities)
-        done = min(start + BATCH_SIZE, len(todo))
-        print(f"  {done}/{len(todo)} episodes → {total_new} entities so far")
-
+    total_new = mine_incrementally(
+        todo,
+        store,
+        result_key="entities",
+        mine_batch=mine_batch,
+        save=lambda current: save_store(current, output_path),
+        batch_size=BATCH_SIZE,
+    )
     print(f"\nDone: {total_new} new entities, {len(store['entities'])} total → {output_path}")
 
 

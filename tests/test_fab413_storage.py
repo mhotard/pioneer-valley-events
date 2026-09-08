@@ -4,8 +4,11 @@ import json
 
 import pytest
 
+import fab413_common
 import fab413_entities
+import fab413_guide
 import fab413_miner
+import fab413_stats
 from json_storage import JsonStorageError
 
 MINERS = [fab413_miner, fab413_entities]
@@ -408,8 +411,9 @@ class TestMiningCheckpoints:
         ]
 
 
-def test_entity_miner_aborts_after_three_consecutive_failures_with_progress_saved(
-    monkeypatch, tmp_path
+@pytest.mark.parametrize("module", MINERS, ids=lambda module: module.__name__)
+def test_miner_aborts_after_three_consecutive_failures_with_progress_saved(
+    module, monkeypatch, tmp_path
 ):
     episodes = [episode(guid) for guid in ("saved", "bad-1", "bad-2", "bad-3", "later")]
 
@@ -420,23 +424,22 @@ def test_entity_miner_aborts_after_three_consecutive_failures_with_progress_save
         return [{"batch": guid}]
 
     output_path, episodes_path = configure_main(
-        monkeypatch, tmp_path, fab413_entities, episodes, mine, batch_size=1
+        monkeypatch, tmp_path, module, episodes, mine, batch_size=1
     )
 
     with pytest.raises(SystemExit) as exc_info:
-        fab413_entities.main(
-            [], output_path=output_path, episodes_path=episodes_path
-        )
+        module.main([], output_path=output_path, episodes_path=episodes_path)
 
     assert exc_info.value.code == 1
     stored = json.loads(output_path.read_text(encoding="utf-8"))
     assert stored == {
         "mined_guids": ["saved"],
-        "entities": [{"batch": "saved"}],
+        result_key(module): [{"batch": "saved"}],
     }
 
 
-def test_entity_miner_success_resets_consecutive_failure_counter(monkeypatch, tmp_path):
+@pytest.mark.parametrize("module", MINERS, ids=lambda module: module.__name__)
+def test_miner_success_resets_consecutive_failure_counter(module, monkeypatch, tmp_path):
     sequence = ("bad-1", "bad-2", "saved-1", "bad-3", "bad-4", "saved-2")
     episodes = [episode(guid) for guid in sequence]
 
@@ -447,11 +450,51 @@ def test_entity_miner_success_resets_consecutive_failure_counter(monkeypatch, tm
         return [{"batch": guid}]
 
     output_path, episodes_path = configure_main(
-        monkeypatch, tmp_path, fab413_entities, episodes, mine, batch_size=1
+        monkeypatch, tmp_path, module, episodes, mine, batch_size=1
     )
 
-    fab413_entities.main([], output_path=output_path, episodes_path=episodes_path)
+    module.main([], output_path=output_path, episodes_path=episodes_path)
 
     stored = json.loads(output_path.read_text(encoding="utf-8"))
     assert stored["mined_guids"] == ["saved-1", "saved-2"]
-    assert stored["entities"] == [{"batch": "saved-1"}, {"batch": "saved-2"}]
+    assert stored[result_key(module)] == [{"batch": "saved-1"}, {"batch": "saved-2"}]
+
+
+def test_render_batch_matches_the_prompt_contract():
+    batch = [
+        episode("a", "2026-01-02", title="First", text="Hello there"),
+        episode("b", "2026-01-09", title="Second", text="More text"),
+    ]
+    assert fab413_common.render_batch(batch) == (
+        "[Episode 0 | 2026-01-02 | First]\nHello there\n\n"
+        "[Episode 1 | 2026-01-09 | Second]\nMore text"
+    )
+
+
+def test_guide_and_stats_write_through_the_atomic_helper(monkeypatch, tmp_path):
+    writes = []
+
+    def record(path, value, **kwargs):
+        writes.append((str(path), value, kwargs))
+
+    mentions_path = tmp_path / "mentions.json"
+    write_json(mentions_path, {"mined_guids": [], "mentions": []})
+    monkeypatch.setattr(fab413_guide, "curate", lambda cands: [])
+    monkeypatch.setattr(fab413_guide, "write_json_atomic", record)
+    guide_out = tmp_path / "seasonal.json"
+    fab413_guide.main(mentions_path=mentions_path, output_path=guide_out)
+
+    entities_path = tmp_path / "entities.json"
+    episodes_path = tmp_path / "episodes.json"
+    write_json(entities_path, {"mined_guids": [], "entities": []})
+    write_json(episodes_path, {"count": 0, "episodes": []})
+    monkeypatch.setattr(fab413_stats, "write_json_atomic", record)
+    stats_out = tmp_path / "413" / "data.json"
+    fab413_stats.main(
+        entities_path=entities_path, episodes_path=episodes_path, output_path=stats_out
+    )
+
+    assert [w[0] for w in writes] == [str(guide_out), str(stats_out)]
+    assert all(w[2] == {"separators": (",", ":")} for w in writes)
+    assert set(writes[0][1]["months"]) == {str(m) for m in range(1, 13)}
+    assert writes[1][1]["totals"]["episodes"] == 0

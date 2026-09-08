@@ -19,14 +19,19 @@ Usage:
 import argparse
 import os
 import re
-import sys
 from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
 
+from fab413_common import (
+    empty_checkpoint,
+    extract_rows,
+    mine_incrementally,
+    validated_checkpoint,
+)
 from json_storage import read_json, write_json_atomic
-from scrapers.claude_scraper import BROWSER_UA, _parse_json_array, call_haiku
+from scrapers.claude_scraper import BROWSER_UA
 
 FEED_URL = "https://publicfeeds.net/f/3459/feed-rss.xml"
 OUTPUT_PATH = os.path.join(
@@ -104,26 +109,10 @@ def fetch_feed() -> list[dict]:
     return episodes
 
 
-def _validated_checkpoint(value: object, path: str) -> dict:
-    if not isinstance(value, dict):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected an object")
-    mined_guids = value.get("mined_guids")
-    mentions = value.get("mentions")
-    if not isinstance(mined_guids, list) or not all(
-        isinstance(guid, str) for guid in mined_guids
-    ):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected string mined_guids")
-    if not isinstance(mentions, list) or not all(isinstance(row, dict) for row in mentions):
-        raise ValueError(f"Invalid mining checkpoint in {path}: expected object mentions")
-    return value
-
-
 def load_store(path=None) -> dict:
     path = path or OUTPUT_PATH
-    value = read_json(
-        path, default_factory=lambda: {"mined_guids": [], "mentions": []}
-    )
-    return _validated_checkpoint(value, path)
+    value = read_json(path, default_factory=lambda: empty_checkpoint("mentions"))
+    return validated_checkpoint(value, path, result_key="mentions")
 
 
 def validated_episode_rows(
@@ -175,20 +164,14 @@ def save_episodes(episodes: list[dict], path=None):
 
 def save_store(store: dict, path=None) -> None:
     path = path or OUTPUT_PATH
-    _validated_checkpoint(store, path)
+    validated_checkpoint(store, path, result_key="mentions")
     write_json_atomic(path, store, separators=(",", ":"))
 
 
 def mine_batch(batch: list[dict]) -> list[dict]:
     """One Haiku call over a batch of episodes; returns mention dicts."""
-    rendered = "\n\n".join(
-        f"[Episode {i} | {ep['date']} | {ep['title']}]\n{ep['text']}"
-        for i, ep in enumerate(batch)
-    )
-    raw = _parse_json_array(call_haiku(EXTRACT_PROMPT.format(episodes=rendered)))
-
     mentions = []
-    for m in raw:
+    for m in extract_rows(batch, EXTRACT_PROMPT):
         try:
             idx = int(m.get("episode", -1))
             if not (0 <= idx < len(batch)) or not str(m.get("name", "")).strip():
@@ -234,21 +217,14 @@ def main(argv=None, *, output_path=None, episodes_path=None):
     if not todo:
         return
 
-    total_new = 0
-    for start in range(0, len(todo), BATCH_SIZE):
-        batch = todo[start : start + BATCH_SIZE]
-        try:
-            mentions = mine_batch(batch)
-        except Exception as e:
-            print(f"  batch at {start}: ERROR {e} — skipping", file=sys.stderr)
-            continue
-        store["mentions"].extend(mentions)
-        store["mined_guids"].extend(ep["guid"] for ep in batch)
-        save_store(store, output_path)
-        total_new += len(mentions)
-        done = min(start + BATCH_SIZE, len(todo))
-        print(f"  {done}/{len(todo)} episodes → {total_new} mentions so far")
-
+    total_new = mine_incrementally(
+        todo,
+        store,
+        result_key="mentions",
+        mine_batch=mine_batch,
+        save=lambda current: save_store(current, output_path),
+        batch_size=BATCH_SIZE,
+    )
     print(f"\nDone: {total_new} new mentions, {len(store['mentions'])} total → {output_path}")
 
 
