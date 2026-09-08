@@ -3,7 +3,6 @@
 import logging
 import re
 
-import requests
 from bs4 import BeautifulSoup
 
 from .base import BaseScraper, Event
@@ -31,10 +30,7 @@ class ForbesLibraryScraper(BaseScraper):
     town = "Northampton"
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
-        resp = requests.get(RSS_URL, headers=headers, timeout=20)
-        resp.raise_for_status()
-
+        resp = self.get(RSS_URL)
         # LibCal's RSS is not always well-formed XML, so use the lenient parser
         soup = BeautifulSoup(resp.content, "xml")
         events = []

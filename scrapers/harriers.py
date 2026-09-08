@@ -3,29 +3,21 @@
 import logging
 from datetime import date
 
-import requests
-
-from .base import BaseScraper, Event
+from .base import BROWSER_UA, BaseScraper, Event
 
 log = logging.getLogger("pipeline")
 
 JSON_URL = "https://harriers.org/Calendar/race_calendar.json"
-BROWSER_UA = (
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-)
 
 
 class HarriersScraper(BaseScraper):
     name = "harriers-race-calendar"
     url = "https://harriers.org/Calendar/wmracecalendar.html"
     town = "Pioneer Valley"
+    user_agent = BROWSER_UA
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": BROWSER_UA}
-        resp = requests.get(JSON_URL, headers=headers, timeout=20)
-        resp.raise_for_status()
-        data = resp.json()
+        data = self.get(JSON_URL).json()
 
         today = date.today().isoformat()
         events = []

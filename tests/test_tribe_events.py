@@ -52,7 +52,7 @@ def _fetch_with_payload(payload):
     mock_resp = MagicMock()
     mock_resp.json.return_value = payload
     mock_resp.raise_for_status = MagicMock()
-    with patch("scrapers.tribe_events.requests.get", return_value=mock_resp):
+    with patch("scrapers.base.requests.get", return_value=mock_resp):
         return scraper.fetch()
 
 
@@ -87,7 +87,7 @@ class TestTribeEventsScraper:
         r1.json.return_value = {**PAYLOAD, "next_rest_url": "https://example.org/page2"}
         r2.json.return_value = page2
         r1.raise_for_status = r2.raise_for_status = MagicMock()
-        with patch("scrapers.tribe_events.requests.get", side_effect=[r1, r2]) as m:
+        with patch("scrapers.base.requests.get", side_effect=[r1, r2]) as m:
             events = scraper.fetch()
         assert len(events) == 2
         assert m.call_count == 2

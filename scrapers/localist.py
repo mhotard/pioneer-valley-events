@@ -7,8 +7,6 @@ over scraping the HTML calendar. UMass and Mount Holyoke subclass this.
 import logging
 from datetime import datetime
 
-import requests
-
 from .base import BaseScraper, Event
 
 log = logging.getLogger("pipeline")
@@ -59,10 +57,7 @@ class LocalistScraper(BaseScraper):
     default_category: str = "academia"
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
-        resp = requests.get(self.api_url, headers=headers, timeout=20)
-        resp.raise_for_status()
-        data = resp.json()
+        data = self.get(self.api_url).json()
 
         events = []
         seen = set()

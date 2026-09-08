@@ -9,7 +9,17 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from typing import Optional
 
+import requests
+
 log = logging.getLogger("pipeline")
+
+# Two user agents: the honest one for sites that serve everyone, and a
+# browser-imitating one for sites that reject unknown clients.
+POLITE_UA = "PioneerValleyEvents/1.0 (community aggregator)"
+BROWSER_UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+)
 
 # The publication window, shared by the pipeline and any scraper that
 # pre-filters (community.py, tribe_events.py): events from DAYS_PAST days ago
@@ -70,6 +80,15 @@ class BaseScraper(ABC):
     # Set True on scrapers that call the Anthropic API; the pipeline pre-flight
     # aborts if any such scraper is selected and no API key is set.
     needs_api_key: bool = False
+    # Sent on every request made through self.get(); override with BROWSER_UA
+    # on scrapers whose sites block unknown clients.
+    user_agent: str = POLITE_UA
+
+    def get(self, url: str, *, timeout: int = 20) -> requests.Response:
+        """GET `url` with this scraper's user agent; raises on HTTP errors."""
+        resp = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=timeout)
+        resp.raise_for_status()
+        return resp
 
     def fetch(self) -> list[Event]:
         """Fetch and return normalized events. Catches all exceptions gracefully."""

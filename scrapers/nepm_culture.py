@@ -3,11 +3,10 @@
 import logging
 import re
 
-import requests
 from bs4 import BeautifulSoup
 
-from .base import BaseScraper, Event
-from .claude_scraper import BROWSER_UA, _clean_html, _dicts_to_events, _extract_events
+from .base import BROWSER_UA, BaseScraper, Event
+from .claude_scraper import _clean_html, _dicts_to_events, _extract_events
 
 log = logging.getLogger("pipeline")
 
@@ -21,13 +20,10 @@ class NEPMCultureScraper(BaseScraper):
     url = LISTING_URL
     town = "Pioneer Valley"
     needs_api_key = True  # uses claude_scraper._extract_events
+    user_agent = BROWSER_UA
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": BROWSER_UA}
-
-        resp = requests.get(LISTING_URL, headers=headers, timeout=20)
-        resp.raise_for_status()
-
+        resp = self.get(LISTING_URL)
         soup = BeautifulSoup(resp.text, "html.parser")
         editions = {}
         for a in soup.find_all("a", href=EDITION_PATTERN):
@@ -44,9 +40,7 @@ class NEPMCultureScraper(BaseScraper):
         latest_url = editions[latest_date]
         log.debug("[nepm-culture] Most recent edition: %s  %s", latest_date, latest_url)
 
-        resp2 = requests.get(latest_url, headers=headers, timeout=20)
-        resp2.raise_for_status()
-
+        resp2 = self.get(latest_url)
         cleaned = _clean_html(resp2.text)
         dicts = _extract_events(cleaned, "Various Pioneer Valley Venues", self.town, self.name)
         events = _dicts_to_events(dicts, self.name, "Various Pioneer Valley Venues", self.town)

@@ -31,7 +31,7 @@ from fab413_common import (
     validated_checkpoint,
 )
 from json_storage import read_json, write_json_atomic
-from scrapers.claude_scraper import BROWSER_UA
+from scrapers.base import BROWSER_UA
 
 FEED_URL = "https://publicfeeds.net/f/3459/feed-rss.xml"
 OUTPUT_PATH = os.path.join(

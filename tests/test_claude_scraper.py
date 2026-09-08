@@ -180,7 +180,7 @@ class TestClaudeHTMLScraper:
         mock_message.content = [MagicMock(text=json.dumps(SAMPLE_DICTS))]
 
         with (
-            patch("scrapers.claude_scraper.requests.get", return_value=mock_response),
+            patch("scrapers.base.requests.get", return_value=mock_response),
             patch("scrapers.claude_scraper._get_client") as mock_client_fn,
         ):
             mock_client = MagicMock()
@@ -195,7 +195,7 @@ class TestClaudeHTMLScraper:
     def test_fetch_returns_empty_on_http_error(self):
         scraper = self._make_scraper()
         with patch(
-            "scrapers.claude_scraper.requests.get",
+            "scrapers.base.requests.get",
             side_effect=Exception("connection refused"),
         ):
             events = scraper.fetch()
@@ -212,7 +212,7 @@ class TestClaudeHTMLScraper:
         mock_message.content = [MagicMock(text="not valid json")]
 
         with (
-            patch("scrapers.claude_scraper.requests.get", return_value=mock_response),
+            patch("scrapers.base.requests.get", return_value=mock_response),
             patch("scrapers.claude_scraper._get_client") as mock_client_fn,
         ):
             mock_client = MagicMock()
@@ -235,7 +235,7 @@ class TestClaudeHTMLScraper:
         mock_message.content = [MagicMock(text=fenced)]
 
         with (
-            patch("scrapers.claude_scraper.requests.get", return_value=mock_response),
+            patch("scrapers.base.requests.get", return_value=mock_response),
             patch("scrapers.claude_scraper._get_client") as mock_client_fn,
         ):
             mock_client = MagicMock()

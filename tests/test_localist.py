@@ -54,7 +54,7 @@ def _fetch_with_payload(payload):
     mock_resp = MagicMock()
     mock_resp.json.return_value = payload
     mock_resp.raise_for_status = MagicMock()
-    with patch("scrapers.localist.requests.get", return_value=mock_resp):
+    with patch("scrapers.base.requests.get", return_value=mock_resp):
         return scraper.fetch()
 
 
@@ -85,7 +85,7 @@ class TestLocalistScraper:
 
     def test_http_error_caught_by_fetch(self):
         scraper = DummyLocalist()
-        with patch("scrapers.localist.requests.get", side_effect=Exception("boom")):
+        with patch("scrapers.base.requests.get", side_effect=Exception("boom")):
             assert scraper.fetch() == []
         assert scraper.last_error == "boom"
 

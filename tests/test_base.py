@@ -3,6 +3,8 @@
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from scrapers.base import BaseScraper, Event
@@ -163,3 +165,37 @@ class TestEventTimeKey:
 
     def test_midnight_is_zero_minutes(self):
         assert event_time_key({"time": "12:00 AM"}) == (1, 0)
+
+
+class TestBaseScraperGet:
+    def test_sends_scraper_user_agent_and_raises_on_http_error(self):
+        from unittest.mock import MagicMock, patch
+
+        from scrapers.base import BROWSER_UA, POLITE_UA, BaseScraper
+
+        class Polite(BaseScraper):
+            name = "polite"
+
+            def _fetch(self):
+                return []
+
+        class Browserish(Polite):
+            user_agent = BROWSER_UA
+
+        resp = MagicMock()
+        with patch("scrapers.base.requests.get", return_value=resp) as get:
+            assert Polite().get("https://example.test/a") is resp
+            assert Browserish().get("https://example.test/b", timeout=5) is resp
+
+        assert get.call_args_list[0].kwargs == {
+            "headers": {"User-Agent": POLITE_UA}, "timeout": 20,
+        }
+        assert get.call_args_list[1].kwargs == {
+            "headers": {"User-Agent": BROWSER_UA}, "timeout": 5,
+        }
+        assert resp.raise_for_status.call_count == 2
+
+        resp.raise_for_status.side_effect = RuntimeError("403")
+        with patch("scrapers.base.requests.get", return_value=resp):
+            with pytest.raises(RuntimeError, match="403"):
+                Polite().get("https://example.test/c")

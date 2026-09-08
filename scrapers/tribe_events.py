@@ -7,7 +7,6 @@ far cheaper and more reliable than scraping their HTML.
 import logging
 from datetime import date, timedelta
 
-import requests
 from bs4 import BeautifulSoup
 
 from .base import DAYS_FUTURE, BaseScraper, Event
@@ -49,7 +48,6 @@ class TribeEventsScraper(BaseScraper):
         return self.default_category
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
         start = date.today().isoformat()
         end = (date.today() + timedelta(days=DAYS_FUTURE)).isoformat()
         next_url = (
@@ -61,9 +59,7 @@ class TribeEventsScraper(BaseScraper):
         seen = set()
 
         for _ in range(MAX_PAGES):
-            resp = requests.get(next_url, headers=headers, timeout=20)
-            resp.raise_for_status()
-            data = resp.json()
+            data = self.get(next_url).json()
 
             for ev in data.get("events", []):
                 title = self.clean(_strip_html(ev.get("title", "")))

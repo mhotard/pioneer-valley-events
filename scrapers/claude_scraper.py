@@ -15,11 +15,10 @@ import re
 import time
 from typing import Optional
 
-import requests
 from anthropic import Anthropic
 from bs4 import BeautifulSoup
 
-from .base import BaseScraper, Event
+from .base import BROWSER_UA, BaseScraper, Event
 
 log = logging.getLogger("pipeline")
 
@@ -34,11 +33,6 @@ VALID_CATEGORIES = {
     "music", "arts", "film", "comedy", "community",
     "academia", "family", "food", "outdoor", "festival",
 }
-
-BROWSER_UA = (
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-)
 
 EXTRACT_PROMPT = """\
 You are an event data extractor. Extract all upcoming events from the HTML below.
@@ -222,6 +216,7 @@ class ClaudeHTMLScraper(BaseScraper):
     """Fetches a static HTML page and uses Haiku to extract events."""
 
     needs_api_key = True
+    user_agent = BROWSER_UA
 
     def __init__(self, name: str, url: str, venue: str, town: str):
         self.name = name
@@ -230,10 +225,7 @@ class ClaudeHTMLScraper(BaseScraper):
         self.town = town
 
     def _get_html(self) -> str:
-        headers = {"User-Agent": BROWSER_UA}
-        resp = requests.get(self.url, headers=headers, timeout=20)
-        resp.raise_for_status()
-        return resp.text
+        return self.get(self.url).text
 
     def _fetch(self) -> list[Event]:
         cleaned = _clean_html(self._get_html())
@@ -258,7 +250,7 @@ class ClaudePlaywrightScraper(ClaudeHTMLScraper):
 
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
-            page = browser.new_page(user_agent=BROWSER_UA)
+            page = browser.new_page(user_agent=self.user_agent)
             # "networkidle" hangs on ad-heavy pages, so wait for DOM + a fixed delay
             page.goto(self.url, wait_until="domcontentloaded", timeout=30_000)
             page.wait_for_timeout(4000)

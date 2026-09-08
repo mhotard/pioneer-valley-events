@@ -16,6 +16,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from scrapers import get_all_scrapers
+from scrapers.base import BROWSER_UA
 
 
 def load_sources() -> dict:
@@ -32,12 +33,7 @@ def load_sources() -> dict:
 
 SOURCES = load_sources()
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    )
-}
+HEADERS = {"User-Agent": BROWSER_UA}
 CHARS = 4000  # how many chars of HTML to print per source
 
 

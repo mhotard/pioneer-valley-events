@@ -53,7 +53,7 @@ def _fetch():
     mock_resp = MagicMock()
     mock_resp.content = ICS.encode()
     mock_resp.raise_for_status = MagicMock()
-    with patch("scrapers.ical.requests.get", return_value=mock_resp):
+    with patch("scrapers.base.requests.get", return_value=mock_resp):
         return scraper.fetch()
 
 

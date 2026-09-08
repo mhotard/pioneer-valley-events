@@ -4,8 +4,6 @@ import logging
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
-import requests
-
 from .base import BaseScraper, Event
 
 log = logging.getLogger("pipeline")
@@ -42,10 +40,7 @@ class ICalScraper(BaseScraper):
         except ImportError:
             raise ImportError("icalendar not installed. Run: pip install icalendar")
 
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
-        resp = requests.get(self.url, headers=headers, timeout=20)
-        resp.raise_for_status()
-
+        resp = self.get(self.url)
         cal = Calendar.from_ical(resp.content)
         today = date.today().isoformat()
         events = []

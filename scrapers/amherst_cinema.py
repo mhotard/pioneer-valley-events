@@ -4,10 +4,9 @@ import logging
 import re
 from datetime import date, datetime, timedelta
 
-import requests
 from bs4 import BeautifulSoup
 
-from .base import BaseScraper, Event
+from .base import BROWSER_UA, BaseScraper, Event
 
 log = logging.getLogger("pipeline")
 
@@ -50,11 +49,10 @@ class AmherstCinemaScraper(BaseScraper):
     name = "amherst-cinema"
     url = LISTING_URL
     town = "Amherst"
+    user_agent = BROWSER_UA
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}  # noqa: E501
-        resp = requests.get(LISTING_URL, headers=headers, timeout=15)
-        resp.raise_for_status()
+        resp = self.get(LISTING_URL)
         soup = BeautifulSoup(resp.text, "html.parser")
 
         events = []

@@ -3,8 +3,6 @@
 import logging
 import xml.etree.ElementTree as ET
 
-import requests
-
 from .base import BaseScraper, Event
 
 log = logging.getLogger("pipeline")
@@ -58,10 +56,7 @@ class JonesLibraryScraper(BaseScraper):
     town = "Amherst"
 
     def _fetch(self) -> list[Event]:
-        headers = {"User-Agent": "PioneerValleyEvents/1.0 (community aggregator)"}
-        resp = requests.get(RSS_URL, headers=headers, timeout=15)
-        resp.raise_for_status()
-
+        resp = self.get(RSS_URL)
         root = ET.fromstring(resp.content)
         events = []
         seen = set()
