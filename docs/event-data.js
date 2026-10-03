@@ -1,5 +1,23 @@
 // Pure event transformations shared by the list, card, and calendar views.
 
+// Allow one missed weekly update before warning. Compare calendar days so DST
+// and the viewer's timezone cannot shift a date-only publication timestamp.
+const MAX_DATA_AGE_DAYS = 14;
+
+function calendarDay(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return NaN;
+  const timestamp = Date.parse(`${value}T00:00:00Z`);
+  if (!Number.isFinite(timestamp)
+      || new Date(timestamp).toISOString().slice(0, 10) !== value) return NaN;
+  return timestamp / 86400000;
+}
+
+export function dataFreshness(generated, today = dateString(new Date())) {
+  const age = calendarDay(today) - calendarDay(generated);
+  if (!Number.isFinite(age) || age < 0) return 'unknown';
+  return age > MAX_DATA_AGE_DAYS ? 'stale' : 'current';
+}
+
 // Chronological minutes for a "H:MM AM/PM" time; all-day (no time) sorts first.
 // Keep this parser permissive: hour-only and lowercase inputs are valid.
 export function timeMinutes(time) {

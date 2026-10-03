@@ -1,4 +1,4 @@
-import { buildCalendarCells, filterEvents, groupEventsByDate } from './event-data.js';
+import { buildCalendarCells, dataFreshness, filterEvents, groupEventsByDate } from './event-data.js';
 
 /* ============================================================
    Pioneer Valley Events — App
@@ -6,6 +6,8 @@ import { buildCalendarCells, filterEvents, groupEventsByDate } from './event-dat
 
 const state = {
   events: [],
+  generated: null,
+  loadFailed: false,
   view: 'list',
   filters: { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' },
   calendarMonth: null, // Date object for calendar display
@@ -18,6 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   state.calendarMonth.setDate(1);
 
   await loadEvents();
+  // Reassess an open tab as the data ages, including when returning to it.
+  setInterval(updateDataStatus, 60 * 60 * 1000);
+  document.addEventListener('visibilitychange', updateDataStatus);
   populateSourceFilter();
   populateTownFilter();
   setupFilters();
@@ -30,16 +35,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 /* ---- Data ---- */
 async function loadEvents() {
   try {
-    const res = await fetch('data/events.json');
+    const res = await fetch('data/events.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    state.events = data.events || [];
-    const gen = document.getElementById('last-updated');
-    if (gen && data.generated) {
-      gen.textContent = `Updated ${formatDateShort(data.generated)}`;
-    }
+    if (!data || !Array.isArray(data.events)) throw new Error('Invalid events payload');
+    state.events = data.events;
+    state.generated = data.generated;
   } catch (e) {
     console.error('Failed to load events.json:', e);
     state.events = [];
+    state.loadFailed = true;
+  }
+  updateDataStatus();
+}
+
+function updateDataStatus() {
+  const updated = document.getElementById('last-updated');
+  const warning = document.getElementById('data-warning');
+  const freshness = dataFreshness(state.generated);
+  warning.hidden = !state.loadFailed && freshness === 'current';
+
+  if (state.loadFailed) {
+    updated.textContent = 'Update unavailable';
+    warning.textContent = 'Event listings could not be loaded. Please try again later.';
+  } else if (freshness === 'unknown') {
+    updated.textContent = 'Update date unverified';
+    warning.textContent = 'The last event update date could not be verified. Listings may be out of date; confirm details with the event organizer.';
+  } else {
+    const label = formatDateShort(state.generated);
+    updated.textContent = `${freshness === 'stale' ? 'Out of date · updated' : 'Updated'} ${label}`;
+    warning.textContent = freshness === 'stale'
+      ? `Event listings are out of date. Last updated ${label}; updates are scheduled weekly. Events may have passed or changed, and newer events may be missing. Confirm details with the event organizer.`
+      : '';
   }
 }
 
@@ -114,9 +141,15 @@ function setupViewSwitcher() {
 function render() {
   const events = filterEvents(state.events, state.filters);
   const count = document.getElementById('result-count');
-  count.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
+  count.textContent = state.loadFailed
+    ? 'Events unavailable'
+    : `${events.length} event${events.length !== 1 ? 's' : ''}`;
 
   const container = document.getElementById('events-container');
+  if (state.loadFailed) {
+    container.innerHTML = '<div class="empty-state"><p>Event listings could not be loaded. Please try again later.</p></div>';
+    return;
+  }
   if (state.view === 'list')     renderList(container, events);
   else if (state.view === 'cards')    renderCards(container, events);
   else if (state.view === 'calendar') renderCalendar(container, events);

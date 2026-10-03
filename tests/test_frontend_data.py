@@ -55,6 +55,30 @@ BLANK_FILTERS = {
 
 
 @pytest.mark.parametrize(
+    ("generated", "today", "expected"),
+    [
+        ("2026-08-15", "2026-08-15", "current"),
+        ("2026-08-01", "2026-08-15", "current"),
+        ("2026-07-31", "2026-08-15", "stale"),
+        ("2026-07-03", "2026-08-15", "stale"),
+        ("2026-03-01", "2026-03-15", "current"),
+        ("2024-02-29", "2024-03-15", "stale"),
+        ("2026-08-16", "2026-08-15", "unknown"),
+        ("2026-02-29", "2026-08-15", "unknown"),
+        ("2026-04-31", "2026-08-15", "unknown"),
+        ("garbage", "2026-08-15", "unknown"),
+        ("", "2026-08-15", "unknown"),
+        (None, "2026-08-15", "unknown"),
+        (42, "2026-08-15", "unknown"),
+    ],
+)
+def test_data_freshness(module_page, frontend_server, generated, today, expected):
+    assert call_module(
+        module_page, frontend_server, "dataFreshness", generated, today
+    ) == expected
+
+
+@pytest.mark.parametrize(
     ("query", "expected"),
     [
         ("concert", ["title"]),

@@ -1,6 +1,9 @@
 from pathlib import Path
 
+import pytest
 from playwright.sync_api import expect
+
+from tests.conftest import FIXED_DATE_SCRIPT, PROJECT_PREFIX
 
 
 def modal_title(page):
@@ -15,11 +18,97 @@ def test_boot_count_dropdowns_and_generated_label(app_page):
     expect(app_page.locator("#result-count")).to_have_text("8 events")
     expect(app_page.locator(".list-item")).to_have_count(8)
     expect(app_page.locator("#last-updated")).to_have_text("Updated Aug 14, 2026")
+    expect(app_page.locator("#data-warning")).to_be_hidden()
     expect(app_page.locator("#source-filter option")).to_have_count(3)
     expect(app_page.locator("#town-filter option")).to_have_count(4)
     expect(app_page.locator('#town-filter option[value="Pioneer Valley"]')).to_have_text(
         "Regionwide"
     )
+
+
+def test_stale_warning_survives_filters_and_views(app_page, frontend_server, sample_events):
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": "2026-07-03", "events": sample_events}),
+    )
+    app_page.reload()
+    expect(app_page.locator("#data-warning")).to_be_visible()
+    expect(app_page.locator("#data-warning")).to_contain_text("Last updated Jul 3, 2026")
+    expect(app_page.locator("#last-updated")).to_have_text("Out of date · updated Jul 3, 2026")
+    app_page.locator("#search").fill("does-not-exist")
+    for view in ("cards", "calendar", "list"):
+        switch_view(app_page, view)
+        expect(app_page.locator("#data-warning")).to_be_visible()
+    app_page.locator("#clear-filters").click()
+    expect(app_page.locator("#result-count")).to_have_text("8 events")
+    expect(app_page.locator("#data-warning")).to_be_visible()
+
+
+@pytest.mark.parametrize("generated", [None, "bad-date", "2026-02-29", "2026-08-16"])
+def test_unverifiable_date_warns_without_hiding_events(
+    app_page, frontend_server, sample_events, generated
+):
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": generated, "events": sample_events}),
+    )
+    app_page.reload()
+    expect(app_page.locator("#data-warning")).to_be_visible()
+    expect(app_page.locator("#data-warning")).to_contain_text("could not be verified")
+    expect(app_page.locator("#last-updated")).to_have_text("Update date unverified")
+    expect(app_page.locator("#result-count")).to_have_text("8 events")
+
+
+@pytest.mark.parametrize("failure", ["http", "json", "shape", "network"])
+def test_failed_load_is_not_an_ordinary_empty_result(
+    chromium_browser, frontend_server, failure
+):
+    context = chromium_browser.new_context(timezone_id="America/New_York")
+    page = context.new_page()
+    page.add_init_script(FIXED_DATE_SCRIPT)
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+
+    def respond(route):
+        if failure == "network":
+            route.abort()
+        elif failure == "shape":
+            route.fulfill(json={"generated": "2026-08-14", "events": {}})
+        else:
+            route.fulfill(
+                status=503 if failure == "http" else 200,
+                content_type="application/json",
+                body="not json",
+            )
+
+    page.route(f"{frontend_server}{PROJECT_PREFIX}/data/events.json", respond)
+    try:
+        page.goto(f"{frontend_server}{PROJECT_PREFIX}/")
+        expect(page.locator("#data-warning")).to_be_visible()
+        expect(page.locator("#data-warning")).to_contain_text("could not be loaded")
+        expect(page.locator("#result-count")).to_have_text("Events unavailable")
+        for view in ("list", "cards", "calendar"):
+            switch_view(page, view)
+            expect(page.locator(".empty-state")).to_contain_text("could not be loaded")
+        assert errors == []
+    finally:
+        context.close()
+
+
+def test_open_tab_rechecks_freshness_when_revisited(app_page):
+    app_page.evaluate(
+        """() => {
+          const RealDate = Date;
+          const fixed = new RealDate('2026-08-30T12:00:00-04:00').getTime();
+          window.Date = class extends RealDate {
+            constructor(...args) { super(...(args.length ? args : [fixed])); }
+            static now() { return fixed; }
+          };
+          document.dispatchEvent(new Event('visibilitychange'));
+        }"""
+    )
+    expect(app_page.locator("#data-warning")).to_be_visible()
+    expect(app_page.locator("#last-updated")).to_have_text("Out of date · updated Aug 14, 2026")
 
 
 def test_combined_filters_views_and_clear(app_page):

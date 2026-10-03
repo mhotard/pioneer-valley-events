@@ -64,6 +64,13 @@ file, and a mining batch whose checkpoint was not replaced may be extracted
 again on the next run. Damaged historical data is reported, not automatically
 repaired.
 
+The event page warns visibly when `events.json` was generated more than 14
+calendar days ago (allowing one missed weekly update), or when its generation
+date is missing, invalid, or in the future. Old listings remain browsable with
+the warning in every view. HTTP, network, JSON, and envelope failures show an
+unavailable state rather than an ordinary empty result. Data requests revalidate
+the browser cache, and open tabs reassess freshness hourly and when revisited.
+
 ---
 
 ## Run the pipeline manually
