@@ -163,10 +163,12 @@ jobs:
                             f"Publication decision: **{report['publication']}**. "
                             f"Prepared events: {report['prepared_event_count']}. "
                             f"Written event count: {report['published_event_count']}.",
-                            "", "| Source | Status | Events | Previous yield |",
-                            "| --- | --- | --- | --- |"])
+                            "", "| Source | Status | Events | Previous yield | Rejected records |",
+                            "| --- | --- | --- | --- | --- |"])
               lines.extend(f"| {source['name']} | {source['status']} | {source['count']} | "
-                           f"{source.get('previous_count', '—')} |" for source in report["sources"])
+                           f"{source.get('previous_count', '—')} | "
+                           f"{', '.join(f'{reason}: {count}' for reason, count in sorted(source.get('rejected_records', {}).items())) or '—'} |"
+                           for source in report["sources"])
               lines.extend(["", "| Destination | Write outcome |", "| --- | --- |"])
               lines.extend(f"| {write['destination']} | {write['status']} |"
                            for write in report["writes"])

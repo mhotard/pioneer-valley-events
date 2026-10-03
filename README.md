@@ -170,6 +170,12 @@ can leave an explicitly reported partial publication. A preview can complete
 successfully while its selected source reports an error. Reports never replace
 the pipeline's exit status or exception.
 
+Extracted records with missing titles, impossible dates, malformed structure,
+or unsafe event links are counted by reason in diagnostics and the Actions
+summary. A nonempty extraction with no valid records is a source error. Useful
+partial results remain eligible under the existing health rules. Unparseable
+optional times remain unknown; supplied midnight remains midnight.
+
 The weekly Action always attempts a job summary and uploads the
 **weekly-update-diagnostics** artifact, containing only safe diagnostic JSON
 from the runner's temporary directory. The workflow report distinguishes an

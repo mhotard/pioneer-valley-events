@@ -257,6 +257,22 @@ def test_actions_summary_carries_source_and_write_outcomes(setup_run, monkeypatc
     assert RAW_ERROR not in text
 
 
+def test_actions_summary_explains_rejected_records(setup_run, monkeypatch):
+    invoke, _output, _archive, path = setup_run
+    scraper = ReportScraper()
+    scraper.last_rejected_counts = {"invalid_date": 2, "unsafe_url": 1, SECRET: 10}
+    assert invoke([scraper]) == 0
+    summary = path.parent / "summary.md"
+    monkeypatch.setenv("DIAGNOSTIC_DIR", str(path.parent))
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    script, _workflow = workflow_summary_script()
+    exec(compile(script, "workflow-summary", "exec"), {})
+    text = summary.read_text()
+    assert "invalid_date: 2, unsafe_url: 1" in text
+    assert SECRET not in text
+    assert RAW_ERROR not in text
+
+
 def test_unknown_selection_reports_no_attempt(setup_run):
     invoke, output, _archive, path = setup_run
     scraper = ReportScraper()
