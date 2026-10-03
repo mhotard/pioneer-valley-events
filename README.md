@@ -71,6 +71,29 @@ the warning in every view. HTTP, network, JSON, and envelope failures show an
 unavailable state rather than an ordinary empty result. Data requests revalidate
 the browser cache, and open tabs reassess freshness hourly and when revisited.
 
+The browser starts with events on or after today in `America/New_York`. Today,
+Next 7 days (today through six days ahead), This weekend, and All published
+dates are explicit choices; Clear returns to upcoming events. Search includes
+titles, descriptions, venues, and towns. Filter/view/calendar state is preserved
+in the URL and browser history. Mobile filters collapse while their summary and
+data warning stay visible, and event details and calendar controls support
+keyboard interaction.
+
+Event details offer a direct link and a single-event `.ics` calendar download.
+Links preserve the published event ID and current filters; an ID missing from
+the current dataset shows an unavailable message. If clipboard access fails,
+a selected text field lets visitors copy the link manually. Calendar entries
+use `America/New_York` for known local times. Unknown times become explained
+all-day date reminders; missing or unreliable end times do not acquire an
+invented duration. Downloads include the real dataset update date, with stale
+or unverified warnings beside the save action.
+
+The Seasonal Guide and 413 dashboard describe historical podcast evidence,
+including the actual generation date and coverage represented in published
+JSON. They show distinct loading, empty, and unavailable states with retry
+controls. The dashboard's town selector and text totals remain usable when
+optional map/chart libraries or tiles fail.
+
 ---
 
 ## Run the pipeline manually
