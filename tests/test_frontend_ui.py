@@ -146,6 +146,9 @@ def test_calendar_geometry_today_pills_and_day_toggle(app_page):
     expect(app_page.locator(".cal-month-label")).to_have_text("August 2026")
     expect(app_page.locator('.cal-day[data-date="2026-08-15"]')).to_have_class("cal-day today")
     expect(app_page.locator(".cal-days > .cal-day")).to_have_count(42)
+    assert app_page.locator('.cal-day.today .cal-day-select').evaluate(
+        "element => getComputedStyle(element).color"
+    ) == "rgb(255, 255, 255)"
 
     multi = app_page.locator('.cal-day[data-date="2026-08-10"]')
     expect(multi.locator(".cal-pill")).to_have_count(3)
@@ -157,7 +160,7 @@ def test_calendar_geometry_today_pills_and_day_toggle(app_page):
     app_page.locator('.cal-day[data-date="2026-08-10"] .cal-day-num').click()
     expect(app_page.locator(".cal-day-detail")).to_have_count(0)
 
-    app_page.locator('.cal-day[data-date="2026-08-11"] .cal-day-num').click()
+    expect(app_page.locator('.cal-day[data-date="2026-08-11"] .cal-day-select')).to_be_disabled()
     app_page.locator(".cal-day.other-month").first.click()
     expect(app_page.locator(".cal-day-detail")).to_have_count(0)
     expect(app_page.locator("#modal-overlay")).to_have_class("modal-overlay hidden")
@@ -294,6 +297,7 @@ def test_no_results_per_view(app_page):
 
 
 def test_representative_screenshots(app_page, tmp_path):
+    app_page.emulate_media(reduced_motion="reduce")
     all_published_dates(app_page)
     output = Path(tmp_path)
     switch_view(app_page, "cards")
@@ -442,6 +446,7 @@ def test_discovery_mobile_controls_and_only_published_requests(app_page, tmp_pat
     requests = []
     app_page.on("request", lambda request: requests.append(request.url))
     app_page.set_viewport_size({"width": 390, "height": 844})
+    app_page.locator("#filters-toggle").click()
     for choice in ("today", "week", "weekend", "all"):
         app_page.locator(f'[data-dates="{choice}"]').click()
     app_page.locator("#search").fill("springfield")
@@ -449,7 +454,6 @@ def test_discovery_mobile_controls_and_only_published_requests(app_page, tmp_pat
     app_page.screenshot(path=tmp_path / "discovery-mobile.png", full_page=True)
     assert app_page.evaluate("document.documentElement.scrollWidth <= innerWidth")
     assert requests == []
-
 
 
 def test_calendar_selected_day_url_restores_panel(app_page):
@@ -462,3 +466,248 @@ def test_calendar_selected_day_url_restores_panel(app_page):
     expect(app_page.locator(".cal-day-detail .list-item")).to_have_count(5)
     app_page.go_back()
     expect(app_page.locator(".cal-day-detail")).to_have_count(0)
+
+
+@pytest.mark.parametrize("view", ["list", "cards", "calendar"])
+def test_modal_focus_trap_background_inert_and_opener_return(app_page, view):
+    all_published_dates(app_page)
+    switch_view(app_page, view)
+    if view == "calendar":
+        opener = app_page.locator('.cal-day[data-date="2026-08-05"] .cal-day-select')
+    else:
+        opener = app_page.locator(f'.{"list-item" if view == "list" else "card"}[data-id="single"]')
+    opener.focus()
+    app_page.keyboard.press("Enter")
+    expect(app_page.get_by_role("dialog", name="Solo Concert")).to_be_visible()
+    expect(app_page.locator("#modal-close")).to_be_focused()
+    assert app_page.locator("header").evaluate("element => element.inert")
+    assert app_page.locator("#main-content").evaluate("element => element.inert")
+    app_page.keyboard.press("Shift+Tab")
+    expect(app_page.locator(".modal-link")).to_be_focused()
+    app_page.keyboard.press("Tab")
+    expect(app_page.locator("#modal-close")).to_be_focused()
+    app_page.locator("#search").evaluate("element => element.focus()")
+    expect(app_page.locator("#modal-close")).to_be_focused()
+    app_page.keyboard.press("Escape")
+    expect(opener).to_be_focused()
+    assert not app_page.locator("header").evaluate("element => element.inert")
+    assert not app_page.locator("#main-content").evaluate("element => element.inert")
+
+
+def test_keyboard_filtering_calendar_selection_and_view_state(app_page):
+    app_page.locator('[data-dates="all"]').focus()
+    app_page.keyboard.press("Enter")
+    app_page.locator("#search").focus()
+    app_page.keyboard.type("jazz")
+    expect(app_page.locator("#result-count")).to_have_text("2 events")
+    expect(
+        app_page.get_by_role("searchbox", name="Search events, venues, and towns")
+    ).to_have_value("jazz")
+    calendar_view = app_page.get_by_role("button", name="Calendar view")
+    calendar_view.focus()
+    app_page.keyboard.press("Space")
+    expect(calendar_view).to_have_attribute("aria-pressed", "true")
+    expect(app_page.get_by_role("button", name="List view")).to_have_attribute(
+        "aria-pressed", "false"
+    )
+    day = app_page.locator('.cal-day[data-date="2026-08-10"] .cal-day-select')
+    day.focus()
+    app_page.keyboard.press("Enter")
+    expect(app_page.locator(".cal-day-detail .list-item")).to_have_count(2)
+    expect(day).to_be_focused()
+    expect(day).to_have_attribute("aria-expanded", "true")
+    app_page.keyboard.press("Space")
+    expect(app_page.locator(".cal-day-detail")).to_have_count(0)
+    day.focus()
+    app_page.keyboard.press("Tab")
+    expect(app_page.locator('.cal-pill[data-id="multi-morning"]')).to_be_focused()
+    app_page.keyboard.press("Enter")
+    expect(modal_title(app_page)).to_have_text("Morning Jazz")
+    app_page.keyboard.press("Escape")
+    expect(app_page.locator('.cal-pill[data-id="multi-morning"]')).to_be_focused()
+    app_page.locator("#cal-next").focus()
+    app_page.keyboard.press("Enter")
+    expect(app_page.locator("#cal-next")).to_be_focused()
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "javascript:window.__injected=1",
+        "data:text/html,bad",
+        "file:///tmp/bad",
+        "https://.",
+        "https://..",
+        "https://@example.test/event",
+        "https:////example.test/event",
+        "https://%65xample.test/event",
+        "//example.test/path",
+        "/relative",
+        "https://user:pass@example.test/event",
+        "https://example.test\\bad",
+        "https://example.test:invalid/event",
+        "https://example.test/with space",
+        "https://example.test/\npath",
+    ],
+)
+def test_unsafe_published_links_images_and_attributes_are_inert(
+    app_page, frontend_server, sample_events, url
+):
+    dangerous = '<img src=x onerror="window.__injected=1">'
+    event = {
+        **sample_events[0],
+        "date": "2026-08-16",
+        "id": 'bad" autofocus onfocus="window.__injected=1',
+        "title": dangerous,
+        "time": dangerous,
+        "category": dangerous,
+        "url": url,
+        "image_url": url,
+    }
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": "2026-08-14", "events": [event]}),
+    )
+    app_page.reload()
+    expect(app_page.locator(".list-item-title")).to_have_text(dangerous)
+    expect(app_page.locator(".list-item-time")).to_have_text(dangerous)
+    assert app_page.locator("[onerror], [onfocus], [autofocus], iframe").count() == 0
+    switch_view(app_page, "cards")
+    expect(app_page.locator(".card-img img")).to_have_count(0)
+    app_page.locator(".card").click()
+    expect(modal_title(app_page)).to_have_text(dangerous)
+    expect(app_page.locator(".modal-link")).to_have_count(0)
+    app_page.keyboard.press("Tab")
+    expect(app_page.locator("#modal-close")).to_be_focused()
+    app_page.keyboard.press("Escape")
+    expect(app_page.locator(".card")).to_be_focused()
+    switch_view(app_page, "calendar")
+    app_page.locator(".cal-pill").focus()
+    app_page.keyboard.press("Enter")
+    expect(modal_title(app_page)).to_have_text(dangerous)
+    assert app_page.evaluate("window.__injected || 0") == 0
+    assert app_page.locator("[onerror], [onfocus], [autofocus], iframe").count() == 0
+
+
+@pytest.mark.parametrize(
+    "url", ["http://example.test/event", " HTTPS://example.test/event?x=1&y=2 "]
+)
+def test_safe_published_links_and_images_remain_usable(
+    app_page, frontend_server, sample_events, url
+):
+    event = {**sample_events[0], "date": "2026-08-16", "url": url, "image_url": url}
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": "2026-08-14", "events": [event]}),
+    )
+    app_page.reload()
+    switch_view(app_page, "cards")
+    expect(app_page.locator(".card-img img")).to_have_count(1)
+    app_page.locator(".card").click()
+    expect(app_page.locator(".modal-link")).to_have_attribute(
+        "href", url.strip().replace("HTTPS:", "https:")
+    )
+
+
+def test_mobile_filter_disclosure_summary_and_status(
+    app_page, frontend_server, sample_events, tmp_path
+):
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": "2026-07-03", "events": sample_events}),
+    )
+    app_page.reload()
+    app_page.set_viewport_size({"width": 390, "height": 844})
+    expect(app_page.locator("#filter-options")).to_be_hidden()
+    expect(app_page.locator("#filter-summary")).to_have_text("Upcoming")
+    expect(app_page.locator("#data-warning")).to_be_visible()
+    toggle = app_page.get_by_role("button", name="Filters", exact=True)
+    toggle.focus()
+    app_page.keyboard.press("Enter")
+    expect(toggle).to_have_attribute("aria-expanded", "true")
+    app_page.locator('[data-dates="all"]').focus()
+    app_page.keyboard.press("Enter")
+    app_page.locator("#town-filter").select_option("Amherst")
+    toggle.focus()
+    app_page.keyboard.press("Space")
+    expect(app_page.locator("#filter-options")).to_be_hidden()
+    expect(app_page.locator("#filter-summary")).to_have_text("All published dates · Amherst")
+    expect(app_page.locator("#data-warning")).to_be_visible()
+    assert app_page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    app_page.screenshot(path=tmp_path / "access-mobile-stale-collapsed.png", full_page=True)
+    toggle.click()
+    app_page.screenshot(path=tmp_path / "access-mobile-stale-expanded.png", full_page=True)
+    app_page.locator('.list-item[data-id="single"]').click()
+    app_page.screenshot(path=tmp_path / "access-mobile-modal.png")
+
+
+def test_zoom_reduced_motion_and_focus_indicator(app_page, tmp_path):
+    app_page.set_viewport_size({"width": 640, "height": 450})
+    app_page.emulate_media(reduced_motion="reduce")
+    app_page.locator("#search").focus()
+    style = app_page.locator("#search").evaluate(
+        "element => ({outline: getComputedStyle(element).outlineStyle, "
+        "width: getComputedStyle(element).outlineWidth})"
+    )
+    assert style == {"outline": "solid", "width": "3px"}
+    assert app_page.evaluate("getComputedStyle(document.documentElement).scrollBehavior") == "auto"
+    assert (
+        app_page.locator(".view-btn").first.evaluate(
+            "element => getComputedStyle(element).transitionDuration"
+        )
+        == "0s"
+    )
+    assert app_page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    app_page.screenshot(path=tmp_path / "access-200-percent-equivalent.png", full_page=True)
+
+
+def test_small_text_contrast_on_main_surfaces(app_page, frontend_server, sample_events):
+    categories = [
+        "music",
+        "arts",
+        "film",
+        "comedy",
+        "community",
+        "academia",
+        "family",
+        "food",
+        "outdoor",
+        "festival",
+    ]
+    events = [
+        {**sample_events[0], "id": category, "date": "2026-08-16", "category": category}
+        for category in categories
+    ]
+    app_page.route(
+        f"{frontend_server}{PROJECT_PREFIX}/data/events.json",
+        lambda route: route.fulfill(json={"generated": "2026-08-14", "events": events}),
+    )
+    app_page.reload()
+    switch_view(app_page, "cards")
+    colors = app_page.locator(".badge").evaluate_all(
+        """elements => elements.map(element => ({
+          text: getComputedStyle(element).color,
+          background: getComputedStyle(element).backgroundColor
+        }))"""
+    )
+
+    def components(color):
+        return [float(value) for value in color.split("(", 1)[1].rstrip(")").split(",")]
+
+    def luminance(rgb):
+        values = [value / 255 for value in rgb]
+        linear = [
+            value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+            for value in values
+        ]
+        return sum(value * weight for value, weight in zip(linear, [0.2126, 0.7152, 0.0722]))
+
+    for color in colors:
+        foreground = components(color["text"])
+        background = components(color["background"])
+        if len(background) == 4:
+            background = [
+                value * background[3] + 255 * (1 - background[3]) for value in background[:3]
+            ]
+        lighter, darker = sorted([luminance(foreground), luminance(background)], reverse=True)
+        assert (lighter + 0.05) / (darker + 0.05) >= 4.5, color
