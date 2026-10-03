@@ -25,7 +25,7 @@ from typing import NamedTuple, Optional
 from json_storage import JsonStorageError, read_json, write_json_atomic
 from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
-from scrapers.claude_scraper import resolve_api_key
+from scrapers.claude_scraper import REJECTION_REASONS, resolve_api_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "docs", "data")
@@ -333,6 +333,13 @@ def run(
             source_report[index].update(
                 count=len(events), status="error" if error else "ok" if events else "zero"
             )
+            # Keep only known reason enums/counts from the already-collected result.
+            counts = getattr(scraper, "last_rejected_counts", {})
+            if isinstance(counts, dict):
+                safe_counts = {reason: count for reason, count in counts.items()
+                               if reason in REJECTION_REASONS and type(count) is int and count > 0}
+                if safe_counts:
+                    source_report[index]["rejected_records"] = safe_counts
         all_events.extend(e.to_dict() for e in events)
         log.info("    └─ found %d events%s", len(events), f"  [ERROR: {error}]" if error else "")
 

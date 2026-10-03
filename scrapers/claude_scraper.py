@@ -13,7 +13,9 @@ import logging
 import os
 import re
 import time
+from datetime import date
 from typing import Optional
+from urllib.parse import urlsplit
 
 from anthropic import Anthropic
 from bs4 import BeautifulSoup
@@ -27,7 +29,8 @@ _client: Optional[Anthropic] = None
 # The one model every extraction, mining, and curation call uses.
 HAIKU_MODEL = "claude-haiku-4-5-20251001"
 
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+REJECTION_REASONS = frozenset({"malformed_record", "missing_title", "invalid_date", "unsafe_url"})
 
 VALID_CATEGORIES = {
     "music", "arts", "film", "comedy", "community",
@@ -165,8 +168,6 @@ def _parse_json_array(raw: str) -> list:
 
 def _extract_events(html: str, venue: str, town: str, source_name: str = "") -> list[dict]:
     """Call Haiku and return parsed list of event dicts."""
-    from datetime import date
-
     today = date.today().isoformat()
     year = str(date.today().year)
 
@@ -179,36 +180,106 @@ def _extract_events(html: str, venue: str, town: str, source_name: str = "") -> 
     return _parse_json_array(raw)
 
 
-def _dicts_to_events(dicts: list[dict], source_name: str, venue: str, town: str) -> list[Event]:
-    """Convert raw dicts from Haiku into validated Event objects."""
+def _optional_text(value) -> str:
+    return value if isinstance(value, str) else ""
+
+
+def _normalize_optional_time(value) -> str:
+    """Keep only a supplied, unambiguous clock time; unknown remains empty."""
+    raw = _optional_text(value).strip().upper()
+    twelve = re.fullmatch(r"([0-9]{1,2})(?::([0-5][0-9]))?\s*(AM|PM)", raw)
+    if twelve:
+        hour, minute, period = twelve.groups()
+        if 1 <= int(hour) <= 12:
+            return f"{int(hour)}:{minute or '00'} {period}"
+    twenty_four = re.fullmatch(r"([0-9]{1,2}):([0-5][0-9])(?::[0-5][0-9])?", raw)
+    if twenty_four:
+        hour, minute = twenty_four.groups()
+        if 0 <= int(hour) <= 23:
+            period = "AM" if int(hour) < 12 else "PM"
+            return f"{int(hour) % 12 or 12}:{minute} {period}"
+    return ""
+
+
+def _safe_event_url(value) -> Optional[str]:
+    """Accept optional absolute HTTP(S) links with no credentials or controls."""
+    if value is None or value == "":
+        return ""
+    if not isinstance(value, str):
+        return None
+    raw = value.strip()
+    if not raw:
+        return ""
+    if re.search(r"[\x00-\x1f\x7f\\]", raw):
+        return None
+    try:
+        parsed = urlsplit(raw)
+        if (parsed.scheme.lower() not in {"http", "https"} or not parsed.hostname
+                or not parsed.hostname.strip(".")
+                or re.search(r'[\s<>"{}|^%]', parsed.hostname)
+                or parsed.username is not None or parsed.password is not None):
+            return None
+        if parsed.netloc.startswith("[") and not re.fullmatch(
+            r"\[[^\]]+\](?::[0-9]+)?", parsed.netloc
+        ):
+            return None
+        # Access validates malformed/out-of-range ports without making a request.
+        parsed.port
+    except ValueError:
+        return None
+    return raw
+
+
+def _dicts_to_events(
+    dicts: list[dict], source_name: str, venue: str, town: str, *,
+    rejected_counts=None, require_valid=False,
+) -> list[Event]:
+    """Convert extracted rows, preserving useful partial results and safe counts.
+
+    Optional unparseable times become unknown, never invented midnight. Scraper
+    callers require a productive nonempty extraction; standalone conversion can
+    still inspect rejected rows without raising.
+    """
+    if not isinstance(dicts, list):
+        raise ValueError("Event extraction must be a JSON array")
+    rejected_counts = rejected_counts if rejected_counts is not None else {}
     events = []
-    for d in dicts:
-        try:
-            title = str(d.get("title", "")).strip()
-            date_str = str(d.get("date", "")).strip()
-            if not title or not DATE_RE.match(date_str):
-                continue
+    for record in dicts:
+        reason = None
+        if not isinstance(record, dict):
+            reason = "malformed_record"
+        else:
+            title = _optional_text(record.get("title")).strip()
+            date_str = _optional_text(record.get("date")).strip()
+            if not title:
+                reason = "missing_title"
+            else:
+                try:
+                    if not DATE_RE.fullmatch(date_str):
+                        raise ValueError
+                    date.fromisoformat(date_str)
+                except ValueError:
+                    reason = "invalid_date"
+            url = _safe_event_url(record.get("url"))
+            if reason is None and url is None:
+                reason = "unsafe_url"
+        if reason:
+            rejected_counts[reason] = rejected_counts.get(reason, 0) + 1
+            continue
 
-            category = str(d.get("category", "")).strip().lower()
-            if category not in VALID_CATEGORIES:
-                category = "community"
-
-            events.append(Event(
-                title=title,
-                date=date_str,
-                time=str(d.get("time", "")),
-                end_time=str(d.get("end_time", "")),
-                venue=venue,
-                address="",
-                town=town,
-                description=str(d.get("description", ""))[:500],
-                url=str(d.get("url", "")),
-                image_url=None,
-                category=category,
-                source=source_name,
-            ))
-        except Exception as e:
-            log.warning("[%s] Skipping malformed event dict: %s", source_name, e)
+        category = _optional_text(record.get("category")).strip().lower()
+        if category not in VALID_CATEGORIES:
+            category = "community"
+        events.append(Event(
+            title=title, date=date_str,
+            time=_normalize_optional_time(record.get("time")),
+            end_time=_normalize_optional_time(record.get("end_time")),
+            venue=venue, address="", town=town,
+            description=_optional_text(record.get("description"))[:500],
+            url=url, image_url=None, category=category, source=source_name,
+        ))
+    if require_valid and dicts and not events:
+        raise ValueError("Event extraction contained no valid records")
     return events
 
 
@@ -228,9 +299,13 @@ class ClaudeHTMLScraper(BaseScraper):
         return self.get(self.url).text
 
     def _fetch(self) -> list[Event]:
+        self.last_rejected_counts = {}
         cleaned = _clean_html(self._get_html())
         dicts = _extract_events(cleaned, self.venue, self.town, self.name)
-        events = _dicts_to_events(dicts, self.name, self.venue, self.town)
+        events = _dicts_to_events(
+            dicts, self.name, self.venue, self.town,
+            rejected_counts=self.last_rejected_counts, require_valid=True,
+        )
 
         log.debug("[%s] Found %d events", self.name, len(events))
         return events
