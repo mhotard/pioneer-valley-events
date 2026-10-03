@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Fabulous 413 — by the numbers</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <style>
     :root {
       --bg: #FAF7F2; --surface: #FFFFFF; --border: #E5DFD6;
@@ -35,7 +34,7 @@
     .panel h2 { font-size: 1.05rem; margin-bottom: 2px; }
     .panel .sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
     #map { height: 420px; border-radius: 8px; }
-    .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
                gap: 1.25rem; }
     .kind-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem;
                 margin-bottom: 6px; }
@@ -73,6 +72,29 @@
     footer { max-width: 960px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem;
              font-size: 0.8rem; color: var(--muted); }
     footer a { color: var(--accent-dark); }
+    .data-status { margin-bottom: 1.25rem; background: #fff8e9;
+      border: 1px solid #b9a88a; border-radius: 8px; padding: 1rem; }
+    .data-status p + p { margin-top: .5rem; }
+    .page-nav { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .75rem; }
+    .table-scroll { overflow-x: auto; }
+    .table-hint { display: none; }
+    #town-filter { max-width: 100%; min-height: 44px; padding: .5rem; }
+    .fallback { font-size: .85rem; margin: .5rem 0; color: #57534e; }
+    .chart-summary { font-size: .85rem; }
+    .chart-summary summary { cursor: pointer; padding: .5rem 0; }
+    .chart-summary ul { padding-left: 1.25rem; }
+    [hidden] { display: none !important; }
+    button, input, select { min-height: 44px; }
+    :focus-visible { outline: 3px solid #993C1D; outline-offset: 3px; }
+    @media (max-width: 600px) {
+      main { padding: 1rem; }
+      .panel { padding: 1rem; }
+      .filters input[type=search] { min-width: 0; width: 100%; flex-basis: 100%; }
+      .board .row { overflow-wrap: anywhere; }
+      table { min-width: 580px; }
+      .table-hint { display: block; }
+      #map { height: 300px; }
+    }
   </style>
 </head>
 <body>
@@ -80,20 +102,35 @@
 <header>
   <div class="wrap">
     <h1>The Fabulous <span>413</span> — by the numbers</h1>
-    <p>Every place, event, restaurant, and person covered by
+    <p>Explore places, events, restaurants, and people covered by
        <a href="https://www.nepm.org/podcast/the-fabulous-413" target="_blank" rel="noopener">NEPM's The Fabulous 413</a>
-       since February 2023 · part of
+       in historical podcast coverage · part of
        <a href="../index.html">Pioneer Valley Events</a></p>
+    <nav class="page-nav" aria-label="Site pages">
+      <a href="../index.html">Events</a>
+      <a href="../seasonal.html">Seasonal Guide</a>
+      <a href="./" aria-current="page">413 dashboard</a>
+    </nav>
   </div>
 </header>
 
 <main>
+  <div class="data-status" role="status" aria-live="polite">
+    <p id="data-status">Loading the published 413 dataset…</p>
+    <p id="data-coverage"></p>
+    <button class="more-btn" id="data-retry" hidden>Retry loading dashboard</button>
+  </div>
+  <p id="data-empty" hidden>No podcast mentions are in this published dataset yet.</p>
+  <div id="dashboard-content" hidden aria-busy="true">
   <div class="stats" id="stats"></div>
 
   <div class="panel">
     <h2>Where the 413 gets covered</h2>
-    <div class="sub">Bubble size = mentions. Click a town to filter everything below.</div>
-    <div id="map"></div>
+    <div class="sub">Bubble size = historical mentions. Choose a town to filter the explorer and hall of fame.</div>
+    <label for="town-filter">Browse by town</label>
+    <select id="town-filter"><option value="">All towns</option></select>
+    <p class="fallback" id="map-status">The town selector works without a map.</p>
+    <div id="map" hidden aria-label="Map of historical mentions by town"></div>
   </div>
 
   <div class="two-col">
@@ -105,14 +142,18 @@
     <div class="panel">
       <h2>The rhythm of the year</h2>
       <div class="sub">Mentions by calendar month, all years combined</div>
-      <div class="chart-box"><canvas id="monthChart"></canvas></div>
+      <p class="fallback" id="month-status">Chart unavailable. Read the month totals below.</p>
+      <div class="chart-box" id="month-box" hidden><canvas id="monthChart"></canvas></div>
+      <details class="chart-summary" open><summary>Monthly mention totals</summary><ul id="month-totals"></ul></details>
     </div>
   </div>
 
   <div class="panel">
     <h2>Coverage over time</h2>
     <div class="sub">Mentions per quarter, by kind</div>
-    <div class="chart-box"><canvas id="timelineChart"></canvas></div>
+    <p class="fallback" id="timeline-status">Chart unavailable. Read the quarter totals below.</p>
+    <div class="chart-box" id="timeline-box" hidden><canvas id="timelineChart"></canvas></div>
+    <details class="chart-summary" open><summary>Quarterly mention totals</summary><ul id="quarter-totals"></ul></details>
   </div>
 
   <div class="panel">
@@ -124,8 +165,8 @@
     <h2>Everything explorer</h2>
     <div class="sub" id="explorer-sub"></div>
     <div class="filters">
-      <input type="search" id="q" placeholder="Search everything — try Thunderdome, maple, sylvester...">
-      <select id="kind-filter">
+      <input type="search" id="q" aria-label="Search historical podcast mentions" placeholder="Search everything — try Thunderdome, maple, sylvester...">
+      <select id="kind-filter" aria-label="Filter by kind">
         <option value="">All kinds</option>
         <option value="event">Events</option>
         <option value="venue">Venues</option>
@@ -138,23 +179,25 @@
       <span class="chip" id="town-chip"><span id="town-chip-name"></span>
         <button id="town-clear" aria-label="Clear town filter">&times;</button></span>
     </div>
-    <table>
+    <p class="fallback table-hint">Scroll the table sideways to read all columns.</p>
+    <div class="table-scroll" role="region" tabindex="0" aria-label="Historical mentions table"><table>
       <thead><tr><th>Name</th><th>Kind</th><th>Town</th><th>Mentions</th><th>Episodes</th></tr></thead>
       <tbody id="rows"></tbody>
-    </table>
+    </table></div>
+    <p id="explorer-empty" hidden>No historical mentions match these filters.</p>
     <button class="more-btn" id="more" style="display:none">Show more</button>
+  </div>
   </div>
 </main>
 
 <footer>
-  Mined weekly from the show's public episode descriptions ·
+  Based on historical episode descriptions · updates are scheduled weekly ·
   <a href="../seasonal.html">Seasonal guide of annual events</a> ·
   <a href="https://github.com/mhotard/pioneer-valley-events" target="_blank" rel="noopener">How this is built</a>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
+<script type="module">
+import { loadPublished, validDashboard, publicationStatus, coverageLabel, safeURL } from '../secondary-data.js';
 const KIND_COLORS = {
   event: '#D85A30', venue: '#7F77DD', restaurant: '#BA7517', place: '#1D9E75',
   business: '#378ADD', person: '#D4537E', org: '#888780',
@@ -162,6 +205,9 @@ const KIND_COLORS = {
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const state = { q: '', kind: '', town: '', shown: 50 };
 let DATA = null;
+let map = null;
+const charts = [];
+let librariesStarted = false;
 
 function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
@@ -179,17 +225,23 @@ function renderStats() {
 }
 
 function renderMap() {
-  const map = L.map('map', { scrollWheelZoom: false }).setView([42.38, -72.75], 9);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  if (!window.L || !DATA || !DATA.index.length) return;
+  if (map) { map.remove(); map = null; }
+  document.getElementById('map').hidden = false;
+  map = window.L.map('map', { scrollWheelZoom: false }).setView([42.38, -72.75], 9);
+  window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 14,
+  }).on('tileerror', () => {
+    document.getElementById('map-status').textContent = 'Map tiles could not be loaded. Use the town selector to browse every represented town.';
   }).addTo(map);
-  const max = Math.max(...DATA.towns.map(t => t.count));
+  document.getElementById('map-status').textContent = 'Use the map or town selector to explore historical mentions.';
+  const max = Math.max(1, ...DATA.towns.map(t => t.count));
   DATA.towns.forEach(t => {
     const r = 6 + 30 * Math.sqrt(t.count / max);
-    const c = L.circleMarker([t.lat, t.lng], {
+    const c = window.L.circleMarker([t.lat, t.lng], {
       radius: r, color: '#993C1D', weight: 1, fillColor: '#D85A30', fillOpacity: 0.55,
     }).addTo(map);
-    c.bindTooltip(`${t.town}: ${t.count} mentions`);
+    c.bindTooltip(`${esc(t.town)}: ${t.count} mentions`);
     c.on('click', () => setTown(t.town));
   });
 }
@@ -197,6 +249,7 @@ function renderMap() {
 function setTown(town) {
   state.town = (state.town === town) ? '' : town;
   state.shown = 50;
+  document.getElementById('town-filter').value = state.town;
   const chip = document.getElementById('town-chip');
   chip.style.display = state.town ? 'inline-flex' : 'none';
   document.getElementById('town-chip-name').textContent = state.town;
@@ -207,27 +260,32 @@ function setTown(town) {
 }
 
 function renderKinds() {
-  const max = Math.max(...Object.values(DATA.kinds));
+  const max = Math.max(1, ...Object.values(DATA.kinds));
   document.getElementById('kinds').innerHTML = Object.entries(DATA.kinds).map(([k, v]) => `
-    <div class="kind-row"><span class="label">${k}</span>
+    <div class="kind-row"><span class="label">${esc(k)}</span>
       <div class="bar" style="width:${Math.round(76 * v / max)}%;background:${KIND_COLORS[k] || '#888'}"></div>
       <span class="val">${v}</span></div>`).join('');
 }
 
 function renderMonthChart() {
-  new Chart(document.getElementById('monthChart'), {
+  if (!window.Chart) return;
+  document.getElementById('month-box').hidden = false;
+  charts.push(new window.Chart(document.getElementById('monthChart'), {
     type: 'bar',
     data: { labels: MONTHS,
       datasets: [{ data: Array.from({length: 12}, (_, i) => DATA.months[String(i + 1)] || 0),
         backgroundColor: '#7F77DD', borderRadius: 4 }] },
     options: { maintainAspectRatio: false, plugins: { legend: { display: false } },
       scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } },
-  });
+  }));
+  document.getElementById('month-status').hidden = true;
 }
 
 function renderTimeline() {
   const tl = DATA.timeline;
-  new Chart(document.getElementById('timelineChart'), {
+  if (!window.Chart) return;
+  document.getElementById('timeline-box').hidden = false;
+  charts.push(new window.Chart(document.getElementById('timelineChart'), {
     type: 'bar',
     data: { labels: tl.quarters,
       datasets: Object.entries(tl.series).map(([kind, vals]) => ({
@@ -237,7 +295,8 @@ function renderTimeline() {
       plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
       scales: { x: { stacked: true, grid: { display: false } },
                 y: { stacked: true, beginAtZero: true } } },
-  });
+  }));
+  document.getElementById('timeline-status').hidden = true;
 }
 
 function filteredIndex() {
@@ -272,34 +331,113 @@ function renderRows() {
   const slice = rows.slice(0, state.shown);
   document.getElementById('rows').innerHTML = slice.map(r => `
     <tr>
-      <td>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}
+      <td>${safeURL(r.url) ? `<a href="${esc(safeURL(r.url))}" target="_blank" rel="noopener">${esc(r.name)}</a>` : esc(r.name)}
         ${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}</td>
-      <td><span class="pill" style="background:${KIND_COLORS[r.kind] || '#888'}">${r.kind}</span></td>
+      <td><span class="pill" style="background:${KIND_COLORS[r.kind] || '#888'}">${esc(r.kind)}</span></td>
       <td>${esc(r.town)}</td>
       <td>${r.count}</td>
-      <td>${r.episodes.map(e =>
-        `<a href="${esc(e.url)}" target="_blank" rel="noopener">${e.date.slice(0, 7)}</a>`).join(' ')}</td>
+      <td>${r.episodes.map(e => safeURL(e.url)
+        ? `<a href="${esc(safeURL(e.url))}" target="_blank" rel="noopener">${esc(e.date.slice(0, 7))}</a>`
+        : esc(e.date.slice(0, 7))).join(' ')}</td>
     </tr>`).join('');
+  document.getElementById('explorer-empty').hidden = rows.length !== 0;
   document.getElementById('more').style.display = rows.length > state.shown ? 'block' : 'none';
 }
 
-async function boot() {
-  const res = await fetch('data.json');
-  DATA = await res.json();
-  renderStats(); renderMap(); renderKinds(); renderMonthChart();
-  renderTimeline(); renderBoards(); renderRows();
-
-  document.getElementById('q').addEventListener('input', e => {
-    state.q = e.target.value.trim(); state.shown = 50; renderRows();
-  });
-  document.getElementById('kind-filter').addEventListener('change', e => {
-    state.kind = e.target.value; state.shown = 50; renderRows();
-  });
-  document.getElementById('town-clear').addEventListener('click', () => setTown(state.town));
-  document.getElementById('more').addEventListener('click', () => {
-    state.shown += 100; renderRows();
-  });
+function renderTextFallbacks() {
+  const towns = [...new Set(DATA.index.map(row => row.town).filter(Boolean))].sort();
+  document.getElementById('town-filter').innerHTML = '<option value="">All towns</option>'
+    + towns.map(town => `<option value="${esc(town)}">${esc(town)}</option>`).join('');
+  document.getElementById('month-totals').innerHTML = MONTHS.map((month, i) =>
+    `<li>${month}: ${DATA.months[String(i + 1)] || 0} mentions</li>`).join('');
+  document.getElementById('quarter-totals').innerHTML = DATA.timeline.quarters.map((quarter, i) =>
+    `<li>${esc(quarter)}: ${Object.values(DATA.timeline.series).reduce((sum, series) => sum + series[i], 0)} mentions</li>`).join('');
 }
+
+function optionalMap() {
+  try { renderMap(); } catch {
+    if (map) { try { map.remove(); } catch { /* The text selector is independent. */ } map = null; }
+    document.getElementById('map').hidden = true;
+    document.getElementById('map-status').textContent = 'Map unavailable. Use the town selector to browse historical mentions.';
+  }
+}
+
+function optionalCharts() {
+  charts.splice(0).forEach(chart => {
+    try { chart.destroy(); } catch { /* Totals remain available without charts. */ }
+  });
+  try { renderMonthChart(); } catch {
+    document.getElementById('month-box').hidden = true;
+    document.getElementById('month-status').hidden = false;
+  }
+  try { renderTimeline(); } catch {
+    document.getElementById('timeline-box').hidden = true;
+    document.getElementById('timeline-status').hidden = false;
+  }
+}
+
+function loadLibraries() {
+  if (librariesStarted) return;
+  librariesStarted = true;
+  const stylesheet = document.createElement('link');
+  stylesheet.rel = 'stylesheet';
+  stylesheet.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+  document.head.append(stylesheet);
+  for (const [src, enhance] of [
+    ['https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js', optionalMap],
+    ['https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js', optionalCharts],
+  ]) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = enhance;
+    // Default text fallbacks remain usable when a CDN request fails.
+    script.onerror = () => {};
+    document.head.append(script);
+  }
+}
+
+async function boot() {
+  const content = document.getElementById('dashboard-content');
+  const status = document.getElementById('data-status');
+  const retry = document.getElementById('data-retry');
+  retry.hidden = true;
+  content.hidden = true;
+  content.setAttribute('aria-busy', 'true');
+  document.getElementById('data-empty').hidden = true;
+  document.getElementById('data-coverage').textContent = '';
+  status.textContent = 'Loading the published 413 dataset…';
+  try {
+    DATA = await loadPublished('data.json', validDashboard);
+    Object.assign(state, { q: '', kind: '', town: '', shown: 50 });
+    document.getElementById('q').value = '';
+    document.getElementById('kind-filter').value = '';
+    renderStats(); renderKinds(); renderTextFallbacks(); setTown('');
+    status.textContent = publicationStatus(DATA.generated);
+    document.getElementById('data-coverage').textContent = coverageLabel(
+      DATA.index.flatMap(row => [row.first, row.last, ...row.episodes.map(ep => ep.date)]),
+      'Coverage represented in this dataset');
+    content.hidden = false;
+    document.getElementById('data-empty').hidden = DATA.index.length !== 0;
+    optionalMap(); optionalCharts(); loadLibraries();
+  } catch {
+    DATA = null;
+    status.textContent = 'The published 413 dataset could not be loaded. Try again, or browse Events and the Seasonal Guide.';
+    retry.hidden = false;
+  } finally { content.setAttribute('aria-busy', 'false'); }
+}
+
+document.getElementById('data-retry').addEventListener('click', boot);
+document.getElementById('q').addEventListener('input', e => {
+  state.q = e.target.value.trim(); state.shown = 50; renderRows();
+});
+document.getElementById('kind-filter').addEventListener('change', e => {
+  state.kind = e.target.value; state.shown = 50; renderRows();
+});
+document.getElementById('town-filter').addEventListener('change', e => setTown(e.target.value));
+document.getElementById('town-clear').addEventListener('click', () => setTown(state.town));
+document.getElementById('more').addEventListener('click', () => { state.shown += 100; renderRows(); });
+
 boot();
 </script>
 </body>
