@@ -2,6 +2,7 @@ import {
   browserStateParams, buildCalendarCells, dataFreshness, filterEvents,
   groupEventsByDate, quickDateRange, readBrowserState, regionToday,
 } from './event-data.js';
+import { calendarTiming, createCalendar, safeEventURL, validCalendarDate } from './calendar-export.js';
 
 /* ============================================================
    Pioneer Valley Events — App
@@ -34,10 +35,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupModal();
   setupEventInteractions();
   render();
+  restoreEventFromURL();
   window.addEventListener('popstate', () => {
-    closeModal();
     restoreBrowserState();
     render();
+    restoreEventFromURL();
   });
 });
 
@@ -48,6 +50,15 @@ async function loadEvents() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (!data || !Array.isArray(data.events)) throw new Error('Invalid events payload');
+    const ids = new Set();
+    if (!data.events.every(event => {
+      if (!event || typeof event !== 'object' || Array.isArray(event)
+          || typeof event.id !== 'string' || !event.id.trim()
+          || typeof event.title !== 'string' || !event.title.trim()
+          || !validCalendarDate(event.date) || ids.has(event.id)) return false;
+      ids.add(event.id);
+      return true;
+    })) throw new Error('Invalid published event records');
     state.events = data.events;
     state.generated = data.generated;
   } catch (e) {
@@ -77,6 +88,7 @@ function updateDataStatus() {
       ? `Event listings are out of date. Last updated ${label}; updates are scheduled weekly. Events may have passed or changed, and newer events may be missing. Confirm details with the event organizer.`
       : '';
   }
+  updateModalDataStatus();
 }
 
 /* ---- Source dropdown (dynamic) ---- */
@@ -476,10 +488,16 @@ function setupEventInteractions(openEvent = openModal) {
    ============================================================ */
 let modalOpener = null;
 let modalBackground = [];
+let activeEventId = null;
+let modalOpenerKey = null;
 
 function setupModal() {
   const overlay = document.getElementById('modal-overlay');
-  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-close').addEventListener('click', () => closeModal());
+  document.getElementById('modal-content').addEventListener('click', async event => {
+    if (event.target.closest('#copy-event-link')) await copyEventLink();
+    if (event.target.closest('#download-event')) downloadEventCalendar();
+  });
   overlay.addEventListener('click', event => { if (event.target === overlay) closeModal(); });
   document.addEventListener('keydown', event => {
     if (overlay.classList.contains('hidden')) return;
@@ -502,12 +520,15 @@ function setupModal() {
   });
 }
 
-function openModal(id, opener = document.activeElement) {
+function openModal(id, opener = document.activeElement, updateURL = true) {
   const e = state.events.find(ev => ev.id === id);
   if (!e) return;
 
   const content = document.getElementById('modal-content');
   const eventURL = safeEventURL(e.url);
+  const timing = calendarTiming(e);
+  activeEventId = id;
+  if (updateURL) setEventURL(id);
   const timeStr = e.time ? (e.end_time ? `${e.time} – ${e.end_time}` : e.time) : 'Time TBD';
 
   content.innerHTML = `
@@ -525,11 +546,27 @@ function openModal(id, opener = document.activeElement) {
       </div>
     </div>
     ${e.description ? `<hr class="modal-divider"><p class="modal-description">${esc(e.description)}</p>` : ''}
-    ${eventURL ? `<a class="modal-link" href="${esc(eventURL)}" target="_blank" rel="noopener">${iconExternal()} More info</a>` : ''}`;
+    ${eventURL ? `<a class="modal-link" href="${esc(eventURL)}" target="_blank" rel="noopener">${iconExternal()} More info</a>` : ''}
+    <div id="modal-data-warning" class="modal-data-warning" role="status" hidden></div>
+    <p class="calendar-note">${esc(timing.error || timing.note)}</p>
+    <div class="event-actions">
+      <button id="copy-event-link" class="clear-btn">Copy event link</button>
+      <button id="download-event" class="calendar-download" ${timing.error ? 'disabled' : ''}>Download calendar (.ics)</button>
+    </div>
+    <p id="event-action-status" class="event-action-status" role="status"></p>
+    <div id="copy-link-fallback" hidden>
+      <label for="event-link-input">Event link — select and copy</label>
+      <input id="event-link-input" type="text" readonly value="${esc(sharedEventURL(id))}">
+    </div>`;
+  updateModalDataStatus();
+  presentModal(opener);
+}
 
+function presentModal(opener) {
   const overlay = document.getElementById('modal-overlay');
   if (overlay.classList.contains('hidden')) {
     modalOpener = opener;
+    modalOpenerKey = { id: opener?.dataset?.id, date: opener?.closest?.('.cal-day')?.dataset.date };
     modalBackground = [...document.body.children].filter(element => element !== overlay && element.tagName !== 'SCRIPT')
       .map(element => ({ element, inert: element.inert }));
     modalBackground.forEach(({ element }) => { element.inert = true; });
@@ -539,16 +576,107 @@ function openModal(id, opener = document.activeElement) {
   document.getElementById('modal-close').focus();
 }
 
-function closeModal() {
+function closeModal(updateURL = true) {
   const overlay = document.getElementById('modal-overlay');
   if (overlay.classList.contains('hidden')) return;
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   modalBackground.forEach(({ element, inert }) => { element.inert = inert; });
   modalBackground = [];
+  if (updateURL) setEventURL(null);
+  activeEventId = null;
+  if (!modalOpener?.isConnected && modalOpenerKey) {
+    modalOpener = [...document.querySelectorAll('[data-id]')].find(element => element.dataset.id === modalOpenerKey.id)
+      || [...document.querySelectorAll('.cal-day[data-date]')].find(element => element.dataset.date === modalOpenerKey.date)?.querySelector('.cal-day-select');
+  }
   if (modalOpener?.isConnected) modalOpener.focus();
   else document.querySelector(`.view-btn[data-view="${state.view}"]`).focus();
   modalOpener = null;
+  modalOpenerKey = null;
+}
+
+function sharedEventURL(id) {
+  const url = new URL(location.href);
+  url.searchParams.set('event', id);
+  return url.href;
+}
+
+function setEventURL(id) {
+  const url = new URL(location.href);
+  if (id === null) url.searchParams.delete('event');
+  else url.searchParams.set('event', id);
+  if (url.href !== location.href) history.pushState(null, '', url.href);
+}
+
+function restoreEventFromURL() {
+  const params = new URLSearchParams(location.search);
+  if (!params.has('event')) { closeModal(false); return; }
+  const id = params.get('event');
+  if (state.events.some(event => event.id === id)) {
+    const opener = [...document.querySelectorAll('#events-container [data-id]')].find(element =>
+      element.dataset.id === id && element.getClientRects().length > 0);
+    openModal(id, opener || document.querySelector(`.view-btn[data-view="${state.view}"]`), false);
+    return;
+  }
+  activeEventId = null;
+  document.getElementById('modal-content').innerHTML = `
+    <h2 id="modal-title" class="modal-title">Event unavailable</h2>
+    <p>${state.loadFailed
+      ? 'The published listings could not be loaded, so this shared event cannot be checked. Please try again later.'
+      : 'This event is no longer in the current published listings. Browse upcoming events or confirm details with the organizer.'}</p>`;
+  presentModal(document.querySelector(`.view-btn[data-view="${state.view}"]`));
+}
+
+function updateModalDataStatus() {
+  const warning = document.getElementById('modal-data-warning');
+  if (!warning) return;
+  const pageWarning = document.getElementById('data-warning');
+  warning.hidden = pageWarning.hidden;
+  warning.textContent = pageWarning.textContent;
+}
+
+async function copyEventLink() {
+  const id = activeEventId;
+  if (id === null) return;
+  const status = document.getElementById('event-action-status');
+  const fallback = document.getElementById('copy-link-fallback');
+  const input = document.getElementById('event-link-input');
+  try {
+    await navigator.clipboard.writeText(sharedEventURL(id));
+    if (activeEventId !== id || !status.isConnected) return;
+    fallback.hidden = true;
+    status.textContent = 'Event link copied.';
+  } catch {
+    if (activeEventId !== id || !status.isConnected) return;
+    fallback.hidden = false;
+    input.value = sharedEventURL(id);
+    status.textContent = 'Select this link and copy it with your keyboard or device menu.';
+    input.focus();
+    input.select();
+    input.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const modal = input.closest('.modal');
+    modal.scrollTop = modal.scrollHeight;
+  }
+}
+
+function downloadEventCalendar() {
+  const event = state.events.find(item => item.id === activeEventId);
+  if (!event) return;
+  const status = document.getElementById('event-action-status');
+  try {
+    const blob = new Blob([createCalendar(event, state.generated)], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `pioneer-valley-event-${event.date}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    status.textContent = 'Calendar file downloaded. Confirm details with the organizer before attending.';
+  } catch {
+    status.textContent = 'A calendar entry could not be made from these published details.';
+  }
 }
 
 /* ============================================================
@@ -571,20 +699,6 @@ function formatDateShort(dateStr) {
 
 function toDateStr(date) {
   return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
-}
-
-// Published historical records need the same link boundary as fresh extraction.
-function safeEventURL(value) {
-  if (typeof value !== 'string') return '';
-  const candidate = value.trim();
-  if (!/^https?:\/\//i.test(candidate) || /[\s\\\u0000-\u001f\u007f]/.test(candidate)) return '';
-  const authority = candidate.match(/^https?:\/\/([^/?#]+)/i)?.[1];
-  if (!authority || /[@<>"{}|^%]/.test(authority)) return '';
-  try {
-    const url = new URL(candidate);
-    return ['http:', 'https:'].includes(url.protocol) && url.hostname.replace(/\./g, '') && !url.username && !url.password
-      ? url.href : '';
-  } catch { return ''; }
 }
 
 function truncate(str, len) {

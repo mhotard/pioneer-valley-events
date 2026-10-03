@@ -146,9 +146,12 @@ def test_calendar_geometry_today_pills_and_day_toggle(app_page):
     expect(app_page.locator(".cal-month-label")).to_have_text("August 2026")
     expect(app_page.locator('.cal-day[data-date="2026-08-15"]')).to_have_class("cal-day today")
     expect(app_page.locator(".cal-days > .cal-day")).to_have_count(42)
-    assert app_page.locator('.cal-day.today .cal-day-select').evaluate(
-        "element => getComputedStyle(element).color"
-    ) == "rgb(255, 255, 255)"
+    assert (
+        app_page.locator(".cal-day.today .cal-day-select").evaluate(
+            "element => getComputedStyle(element).color"
+        )
+        == "rgb(255, 255, 255)"
+    )
 
     multi = app_page.locator('.cal-day[data-date="2026-08-10"]')
     expect(multi.locator(".cal-pill")).to_have_count(3)
@@ -483,7 +486,7 @@ def test_modal_focus_trap_background_inert_and_opener_return(app_page, view):
     assert app_page.locator("header").evaluate("element => element.inert")
     assert app_page.locator("#main-content").evaluate("element => element.inert")
     app_page.keyboard.press("Shift+Tab")
-    expect(app_page.locator(".modal-link")).to_be_focused()
+    expect(app_page.locator("#download-event")).to_be_focused()
     app_page.keyboard.press("Tab")
     expect(app_page.locator("#modal-close")).to_be_focused()
     app_page.locator("#search").evaluate("element => element.focus()")
@@ -577,6 +580,8 @@ def test_unsafe_published_links_images_and_attributes_are_inert(
     app_page.locator(".card").click()
     expect(modal_title(app_page)).to_have_text(dangerous)
     expect(app_page.locator(".modal-link")).to_have_count(0)
+    app_page.keyboard.press("Shift+Tab")
+    expect(app_page.locator("#download-event")).to_be_focused()
     app_page.keyboard.press("Tab")
     expect(app_page.locator("#modal-close")).to_be_focused()
     app_page.keyboard.press("Escape")

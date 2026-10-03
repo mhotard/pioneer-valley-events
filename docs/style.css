@@ -734,3 +734,13 @@ footer {
   html.event-browser-root { scroll-behavior: auto; }
   .event-browser *, .event-browser *::before, .event-browser *::after { transition: none; animation: none; }
 }
+
+/* Event sharing and saving stay inside the accessible details dialog. */
+.event-browser .event-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+.event-browser .calendar-note, .event-browser .event-action-status { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; }
+.event-browser .modal-data-warning { padding: 0.75rem; margin-top: 1rem; border: 1px solid #B45309; border-radius: var(--radius-sm); background: #FFFBEB; color: #78350F; font-size: 0.85rem; }
+.event-browser #copy-link-fallback { margin-top: 0.8rem; font-size: 0.85rem; }
+.event-browser #copy-link-fallback[hidden], .event-browser .modal-data-warning[hidden] { display: none; }
+.event-browser #event-link-input { display: block; width: 100%; padding: 0.6rem; margin-top: 0.4rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; }
+.event-browser .calendar-download { padding: 9px 18px; min-height: 44px; background: var(--primary); color: #fff; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; }
+.event-browser .calendar-download:hover { background: var(--primary-dark); }
