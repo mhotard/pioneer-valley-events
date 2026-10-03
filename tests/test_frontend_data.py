@@ -73,9 +73,7 @@ BLANK_FILTERS = {
     ],
 )
 def test_data_freshness(module_page, frontend_server, generated, today, expected):
-    assert call_module(
-        module_page, frontend_server, "dataFreshness", generated, today
-    ) == expected
+    assert call_module(module_page, frontend_server, "dataFreshness", generated, today) == expected
 
 
 @pytest.mark.parametrize(
@@ -84,7 +82,7 @@ def test_data_freshness(module_page, frontend_server, generated, today, expected
         ("concert", ["title"]),
         ("SCULPTURE", ["description"]),
         ("academy", ["venue"]),
-        ("northampton", []),
+        ("northampton", ["missing"]),
         ("beta", []),
     ],
 )
@@ -289,3 +287,78 @@ def test_calendar_date_strings_match_across_timezones(
         results.append(call_module(page, frontend_server, "buildCalendarCells", 2026, month_index))
         context.close()
     assert results[0] == results[1]
+
+
+@pytest.mark.parametrize(
+    ("choice", "today", "start", "end"),
+    [
+        ("upcoming", "2026-12-31", "2026-12-31", ""),
+        ("today", "2026-12-31", "2026-12-31", "2026-12-31"),
+        ("week", "2026-12-31", "2026-12-31", "2027-01-06"),
+        ("week", "2026-03-07", "2026-03-07", "2026-03-13"),
+        ("week", "2026-10-31", "2026-10-31", "2026-11-06"),
+        ("weekend", "2026-08-14", "2026-08-15", "2026-08-16"),
+        ("weekend", "2026-08-15", "2026-08-15", "2026-08-16"),
+        ("weekend", "2026-08-16", "2026-08-16", "2026-08-16"),
+        ("weekend", "2026-08-17", "2026-08-22", "2026-08-23"),
+        ("weekend", "2026-12-31", "2027-01-02", "2027-01-03"),
+        ("all", "2026-08-15", "", ""),
+    ],
+)
+def test_quick_date_boundaries(module_page, frontend_server, choice, today, start, end):
+    assert call_module(module_page, frontend_server, "quickDateRange", choice, today) == {
+        "dateFrom": start,
+        "dateTo": end,
+    }
+
+
+def test_url_state_roundtrip_and_unknown_values(module_page, frontend_server):
+    choices = {"category": ["music"], "town": ["Amherst"], "source": ["alpha"]}
+    query = (
+        "?dates=custom&from=2026-12-31&to=2027-01-06&q=Jazz+night"
+        "&category=music&town=Amherst&source=alpha&view=calendar&month=2027-01&day=2027-01-02"
+    )
+    state = call_module(
+        module_page, frontend_server, "readBrowserState", query, choices, "2026-08-15"
+    )
+    params = call_module(module_page, frontend_server, "browserStateParams", state)
+    assert (
+        call_module(module_page, frontend_server, "readBrowserState", params, choices, "2026-08-15")
+        == state
+    )
+    invalid = call_module(
+        module_page,
+        frontend_server,
+        "readBrowserState",
+        "?dates=bogus&view=bogus&category=bogus&town=bogus&source=bogus&from=2026-02-30&month=2026-13&day=bad&unknown=ignored",
+        choices,
+        "2026-08-15",
+    )
+    assert invalid["filters"] == {**BLANK_FILTERS, "dateFrom": "2026-08-15"}
+    assert invalid["view"] == "list"
+    assert invalid["calendarMonth"] == "2026-08-01"
+    custom = call_module(
+        module_page,
+        frontend_server,
+        "readBrowserState",
+        "?dates=custom&from=2026-02-30&to=bad",
+        choices,
+        "2026-08-15",
+    )
+    assert custom["filters"] == BLANK_FILTERS
+
+
+def test_search_accepts_missing_optional_strings(module_page, frontend_server):
+    events = [
+        make_event("town", title=None, description=None, venue=None, town="Hadley"),
+        make_event("missing", title=None, town=None, description=42, venue=["Sculpture"]),
+    ]
+    result = call_module(
+        module_page, frontend_server, "filterEvents", events, {**BLANK_FILTERS, "q": " HADLEY "}
+    )
+    assert [event["id"] for event in result] == ["town"]
+
+    numeric = call_module(
+        module_page, frontend_server, "filterEvents", events, {**BLANK_FILTERS, "q": "42"}
+    )
+    assert [event["id"] for event in numeric] == ["missing"]

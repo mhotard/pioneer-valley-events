@@ -657,3 +657,16 @@ footer {
 }
 .guide-event-episodes a { color: var(--primary); text-decoration: none; }
 .guide-event-episodes a:hover { text-decoration: underline; }
+
+/* Quick choices keep date-only filters in the region's timezone. */
+.quick-dates { display: flex; flex-wrap: wrap; gap: 0.35rem; width: 100%; }
+.date-choice {
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-alt);
+  color: var(--text);
+  font-size: 0.82rem;
+}
+.date-choice.active { color: #fff; background: var(--primary-dark); border-color: var(--primary-dark); }
+.empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1rem; }

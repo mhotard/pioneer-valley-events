@@ -38,7 +38,14 @@
     <div class="filters-inner">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-        <input type="search" id="search" placeholder="Search events, venues..." autocomplete="off">
+        <input type="search" id="search" placeholder="Search events, venues, towns..." autocomplete="off">
+      </div>
+      <div class="quick-dates" role="group" aria-label="Quick date choices">
+        <button class="date-choice active" data-dates="upcoming" aria-pressed="true">Upcoming</button>
+        <button class="date-choice" data-dates="today" aria-pressed="false">Today</button>
+        <button class="date-choice" data-dates="week" aria-pressed="false">Next 7 days</button>
+        <button class="date-choice" data-dates="weekend" aria-pressed="false">This weekend</button>
+        <button class="date-choice" data-dates="all" aria-pressed="false">All published dates</button>
       </div>
       <div class="filter-group">
         <label for="date-from" class="sr-only">From date</label>

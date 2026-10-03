@@ -1,4 +1,7 @@
-import { buildCalendarCells, dataFreshness, filterEvents, groupEventsByDate } from './event-data.js';
+import {
+  browserStateParams, buildCalendarCells, dataFreshness, filterEvents,
+  groupEventsByDate, quickDateRange, readBrowserState, regionToday,
+} from './event-data.js';
 
 /* ============================================================
    Pioneer Valley Events — App
@@ -9,6 +12,8 @@ const state = {
   generated: null,
   loadFailed: false,
   view: 'list',
+  dateChoice: 'upcoming',
+  today: regionToday(),
   filters: { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' },
   calendarMonth: null, // Date object for calendar display
   calendarSelectedDay: null, // 'YYYY-MM-DD'
@@ -16,20 +21,23 @@ const state = {
 
 /* ---- Boot ---- */
 document.addEventListener('DOMContentLoaded', async () => {
-  state.calendarMonth = new Date();
-  state.calendarMonth.setDate(1);
-
   await loadEvents();
   // Reassess an open tab as the data ages, including when returning to it.
-  setInterval(updateDataStatus, 60 * 60 * 1000);
-  document.addEventListener('visibilitychange', updateDataStatus);
+  setInterval(refreshDateStatus, 60 * 60 * 1000);
+  document.addEventListener('visibilitychange', refreshDateStatus);
   populateSourceFilter();
   populateTownFilter();
+  restoreBrowserState();
   setupFilters();
   setupViewSwitcher();
   setupModal();
   setupEventInteractions();
   render();
+  window.addEventListener('popstate', () => {
+    closeModal();
+    restoreBrowserState();
+    render();
+  });
 });
 
 /* ---- Data ---- */
@@ -96,32 +104,96 @@ function populateTownFilter() {
 }
 
 /* ---- Filters ---- */
-function setupFilters() {
-  const search = document.getElementById('search');
-  const dateFrom = document.getElementById('date-from');
-  const dateTo = document.getElementById('date-to');
-  const catFilter = document.getElementById('category-filter');
-  const townFilter = document.getElementById('town-filter');
-  const sourceFilter = document.getElementById('source-filter');
-  const clearBtn = document.getElementById('clear-filters');
+function monthFromDate(date) {
+  const [year, month] = date.split('-').map(Number);
+  return new Date(year, month - 1, 1);
+}
 
-  search.addEventListener('input', () => { state.filters.q = search.value.trim(); render(); });
-  dateFrom.addEventListener('change', () => { state.filters.dateFrom = dateFrom.value; render(); });
-  dateTo.addEventListener('change', () => { state.filters.dateTo = dateTo.value; render(); });
-  catFilter.addEventListener('change', () => { state.filters.category = catFilter.value; render(); });
-  townFilter.addEventListener('change', () => { state.filters.town = townFilter.value; render(); });
-  sourceFilter.addEventListener('change', () => { state.filters.source = sourceFilter.value; render(); });
+function restoreBrowserState() {
+  const available = {};
+  for (const key of ['category', 'town', 'source']) {
+    available[key] = [...document.querySelectorAll(`#${key}-filter option`)].map(option => option.value);
+  }
+  const restored = readBrowserState(location.search, available);
+  Object.assign(state, restored, { calendarMonth: monthFromDate(restored.calendarMonth) });
+  syncControls();
+}
 
-  clearBtn.addEventListener('click', () => {
-    search.value = '';
-    dateFrom.value = '';
-    dateTo.value = '';
-    catFilter.value = '';
-    townFilter.value = '';
-    sourceFilter.value = '';
-    state.filters = { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' };
-    render();
+function syncControls() {
+  const controls = { q: 'search', dateFrom: 'date-from', dateTo: 'date-to', category: 'category-filter', town: 'town-filter', source: 'source-filter' };
+  for (const [key, id] of Object.entries(controls)) document.getElementById(id).value = state.filters[key];
+  document.querySelectorAll('[data-dates]').forEach(button => {
+    const selected = button.dataset.dates === state.dateChoice;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
   });
+  document.querySelectorAll('.view-btn').forEach(button => {
+    button.classList.toggle('active', button.dataset.view === state.view);
+  });
+}
+
+function updateBrowserState(replace = false) {
+  const query = browserStateParams({ ...state, calendarMonth: toDateStr(state.calendarMonth) }, location.search);
+  const url = `${location.pathname}${query ? '?' + query : ''}${location.hash}`;
+  if (url !== location.pathname + location.search + location.hash) {
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+}
+
+function applyDateChoice(choice) {
+  state.dateChoice = choice;
+  Object.assign(state.filters, quickDateRange(choice));
+  state.calendarMonth = monthFromDate(state.filters.dateFrom || regionToday());
+  state.calendarSelectedDay = null;
+}
+
+function resetFilters() {
+  state.filters = { q: '', category: '', town: '', source: '' };
+  applyDateChoice('upcoming');
+  syncControls();
+  updateBrowserState();
+  render();
+}
+
+function refreshDateStatus() {
+  updateDataStatus();
+  const today = regionToday();
+  if (today === state.today) return;
+  state.today = today;
+  if (state.dateChoice !== 'custom') {
+    applyDateChoice(state.dateChoice);
+    syncControls();
+    updateBrowserState(true);
+    render();
+  }
+}
+
+function setupFilters() {
+  const controls = { q: 'search', dateFrom: 'date-from', dateTo: 'date-to', category: 'category-filter', town: 'town-filter', source: 'source-filter' };
+  for (const [key, id] of Object.entries(controls)) {
+    const control = document.getElementById(id);
+    control.addEventListener(key === 'q' ? 'input' : 'change', () => {
+      state.filters[key] = control.value.trim();
+      if (key === 'dateFrom' || key === 'dateTo') {
+        state.dateChoice = 'custom';
+        state.calendarMonth = monthFromDate(state.filters.dateFrom || regionToday());
+        state.calendarSelectedDay = null;
+      }
+      // Typing updates the current history entry; deliberate choices add one.
+      if (key !== 'q') syncControls();
+      updateBrowserState(key === 'q');
+      render();
+    });
+  }
+  document.querySelectorAll('[data-dates]').forEach(button => {
+    button.addEventListener('click', () => {
+      applyDateChoice(button.dataset.dates);
+      syncControls();
+      updateBrowserState();
+      render();
+    });
+  });
+  document.getElementById('clear-filters').addEventListener('click', resetFilters);
 }
 
 /* ---- View Switcher ---- */
@@ -129,9 +201,9 @@ function setupViewSwitcher() {
   document.querySelectorAll('.view-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       state.view = btn.dataset.view;
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       state.calendarSelectedDay = null;
+      syncControls();
+      updateBrowserState();
       render();
     });
   });
@@ -234,11 +306,11 @@ function renderCalendar(container, events) {
   const cells = buildCalendarCells(year, mo);
 
   const monthLabel = month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  const todayStr = toDateStr(new Date());
+  const todayStr = regionToday();
 
   const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  let html = `
+  let html = `${events.length ? '' : emptyState()}
     <div class="calendar-view">
       <div class="calendar-nav">
         <button class="cal-nav-btn" id="cal-prev" aria-label="Previous month">&#8249;</button>
@@ -305,6 +377,10 @@ function setupEventInteractions(openEvent = openModal) {
   const container = document.getElementById('events-container');
 
   container.addEventListener('click', event => {
+    if (event.target.closest('#reset-results')) { resetFilters(); return; }
+    if (event.target.closest('#show-all-dates')) {
+      applyDateChoice('all'); syncControls(); updateBrowserState(); render(); return;
+    }
     const nav = event.target.closest('#cal-prev, #cal-next, #cal-today');
     if (nav && container.contains(nav)) {
       const month = state.calendarMonth;
@@ -313,10 +389,10 @@ function setupEventInteractions(openEvent = openModal) {
       } else if (nav.id === 'cal-next') {
         state.calendarMonth = new Date(month.getFullYear(), month.getMonth() + 1, 1);
       } else {
-        state.calendarMonth = new Date();
-        state.calendarMonth.setDate(1);
+        state.calendarMonth = monthFromDate(regionToday());
       }
       state.calendarSelectedDay = null;
+      updateBrowserState();
       render();
       return;
     }
@@ -341,6 +417,7 @@ function setupEventInteractions(openEvent = openModal) {
       state.calendarSelectedDay = state.calendarSelectedDay === day.dataset.date
         ? null
         : day.dataset.date;
+      updateBrowserState();
       render();
     }
   });
@@ -444,7 +521,12 @@ function emptyState() {
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-      <p>No events match your filters.</p>
+      <p>No events match these filters and dates.</p>
+      <p>Try upcoming events with fewer filters, or browse earlier published listings.</p>
+      <div class="empty-actions">
+        <button id="reset-results" class="clear-btn">Reset to upcoming events</button>
+        <button id="show-all-dates" class="clear-btn">All published dates</button>
+      </div>
     </div>`;
 }
 
