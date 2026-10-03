@@ -23,6 +23,7 @@ class NEPMCultureScraper(BaseScraper):
     user_agent = BROWSER_UA
 
     def _fetch(self) -> list[Event]:
+        self.last_rejected_counts = {}
         resp = self.get(LISTING_URL)
         soup = BeautifulSoup(resp.text, "html.parser")
         editions = {}
@@ -43,7 +44,10 @@ class NEPMCultureScraper(BaseScraper):
         resp2 = self.get(latest_url)
         cleaned = _clean_html(resp2.text)
         dicts = _extract_events(cleaned, "Various Pioneer Valley Venues", self.town, self.name)
-        events = _dicts_to_events(dicts, self.name, "Various Pioneer Valley Venues", self.town)
+        events = _dicts_to_events(
+            dicts, self.name, "Various Pioneer Valley Venues", self.town,
+            rejected_counts=self.last_rejected_counts, require_valid=True,
+        )
 
         log.debug("[nepm-culture] Found %d events", len(events))
         return events

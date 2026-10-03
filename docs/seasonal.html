@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seasonal Guide — Pioneer Valley Events</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .guide-status { max-width: 640px; margin: 1rem auto; padding: 1rem; border: 1px solid #b9a88a;
+      border-radius: 8px; background: #fff8e9; }
+    .guide-status p + p { margin-top: .5rem; }
+    #guide-retry { min-height: 44px; padding: .65rem 1rem; margin-top: .75rem;
+      border: 1px solid #b9a88a; border-radius: 6px; background: #fff; cursor: pointer; }
+    :focus-visible { outline: 3px solid #1b6041; outline-offset: 3px; }
+    #guide-empty { padding: 1rem 0; }
+    @media (max-width: 700px) {
+      .header-inner { height: auto; flex-direction: column; align-items: flex-start;
+        padding: .75rem 0; gap: .75rem; }
+      .page-nav { flex-wrap: wrap; }
+      .guide-event-name, .guide-event-episodes { overflow-wrap: anywhere; }
+      .guide-event-head { flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body>
 
@@ -14,7 +30,7 @@
         <h1>Seasonal Guide</h1>
         <p class="tagline">The 413's annual events, as covered by The Fabulous 413</p>
       </div>
-      <nav class="page-nav" style="display:flex;gap:8px;">
+      <nav aria-label="Site pages" class="page-nav" style="display:flex;gap:8px;">
         <a href="413/" class="nav-link">413 by the numbers</a>
         <a href="index.html" class="nav-link">← All events</a>
       </nav>
@@ -30,21 +46,30 @@
     <p class="guide-intro">
       Events that <a href="https://www.nepm.org/podcast/the-fabulous-413"
       target="_blank" rel="noopener">The&nbsp;Fabulous&nbsp;413</a> has covered in
-      multiple years — the things that come back every year, so you can plan
-      ahead. Exact dates land on the <a href="index.html">main calendar</a>
-      once they're announced.
+      multiple years. These are ideas to explore by season, based on historical
+      podcast coverage. A month indicates a pattern in past coverage, not a
+      confirmed date this year. Find published upcoming listings on the
+      <a href="index.html">main calendar</a> and verify details with the organizer.
     </p>
-    <div id="guide-container"></div>
+    <div class="guide-status" id="guide-status" role="status" aria-live="polite">
+      <p id="guide-status-text">Loading the published seasonal guide…</p>
+      <p id="guide-coverage"></p>
+      <button id="guide-retry" hidden>Retry loading guide</button>
+    </div>
+    <p id="guide-empty" hidden>No seasonal entries are in this published guide yet.</p>
+    <div id="guide-container" aria-busy="true"></div>
   </main>
 
   <footer>
     <div class="footer-inner">
       <p>Pioneer Valley Events &mdash; community-built event aggregator</p>
-      <p class="footer-sub">Mined from The Fabulous 413 podcast archive &middot; updated weekly</p>
+      <p class="footer-sub">Based on The Fabulous 413 podcast archive &middot; updates are scheduled weekly</p>
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { loadPublished, validSeasonal, publicationStatus, coverageLabel,
+      regionalToday, safeURL } from './secondary-data.js';
     const MONTHS = ["January","February","March","April","May","June",
                     "July","August","September","October","November","December"];
 
@@ -56,9 +81,9 @@
 
     function eventCard(e) {
       const yearsLabel = `covered ${e.years.length} year${e.years.length !== 1 ? 's' : ''} (${e.years.join(', ')})`;
-      const links = e.episodes.map(ep =>
-        `<a href="${esc(ep.url)}" target="_blank" rel="noopener" title="${esc(ep.title)}">${esc(ep.date)}</a>`
-      ).join(' · ');
+      const links = e.episodes.map(ep => safeURL(ep.url)
+        ? `<a href="${esc(safeURL(ep.url))}" target="_blank" rel="noopener" title="${esc(ep.title)}">${esc(ep.date)}</a>`
+        : esc(ep.date)).join(' · ');
       return `
         <div class="guide-event">
           <div class="guide-event-head">
@@ -68,36 +93,55 @@
           <div class="guide-event-meta">
             ${e.town ? esc(e.town) + ' · ' : ''}${yearsLabel}
           </div>
-          <div class="guide-event-episodes">Episodes: ${links}</div>
+          <div class="guide-event-episodes">Historical episodes: ${links || 'none listed'}</div>
         </div>`;
     }
 
     async function boot() {
-      const res = await fetch('data/seasonal.json');
-      const data = await res.json();
-      const thisMonth = new Date().getMonth() + 1; // 1-12
+      const container = document.getElementById('guide-container');
+      const status = document.getElementById('guide-status-text');
+      const retry = document.getElementById('guide-retry');
+      retry.hidden = true;
+      container.setAttribute('aria-busy', 'true');
+      status.textContent = 'Loading the published seasonal guide…';
+      try {
+        const data = await loadPublished('data/seasonal.json', validSeasonal);
+        const thisMonth = Number(regionalToday().slice(5, 7));
 
-      let total = 0;
-      let html = '';
-      // Start the guide at the current month and wrap around the year
-      for (let off = 0; off < 12; off++) {
-        const m = ((thisMonth - 1 + off) % 12) + 1;
-        const events = data.months[String(m)] || [];
-        if (!events.length) continue;
-        total += events.length;
-        html += `
-          <section class="guide-month${off === 0 ? ' current' : ''}" id="month-${m}">
-            <h2>${MONTHS[m - 1]}${off === 0 ? ' <span class="now-chip">now</span>' : ''}</h2>
-            ${events.map(eventCard).join('')}
-          </section>`;
-      }
-      document.getElementById('guide-container').innerHTML = html;
-      document.getElementById('guide-count').textContent =
-        `${total} annual events`;
-      if (data.generated) {
-        document.getElementById('guide-updated').textContent = `Updated ${data.generated}`;
-      }
+        let total = 0;
+        let html = '';
+        // Start the guide at the current month and wrap around the year
+        for (let off = 0; off < 12; off++) {
+          const m = ((thisMonth - 1 + off) % 12) + 1;
+          const events = data.months[String(m)] || [];
+          if (!events.length) continue;
+          total += events.length;
+          html += `
+            <section class="guide-month${off === 0 ? ' current' : ''}" id="month-${m}">
+              <h2>${MONTHS[m - 1]}${off === 0 ? ' <span class="now-chip">now</span>' : ''}</h2>
+              ${events.map(eventCard).join('')}
+            </section>`;
+        }
+        document.getElementById('guide-container').innerHTML = html;
+        document.getElementById('guide-count').textContent =
+          `${total} seasonal idea${total === 1 ? '' : 's'}`;
+        document.getElementById('guide-updated').textContent = '';
+        status.textContent = publicationStatus(data.generated);
+        document.getElementById('guide-coverage').textContent = coverageLabel(
+          Object.values(data.months).flat().flatMap(event => event.episodes.map(ep => ep.date)),
+          'Episode evidence shown');
+        document.getElementById('guide-empty').hidden = total !== 0;
+      } catch {
+        container.replaceChildren();
+        document.getElementById('guide-count').textContent = 'Guide unavailable';
+        document.getElementById('guide-updated').textContent = '';
+        document.getElementById('guide-coverage').textContent = '';
+        document.getElementById('guide-empty').hidden = true;
+        status.textContent = 'The published guide could not be loaded. Try again, or browse the event calendar.';
+        retry.hidden = false;
+      } finally { container.setAttribute('aria-busy', 'false'); }
     }
+    document.getElementById('guide-retry').addEventListener('click', boot);
     boot();
   </script>
 </body>

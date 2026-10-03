@@ -180,6 +180,19 @@ select { padding-right: 28px; appearance: none;
 .clear-btn:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ---- Results Bar ---- */
+.data-warning {
+  width: calc(100% - 3rem);
+  max-width: 1152px;
+  margin: 1rem auto 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #B45309;
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  background: #FFFBEB;
+  color: #78350F;
+  font-size: 0.9rem;
+}
+
 .results-bar {
   max-width: 1200px;
   width: 100%;
@@ -644,3 +657,90 @@ footer {
 }
 .guide-event-episodes a { color: var(--primary); text-decoration: none; }
 .guide-event-episodes a:hover { text-decoration: underline; }
+
+/* Quick choices keep date-only filters in the region's timezone. */
+.quick-dates { display: flex; flex-wrap: wrap; gap: 0.35rem; width: 100%; }
+.date-choice {
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-alt);
+  color: var(--text);
+  font-size: 0.82rem;
+}
+.date-choice.active { color: #fff; background: var(--primary-dark); border-color: var(--primary-dark); }
+.empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1rem; }
+
+/* Main event browser accessibility; keep historical-page layouts independent. */
+.event-browser {
+  --text-muted: #57534E;
+  --text-light: #57534E;
+  --c-comedy: #92400E;
+  --c-academia: #92400E;
+  --c-family: #155E75;
+  --c-outdoor: #166534;
+  --c-community: #166534;
+  --c-food: #9A3412;
+}
+.event-browser :focus-visible, .event-browser #search:focus-visible { outline: 3px solid #0369A1; outline-offset: 3px; }
+.event-browser header :focus-visible { outline-color: #fff; }
+.event-browser .brand .tagline { color: #DEE9E1; }
+.event-browser .view-btn { min-height: 44px; color: #fff; }
+.event-browser .view-btn.active { color: var(--primary-dark); }
+.event-browser #search, .event-browser input[type="date"], .event-browser select,
+.event-browser .clear-btn, .event-browser .date-choice { min-height: 44px; }
+.event-browser .filter-options { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; width: 100%; }
+.event-browser .filter-options[hidden] { display: none; }
+.event-browser #filters-toggle { display: none; }
+.event-browser #search::placeholder { color: var(--text-muted); opacity: 1; }
+.event-browser .filter-summary { width: 100%; font-size: 0.82rem; color: var(--text-muted); overflow-wrap: anywhere; }
+.event-browser .results-bar { flex-wrap: wrap; gap: 0.4rem; }
+.event-browser .list-item-title { white-space: normal; overflow-wrap: anywhere; }
+.event-browser .cal-day-select { border-radius: 4px; min-width: 44px; min-height: 44px; cursor: pointer; }
+.event-browser .cal-day-select:disabled { cursor: default; color: var(--text-muted); }
+.event-browser .cal-day.today .cal-day-select { color: #fff; }
+.event-browser .cal-pill { text-align: left; font-family: inherit; min-height: 28px; width: 100%; }
+.event-browser .cal-nav-btn, .event-browser .cal-today-btn, .event-browser .modal-close { min-width: 44px; min-height: 44px; }
+.event-browser .modal-title { padding-right: 2.5rem; overflow-wrap: anywhere; }
+.event-browser .modal-description, .event-browser .modal-meta-row { overflow-wrap: anywhere; }
+.event-browser.modal-open { overflow: hidden; }
+@media (max-width: 700px) {
+  .event-browser header, .event-browser .filters-bar { position: static; }
+  .event-browser .header-inner { height: auto; padding: 0.75rem 0; flex-wrap: wrap; gap: 0.5rem; }
+  .event-browser .brand { width: 100%; }
+  .event-browser .brand h1 { font-size: 1.25rem; }
+  .event-browser .brand .tagline { font-size: 0.72rem; }
+  .event-browser .page-nav { margin-right: auto; }
+  .event-browser .view-btn { padding: 8px; font-size: 0; min-width: 44px; }
+  .event-browser .search-wrap { min-width: 0; }
+  .event-browser #filters-toggle { display: block; }
+  .event-browser .filter-group { gap: 0.35rem; }
+  .event-browser input[type="date"] { width: 44%; min-width: 0; }
+  .event-browser select { max-width: 100%; }
+  .event-browser .data-warning { width: calc(100% - 2rem); }
+  .event-browser .cards-grid { grid-template-columns: minmax(0, 1fr); }
+  .event-browser .cal-days { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .event-browser .cal-day { min-width: 0; min-height: 66px; padding: 2px; }
+  .event-browser .cal-day-select { width: 100%; min-width: 0; margin-bottom: 0; }
+  .event-browser .cal-more { display: none; }
+  .event-browser .cal-month-label { font-size: 1rem; }
+  .event-browser .calendar-nav { gap: 0.4rem; }
+  .event-browser .cal-day-detail { padding: 0.8rem; }
+  .event-browser .modal-overlay { padding: 0.6rem; }
+  .event-browser .list-item { padding: 0.8rem; gap: 0.6rem; }
+  .event-browser .list-item-time { min-width: 60px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.event-browser-root { scroll-behavior: auto; }
+  .event-browser *, .event-browser *::before, .event-browser *::after { transition: none; animation: none; }
+}
+
+/* Event sharing and saving stay inside the accessible details dialog. */
+.event-browser .event-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+.event-browser .calendar-note, .event-browser .event-action-status { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; }
+.event-browser .modal-data-warning { padding: 0.75rem; margin-top: 1rem; border: 1px solid #B45309; border-radius: var(--radius-sm); background: #FFFBEB; color: #78350F; font-size: 0.85rem; }
+.event-browser #copy-link-fallback { margin-top: 0.8rem; font-size: 0.85rem; }
+.event-browser #copy-link-fallback[hidden], .event-browser .modal-data-warning[hidden] { display: none; }
+.event-browser #event-link-input { display: block; width: 100%; padding: 0.6rem; margin-top: 0.4rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; }
+.event-browser .calendar-download { padding: 9px 18px; min-height: 44px; background: var(--primary); color: #fff; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; }
+.event-browser .calendar-download:hover { background: var(--primary-dark); }

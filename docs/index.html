@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="event-browser-root">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pioneer Valley Events</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="event-browser">
 
   <header>
     <div class="header-inner">
@@ -18,15 +18,15 @@
         <a href="seasonal.html" class="nav-link">Seasonal Guide</a>
       </nav>
       <div class="view-switcher" role="group" aria-label="View mode">
-        <button class="view-btn active" data-view="list" title="List view">
+        <button class="view-btn active" data-view="list" title="List view" aria-label="List view" aria-pressed="true">
           <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
           List
         </button>
-        <button class="view-btn" data-view="cards" title="Cards view">
+        <button class="view-btn" data-view="cards" title="Cards view" aria-label="Cards view" aria-pressed="false">
           <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
           Cards
         </button>
-        <button class="view-btn" data-view="calendar" title="Calendar view">
+        <button class="view-btn" data-view="calendar" title="Calendar view" aria-label="Calendar view" aria-pressed="false">
           <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
           Calendar
         </button>
@@ -37,8 +37,18 @@
   <div class="filters-bar">
     <div class="filters-inner">
       <div class="search-wrap">
+        <label for="search" class="sr-only">Search events, venues, and towns</label>
         <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-        <input type="search" id="search" placeholder="Search events, venues..." autocomplete="off">
+        <input type="search" id="search" placeholder="Search events, venues, towns..." autocomplete="off">
+      </div>
+      <button id="filters-toggle" class="clear-btn" aria-expanded="false" aria-controls="filter-options">Filters</button>
+      <div id="filter-options" class="filter-options">
+      <div class="quick-dates" role="group" aria-label="Quick date choices">
+        <button class="date-choice active" data-dates="upcoming" aria-pressed="true">Upcoming</button>
+        <button class="date-choice" data-dates="today" aria-pressed="false">Today</button>
+        <button class="date-choice" data-dates="week" aria-pressed="false">Next 7 days</button>
+        <button class="date-choice" data-dates="weekend" aria-pressed="false">This weekend</button>
+        <button class="date-choice" data-dates="all" aria-pressed="false">All published dates</button>
       </div>
       <div class="filter-group">
         <label for="date-from" class="sr-only">From date</label>
@@ -70,11 +80,15 @@
         </select>
       </div>
       <button id="clear-filters" class="clear-btn" aria-label="Clear filters">Clear</button>
+      </div>
+      <p id="filter-summary" class="filter-summary" aria-live="polite"></p>
     </div>
   </div>
 
+  <div id="data-warning" class="data-warning" role="status" hidden></div>
+
   <div class="results-bar">
-    <span id="result-count"></span>
+    <span id="result-count" aria-live="polite"></span>
     <span id="last-updated"></span>
   </div>
 
@@ -93,7 +107,7 @@
   <footer>
     <div class="footer-inner">
       <p>Pioneer Valley Events &mdash; community-built event aggregator</p>
-      <p class="footer-sub">Data updated weekly &middot;
+      <p class="footer-sub">Updates scheduled weekly &middot;
         <a href="seasonal.html">Seasonal guide</a> &middot;
         <a href="413/">The Fabulous 413 by the numbers</a> &middot;
         <a href="https://github.com/mhotard/pioneer-valley-events" target="_blank" rel="noopener">Contribute on GitHub</a></p>

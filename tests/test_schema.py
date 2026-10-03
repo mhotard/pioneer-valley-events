@@ -6,6 +6,7 @@ Run against the live file before deploying.
 import json
 import os
 import re
+from datetime import date
 
 import pytest
 
@@ -44,7 +45,8 @@ def test_required_fields_present(events, field):
 
 def test_all_dates_valid_format(events):
     for e in events:
-        assert DATE_RE.match(e["date"]), f"Bad date format '{e['date']}' in '{e['title']}'"
+        assert DATE_RE.fullmatch(e["date"]), f"Bad date format '{e['date']}' in '{e['title']}'"
+        assert date.fromisoformat(e["date"]).isoformat() == e["date"]
 
 
 def test_all_categories_valid(events):

@@ -64,6 +64,36 @@ file, and a mining batch whose checkpoint was not replaced may be extracted
 again on the next run. Damaged historical data is reported, not automatically
 repaired.
 
+The event page warns visibly when `events.json` was generated more than 14
+calendar days ago (allowing one missed weekly update), or when its generation
+date is missing, invalid, or in the future. Old listings remain browsable with
+the warning in every view. HTTP, network, JSON, and envelope failures show an
+unavailable state rather than an ordinary empty result. Data requests revalidate
+the browser cache, and open tabs reassess freshness hourly and when revisited.
+
+The browser starts with events on or after today in `America/New_York`. Today,
+Next 7 days (today through six days ahead), This weekend, and All published
+dates are explicit choices; Clear returns to upcoming events. Search includes
+titles, descriptions, venues, and towns. Filter/view/calendar state is preserved
+in the URL and browser history. Mobile filters collapse while their summary and
+data warning stay visible, and event details and calendar controls support
+keyboard interaction.
+
+Event details offer a direct link and a single-event `.ics` calendar download.
+Links preserve the published event ID and current filters; an ID missing from
+the current dataset shows an unavailable message. If clipboard access fails,
+a selected text field lets visitors copy the link manually. Calendar entries
+use `America/New_York` for known local times. Unknown times become explained
+all-day date reminders; missing or unreliable end times do not acquire an
+invented duration. Downloads include the real dataset update date, with stale
+or unverified warnings beside the save action.
+
+The Seasonal Guide and 413 dashboard describe historical podcast evidence,
+including the actual generation date and coverage represented in published
+JSON. They show distinct loading, empty, and unavailable states with retry
+controls. The dashboard's town selector and text totals remain usable when
+optional map/chart libraries or tiles fail.
+
 ---
 
 ## Run the pipeline manually
@@ -141,7 +171,7 @@ Use `"type": "playwright"` for JavaScript-rendered pages. The Claude Haiku model
 
 ## Automated weekly updates (GitHub Actions)
 
-The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC (2 AM Eastern). It:
+The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC (2 AM EDT / 1 AM EST). It:
 1. Lints with `ruff` (blocks deploy on failure)
 2. Runs `pytest` (blocks deploy on failure)
 3. Runs `python pipeline.py`
@@ -151,6 +181,49 @@ The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM 
 **Required secret:** Add `ANTHROPIC_API_KEY` in your repo under **Settings → Secrets and variables → Actions**.
 
 To trigger manually: **Actions → Weekly Event Update → Run workflow**
+
+
+Each pipeline run writes `logs/run-report.json` (or the path supplied with
+`--report`), separate from published data. It records the run date, mode,
+per-source counts and status, health/publication decision, and completed or
+failed destination writes. It contains no source URLs, error bodies, or
+credentials. `published_event_count` is populated only after `events.json` was
+actually replaced; archives are separate writes, so a later archive failure
+can leave an explicitly reported partial publication. A preview can complete
+successfully while its selected source reports an error. Reports never replace
+the pipeline's exit status or exception.
+
+Extracted records with missing titles, impossible dates, malformed structure,
+or unsafe event links are counted by reason in diagnostics and the Actions
+summary. A nonempty extraction with no valid records is a source error. Useful
+partial results remain eligible under the existing health rules. Unparseable
+optional times remain unknown; supplied midnight remains midnight.
+
+The weekly Action always attempts a job summary and uploads the
+**weekly-update-diagnostics** artifact, containing only safe diagnostic JSON
+from the runner's temporary directory. The workflow report distinguishes an
+earlier workflow failure from missing pipeline diagnostics, and reports
+commit/push separately. Optional podcast outcomes remain visible without
+blocking the main publication. Raw log files are not included in the artifact.
+
+When an update looks wrong, use this sequence without rerunning scrapers:
+
+1. **Scheduling:** check the Weekly Event Update run history for the expected
+   Sunday run. The existing cron is 06:00 UTC (02:00 EDT / 01:00 EST).
+2. **Setup, lint, or tests:** read the failed workflow step. A skipped pipeline
+   means no scrape completed; the summary identifies earlier workflow failures.
+3. **Preflight:** a `missing_api_key` reason means collection never started.
+   Check whether the required repository secret is configured without displaying
+   its value.
+4. **Source health:** inspect source `error` and `regression` statuses and event
+   counts in the summary/report. The existing 34% rejection threshold remains
+   in force. Diagnose from collected results and logs; do not add source probes,
+   retries, or extra scraping.
+5. **Publication and push:** distinguish the accepted health decision from
+   destination writes, then check commit/push outcome. A failed write or push
+   does not establish that the new file reached GitHub.
+6. **Pages:** check the separate GitHub Pages build/deployment and its commit.
+   Pipeline success alone does not confirm what visitors received.
 
 ---
 

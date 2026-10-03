@@ -15,6 +15,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import sys
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
@@ -24,11 +25,12 @@ from typing import NamedTuple, Optional
 from json_storage import JsonStorageError, read_json, write_json_atomic
 from scrapers import get_all_scrapers
 from scrapers.base import DAYS_FUTURE, DAYS_PAST, event_time_key
-from scrapers.claude_scraper import resolve_api_key
+from scrapers.claude_scraper import REJECTION_REASONS, resolve_api_key
 
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "docs", "data", "events.json")
 ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "docs", "data")
 LOGS_DIR = os.path.join(os.path.dirname(__file__), "logs")
+REPORT_PATH = os.path.join(LOGS_DIR, "run-report.json")
 
 # Abort (exit non-zero) if more than this fraction of sources are unhealthy in
 # a full run — errored, OR silently dropped from a productive yield to zero.
@@ -147,7 +149,9 @@ def prepare_payload(events: list, *, run_date: date) -> dict:
     return {"generated": run_date.isoformat(), "events": prepared}
 
 
-def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = "") -> dict:
+def update_archive(
+    events: list, archive_dir: str = ARCHIVE_DIR, today: str = "", *, writes=None
+) -> dict:
     """Upsert published events into per-year archives (docs/data/archive-YYYY.json).
 
     Append-only historical record for analysis: keyed by event id, bucketed by
@@ -163,6 +167,9 @@ def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = ""
     added = {}
     for year, evs in sorted(by_year.items()):
         path = os.path.join(archive_dir, f"archive-{year}.json")
+        write = {"destination": f"archive-{year}", "status": "started"}
+        if writes is not None:
+            writes.append(write)
         stored = read_json(path, default_factory=lambda: {"events": []})
         stored_events = _validated_archive_events(stored, path)
         archive = {record["id"]: record for record in stored_events}
@@ -184,6 +191,8 @@ def update_archive(events: list, archive_dir: str = ARCHIVE_DIR, today: str = ""
             {"year": year, "count": len(records), "events": records},
             separators=(",", ":"),
         )
+        write["status"] = "written"
+        write["new_events"] = new
         added[year] = new
     return added
 
@@ -304,18 +313,33 @@ def log_summary(
     log.info("══════════════════════════════════════════════════════════")
 
 
-def run(scrapers, *, previous_counts: dict, run_date: date) -> PipelineResult:
+def run(
+    scrapers, *, previous_counts: dict, run_date: date, source_report=None
+) -> PipelineResult:
     """Collect and transform events without reading or writing publication files."""
     log = logging.getLogger("pipeline")
     all_events = []
     results: list[SourceResult] = []
 
-    for scraper in scrapers:
+    for index, scraper in enumerate(scrapers):
+        if source_report is not None:
+            source_report[index]["status"] = "started"
         url_label = getattr(scraper, "url", "") or "(no url)"
         log.info("─── %s  %s", scraper.name, url_label)
         events = scraper.fetch()
         error = getattr(scraper, "last_error", None)
         results.append(SourceResult(scraper.name, url_label, len(events), error))
+        if source_report is not None:
+            source_report[index].update(
+                count=len(events), status="error" if error else "ok" if events else "zero"
+            )
+            # Keep only known reason enums/counts from the already-collected result.
+            counts = getattr(scraper, "last_rejected_counts", {})
+            if isinstance(counts, dict):
+                safe_counts = {reason: count for reason, count in counts.items()
+                               if reason in REJECTION_REASONS and type(count) is int and count > 0}
+                if safe_counts:
+                    source_report[index]["rejected_records"] = safe_counts
         all_events.extend(e.to_dict() for e in events)
         log.info("    └─ found %d events%s", len(events), f"  [ERROR: {error}]" if error else "")
 
@@ -330,95 +354,153 @@ def run(scrapers, *, previous_counts: dict, run_date: date) -> PipelineResult:
     log.info("After deduplication: %d", len(payload["events"]))
 
     regressions = find_regressions(results, previous_counts)
+    if source_report is not None:
+        regressed = dict(regressions)
+        for source in source_report:
+            if source["name"] in regressed:
+                source.update(status="regression", previous_count=regressed[source["name"]])
     log_summary(results, regressions, previous_counts, len(payload["events"]))
     return PipelineResult(payload=payload, results=results, regressions=regressions)
 
 
-def publish_payload(payload: dict, *, output_path: str, archive_dir: str) -> None:
+def publish_payload(
+    payload: dict, *, output_path: str, archive_dir: str, writes=None
+) -> None:
     """Write the current payload, then upsert its final events into archives."""
     log = logging.getLogger("pipeline")
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     os.makedirs(archive_dir, exist_ok=True)
+    write = {"destination": "events", "status": "started"}
+    if writes is not None:
+        writes.append(write)
     write_json_atomic(output_path, payload, indent=2)
+    write["status"] = "written"
 
     log.info("Wrote %d events to %s", len(payload["events"]), output_path)
 
     # Append-only historical record (docs/data/archive-YYYY.json) for analysis
     for year, n in update_archive(
-        payload["events"], archive_dir=archive_dir, today=payload["generated"]
+        payload["events"], archive_dir=archive_dir, today=payload["generated"], writes=writes
     ).items():
         log.info("Archive %s: +%d new events", year, n)
 
 
-def main(argv=None, *, output_path=None, archive_dir=None, run_date=None) -> int:
-    """Orchestrate source selection, health assessment, preview, and publication."""
+def _safe_source_name(name) -> str:
+    """Only configured source identifiers enter diagnostics, never free text."""
+    return name if isinstance(name, str) and re.fullmatch(r"[a-z0-9_-]{1,80}", name) else "unknown"
+
+
+def _check_report_path(report_path: str, output_path: str, archive_dir: str) -> None:
+    """Diagnostics cannot be written into a published data directory."""
+    report_path = os.path.realpath(report_path)
+    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
+    for directory in (docs_dir, archive_dir, os.path.dirname(output_path)):
+        directory = os.path.realpath(directory or ".")
+        if os.path.commonpath((report_path, directory)) == directory:
+            raise ValueError("Diagnostic report must be outside publication directories")
+
+
+def main(argv=None, *, output_path=None, archive_dir=None, run_date=None, report_path=None) -> int:
+    """Orchestrate publication and always attempt a safe, separate diagnostic report."""
     parser = argparse.ArgumentParser(description="Pioneer Valley Events pipeline")
     parser.add_argument("--dry-run", action="store_true", help="Don't write output")
     parser.add_argument("--source", help="Run only this scraper (by name)")
+    parser.add_argument("--report", help="Diagnostic JSON path outside published data")
     args = parser.parse_args(argv)
 
     output_path = output_path or OUTPUT_PATH
     archive_dir = archive_dir or ARCHIVE_DIR
     run_date = run_date or date.today()
-
-    log, log_path = setup_logging()
-    log.info("Pioneer Valley Events pipeline  [%s]", datetime.now().isoformat(timespec="seconds"))
-    log.info("Log file: %s", log_path)
-
-    all_scrapers = get_all_scrapers()
-
-    if args.source:
-        scrapers = [s for s in all_scrapers if s.name == args.source]
-        if not scrapers:
-            names = [s.name for s in all_scrapers]
-            log.error("Unknown source '%s'. Available: %s", args.source, ", ".join(names))
+    report_path = report_path or args.report or REPORT_PATH
+    _check_report_path(report_path, output_path, archive_dir)
+    report = {
+        "schema_version": 1,
+        "run_date": run_date.isoformat(),
+        "mode": "single_source" if args.source else "dry_run" if args.dry_run else "full",
+        "status": "started",
+        "stage": "setup",
+        "reason": None,
+        "sources": [],
+        "publication": "not_attempted",
+        "prepared_event_count": None,
+        "published_event_count": None,
+        "writes": [],
+    }
+    try:
+        log, log_path = setup_logging()
+        log.info("Pioneer Valley Events pipeline  [%s]",
+                 datetime.now().isoformat(timespec="seconds"))
+        log.info("Log file: %s", log_path)
+        report["stage"] = "selection"
+        all_scrapers = get_all_scrapers()
+        if args.source:
+            scrapers = [s for s in all_scrapers if s.name == args.source]
+            if not scrapers:
+                log.error("Unknown source '%s'. Available: %s", args.source,
+                          ", ".join(s.name for s in all_scrapers))
+                report.update(status="failed", reason="unknown_source")
+                return 1
+            if not args.dry_run:
+                log.warning("--source runs never write output; treating as --dry-run.")
+                args.dry_run = True
+        else:
+            scrapers = all_scrapers
+        report["sources"] = [
+            {"name": _safe_source_name(s.name), "count": None, "status": "not_attempted"}
+            for s in scrapers
+        ]
+        report["stage"] = "preflight"
+        needing_key = [s for s in scrapers if getattr(s, "needs_api_key", False)]
+        if needing_key and not api_key_present():
+            log.error("ANTHROPIC_API_KEY is not set, but %d source(s) need it. "
+                      "Aborting so we don't publish a degraded events.json.", len(needing_key))
+            report.update(status="failed", reason="missing_api_key")
             return 1
-        if not args.dry_run:
-            # A single-source run must never overwrite events.json (it would
-            # contain only that source's events) — force dry-run behavior.
-            log.warning("--source runs never write output; treating as --dry-run.")
-            args.dry_run = True
-    else:
-        scrapers = all_scrapers
 
-    # Pre-flight: if any source needs the Anthropic key and it's missing, abort
-    # loudly rather than quietly publishing only the non-Claude sources.
-    needing_key = [s for s in scrapers if getattr(s, "needs_api_key", False)]
-    if needing_key and not api_key_present():
-        log.error(
-            "ANTHROPIC_API_KEY is not set, but %d source(s) need it. Aborting so "
-            "we don't publish a degraded events.json. In GitHub Actions, set the "
-            "ANTHROPIC_API_KEY repository secret; locally, run `source ~/.zshrc` first.",
-            len(needing_key),
-        )
-        return 1
+        report["stage"] = "collection"
+        previous_counts = previous_source_counts(output_path)
+        result = run(scrapers, previous_counts=previous_counts, run_date=run_date,
+                     source_report=report["sources"])
+        report["prepared_event_count"] = len(result.payload["events"])
+        report["stage"] = "health"
+        if not args.source and is_unhealthy(result.results, result.regressions):
+            errored = [r for r in result.results if r.error]
+            unhealthy = len(errored) + len(result.regressions)
+            log.error("%d of %d sources unhealthy (%d errored, %d yield regressions; "
+                      "> %.0f%%). Failing the run so it isn't mistaken for a healthy one.",
+                      unhealthy, len(result.results), len(errored), len(result.regressions),
+                      MAX_ERROR_FRACTION * 100)
+            report.update(status="failed", reason="unhealthy_sources", publication="rejected")
+            return 1
 
-    previous_counts = previous_source_counts(output_path)
-    result = run(scrapers, previous_counts=previous_counts, run_date=run_date)
+        if args.dry_run:
+            log.info("--- DRY RUN (not writing) ---")
+            log.info(json.dumps(result.payload, indent=2)[:2000])
+            report.update(status="success", stage="complete", publication="preview")
+            return 0
 
-    # Reject unhealthy full runs before either publication destination is touched.
-    if not args.source and is_unhealthy(result.results, result.regressions):
-        errored = [r for r in result.results if r.error]
-        unhealthy = len(errored) + len(result.regressions)
-        log.error(
-            "%d of %d sources unhealthy (%d errored, %d yield regressions; "
-            "> %.0f%%). Failing the run so it isn't mistaken for a healthy one.",
-            unhealthy,
-            len(result.results),
-            len(errored),
-            len(result.regressions),
-            MAX_ERROR_FRACTION * 100,
-        )
-        return 1
-
-    if args.dry_run:
-        log.info("")
-        log.info("--- DRY RUN (not writing) ---")
-        log.info(json.dumps(result.payload, indent=2)[:2000])
+        report.update(stage="publication", publication="accepted")
+        publish_payload(result.payload, output_path=output_path, archive_dir=archive_dir,
+                        writes=report["writes"])
+        report.update(status="success", stage="complete")
         return 0
-
-    publish_payload(result.payload, output_path=output_path, archive_dir=archive_dir)
-    return 0
+    except Exception:
+        # Preserve the original exception and failing exit status. Never serialize it.
+        report.update(status="failed", reason="stage_exception")
+        for write in report["writes"]:
+            if write["status"] == "started":
+                write["status"] = "failed"
+        raise
+    finally:
+        if any(w["destination"] == "events" and w["status"] == "written"
+               for w in report["writes"]):
+            report["published_event_count"] = report["prepared_event_count"]
+        try:
+            os.makedirs(os.path.dirname(report_path) or ".", exist_ok=True)
+            write_json_atomic(report_path, report, indent=2)
+        except Exception:
+            # Diagnostic failure must not hide or replace an original pipeline failure.
+            logging.getLogger("pipeline").warning("Diagnostic report could not be written")
 
 
 if __name__ == "__main__":

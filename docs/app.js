@@ -1,4 +1,8 @@
-import { buildCalendarCells, filterEvents, groupEventsByDate } from './event-data.js';
+import {
+  browserStateParams, buildCalendarCells, dataFreshness, filterEvents,
+  groupEventsByDate, quickDateRange, readBrowserState, regionToday,
+} from './event-data.js';
+import { calendarTiming, createCalendar, safeEventURL, validCalendarDate } from './calendar-export.js';
 
 /* ============================================================
    Pioneer Valley Events — App
@@ -6,7 +10,11 @@ import { buildCalendarCells, filterEvents, groupEventsByDate } from './event-dat
 
 const state = {
   events: [],
+  generated: null,
+  loadFailed: false,
   view: 'list',
+  dateChoice: 'upcoming',
+  today: regionToday(),
   filters: { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' },
   calendarMonth: null, // Date object for calendar display
   calendarSelectedDay: null, // 'YYYY-MM-DD'
@@ -14,33 +22,73 @@ const state = {
 
 /* ---- Boot ---- */
 document.addEventListener('DOMContentLoaded', async () => {
-  state.calendarMonth = new Date();
-  state.calendarMonth.setDate(1);
-
   await loadEvents();
+  // Reassess an open tab as the data ages, including when returning to it.
+  setInterval(refreshDateStatus, 60 * 60 * 1000);
+  document.addEventListener('visibilitychange', refreshDateStatus);
   populateSourceFilter();
   populateTownFilter();
+  restoreBrowserState();
+  setupFilterDisclosure();
   setupFilters();
   setupViewSwitcher();
   setupModal();
   setupEventInteractions();
   render();
+  restoreEventFromURL();
+  window.addEventListener('popstate', () => {
+    restoreBrowserState();
+    render();
+    restoreEventFromURL();
+  });
 });
 
 /* ---- Data ---- */
 async function loadEvents() {
   try {
-    const res = await fetch('data/events.json');
+    const res = await fetch('data/events.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    state.events = data.events || [];
-    const gen = document.getElementById('last-updated');
-    if (gen && data.generated) {
-      gen.textContent = `Updated ${formatDateShort(data.generated)}`;
-    }
+    if (!data || !Array.isArray(data.events)) throw new Error('Invalid events payload');
+    const ids = new Set();
+    if (!data.events.every(event => {
+      if (!event || typeof event !== 'object' || Array.isArray(event)
+          || typeof event.id !== 'string' || !event.id.trim()
+          || typeof event.title !== 'string' || !event.title.trim()
+          || !validCalendarDate(event.date) || ids.has(event.id)) return false;
+      ids.add(event.id);
+      return true;
+    })) throw new Error('Invalid published event records');
+    state.events = data.events;
+    state.generated = data.generated;
   } catch (e) {
     console.error('Failed to load events.json:', e);
     state.events = [];
+    state.loadFailed = true;
   }
+  updateDataStatus();
+}
+
+function updateDataStatus() {
+  const updated = document.getElementById('last-updated');
+  const warning = document.getElementById('data-warning');
+  const freshness = dataFreshness(state.generated);
+  warning.hidden = !state.loadFailed && freshness === 'current';
+
+  if (state.loadFailed) {
+    updated.textContent = 'Update unavailable';
+    warning.textContent = 'Event listings could not be loaded. Please try again later.';
+  } else if (freshness === 'unknown') {
+    updated.textContent = 'Update date unverified';
+    warning.textContent = 'The last event update date could not be verified. Listings may be out of date; confirm details with the event organizer.';
+  } else {
+    const label = formatDateShort(state.generated);
+    updated.textContent = `${freshness === 'stale' ? 'Out of date · updated' : 'Updated'} ${label}`;
+    warning.textContent = freshness === 'stale'
+      ? `Event listings are out of date. Last updated ${label}; updates are scheduled weekly. Events may have passed or changed, and newer events may be missing. Confirm details with the event organizer.`
+      : '';
+  }
+  updateModalDataStatus();
 }
 
 /* ---- Source dropdown (dynamic) ---- */
@@ -69,32 +117,127 @@ function populateTownFilter() {
 }
 
 /* ---- Filters ---- */
-function setupFilters() {
-  const search = document.getElementById('search');
-  const dateFrom = document.getElementById('date-from');
-  const dateTo = document.getElementById('date-to');
-  const catFilter = document.getElementById('category-filter');
-  const townFilter = document.getElementById('town-filter');
-  const sourceFilter = document.getElementById('source-filter');
-  const clearBtn = document.getElementById('clear-filters');
+function monthFromDate(date) {
+  const [year, month] = date.split('-').map(Number);
+  return new Date(year, month - 1, 1);
+}
 
-  search.addEventListener('input', () => { state.filters.q = search.value.trim(); render(); });
-  dateFrom.addEventListener('change', () => { state.filters.dateFrom = dateFrom.value; render(); });
-  dateTo.addEventListener('change', () => { state.filters.dateTo = dateTo.value; render(); });
-  catFilter.addEventListener('change', () => { state.filters.category = catFilter.value; render(); });
-  townFilter.addEventListener('change', () => { state.filters.town = townFilter.value; render(); });
-  sourceFilter.addEventListener('change', () => { state.filters.source = sourceFilter.value; render(); });
+function restoreBrowserState() {
+  const available = {};
+  for (const key of ['category', 'town', 'source']) {
+    available[key] = [...document.querySelectorAll(`#${key}-filter option`)].map(option => option.value);
+  }
+  const restored = readBrowserState(location.search, available);
+  Object.assign(state, restored, { calendarMonth: monthFromDate(restored.calendarMonth) });
+  syncControls();
+}
 
-  clearBtn.addEventListener('click', () => {
-    search.value = '';
-    dateFrom.value = '';
-    dateTo.value = '';
-    catFilter.value = '';
-    townFilter.value = '';
-    sourceFilter.value = '';
-    state.filters = { q: '', dateFrom: '', dateTo: '', category: '', town: '', source: '' };
-    render();
+function syncControls() {
+  const controls = { q: 'search', dateFrom: 'date-from', dateTo: 'date-to', category: 'category-filter', town: 'town-filter', source: 'source-filter' };
+  for (const [key, id] of Object.entries(controls)) document.getElementById(id).value = state.filters[key];
+  document.querySelectorAll('[data-dates]').forEach(button => {
+    const selected = button.dataset.dates === state.dateChoice;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
   });
+  document.querySelectorAll('.view-btn').forEach(button => {
+    button.classList.toggle('active', button.dataset.view === state.view);
+    button.setAttribute('aria-pressed', String(button.dataset.view === state.view));
+  });
+}
+
+function updateBrowserState(replace = false) {
+  const query = browserStateParams({ ...state, calendarMonth: toDateStr(state.calendarMonth) }, location.search);
+  const url = `${location.pathname}${query ? '?' + query : ''}${location.hash}`;
+  if (url !== location.pathname + location.search + location.hash) {
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+}
+
+function applyDateChoice(choice) {
+  state.dateChoice = choice;
+  Object.assign(state.filters, quickDateRange(choice));
+  state.calendarMonth = monthFromDate(state.filters.dateFrom || regionToday());
+  state.calendarSelectedDay = null;
+}
+
+function resetFilters() {
+  state.filters = { q: '', category: '', town: '', source: '' };
+  applyDateChoice('upcoming');
+  syncControls();
+  updateBrowserState();
+  render();
+}
+
+function refreshDateStatus() {
+  updateDataStatus();
+  const today = regionToday();
+  if (today === state.today) return;
+  state.today = today;
+  if (state.dateChoice !== 'custom') {
+    applyDateChoice(state.dateChoice);
+    syncControls();
+    updateBrowserState(true);
+    render();
+  }
+}
+
+function setupFilterDisclosure() {
+  const toggle = document.getElementById('filters-toggle');
+  const options = document.getElementById('filter-options');
+  const mobile = matchMedia('(max-width: 700px)');
+  let expanded = false;
+  const update = () => {
+    options.hidden = mobile.matches && !expanded;
+    toggle.setAttribute('aria-expanded', String(!options.hidden));
+  };
+  toggle.addEventListener('click', () => { expanded = !expanded; update(); });
+  mobile.addEventListener('change', () => {
+    if (mobile.matches && options.contains(document.activeElement)) toggle.focus();
+    update();
+  });
+  update();
+}
+
+function updateFilterSummary() {
+  const labels = { upcoming: 'Upcoming', today: 'Today', week: 'Next 7 days', weekend: 'This weekend', all: 'All published dates' };
+  const parts = [labels[state.dateChoice] || `${state.filters.dateFrom || 'Any start'} to ${state.filters.dateTo || 'any end'}`];
+  if (state.filters.q) parts.push(`Search: ${state.filters.q}`);
+  for (const key of ['category', 'town', 'source']) {
+    if (state.filters[key]) {
+      const control = document.getElementById(`${key}-filter`);
+      parts.push(control.selectedOptions[0]?.textContent || state.filters[key]);
+    }
+  }
+  document.getElementById('filter-summary').textContent = parts.join(' · ');
+}
+
+function setupFilters() {
+  const controls = { q: 'search', dateFrom: 'date-from', dateTo: 'date-to', category: 'category-filter', town: 'town-filter', source: 'source-filter' };
+  for (const [key, id] of Object.entries(controls)) {
+    const control = document.getElementById(id);
+    control.addEventListener(key === 'q' ? 'input' : 'change', () => {
+      state.filters[key] = control.value.trim();
+      if (key === 'dateFrom' || key === 'dateTo') {
+        state.dateChoice = 'custom';
+        state.calendarMonth = monthFromDate(state.filters.dateFrom || regionToday());
+        state.calendarSelectedDay = null;
+      }
+      // Typing updates the current history entry; deliberate choices add one.
+      if (key !== 'q') syncControls();
+      updateBrowserState(key === 'q');
+      render();
+    });
+  }
+  document.querySelectorAll('[data-dates]').forEach(button => {
+    button.addEventListener('click', () => {
+      applyDateChoice(button.dataset.dates);
+      syncControls();
+      updateBrowserState();
+      render();
+    });
+  });
+  document.getElementById('clear-filters').addEventListener('click', resetFilters);
 }
 
 /* ---- View Switcher ---- */
@@ -102,9 +245,9 @@ function setupViewSwitcher() {
   document.querySelectorAll('.view-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       state.view = btn.dataset.view;
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       state.calendarSelectedDay = null;
+      syncControls();
+      updateBrowserState();
       render();
     });
   });
@@ -112,11 +255,18 @@ function setupViewSwitcher() {
 
 /* ---- Render ---- */
 function render() {
+  updateFilterSummary();
   const events = filterEvents(state.events, state.filters);
   const count = document.getElementById('result-count');
-  count.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
+  count.textContent = state.loadFailed
+    ? 'Events unavailable'
+    : `${events.length} event${events.length !== 1 ? 's' : ''}`;
 
   const container = document.getElementById('events-container');
+  if (state.loadFailed) {
+    container.innerHTML = '<div class="empty-state"><p>Event listings could not be loaded. Please try again later.</p></div>';
+    return;
+  }
   if (state.view === 'list')     renderList(container, events);
   else if (state.view === 'cards')    renderCards(container, events);
   else if (state.view === 'calendar') renderCalendar(container, events);
@@ -146,14 +296,14 @@ function renderList(container, events) {
 
 function listItem(e) {
   return `
-    <div class="list-item" data-id="${e.id}" role="button" tabindex="0">
-      <div class="list-item-time">${e.time || 'TBD'}</div>
+    <div class="list-item" data-id="${esc(e.id)}" role="button" tabindex="0">
+      <div class="list-item-time">${esc(e.time || 'TBD')}</div>
       <div class="list-item-body">
         <div class="list-item-title">${esc(e.title)}</div>
         <div class="list-item-meta">
           <span>${esc(e.venue)}</span>
           <span class="dot">${esc(e.town)}</span>
-          <span class="dot"><span class="badge badge-${e.category}">${labelFor(e.category)}</span></span>
+          <span class="dot"><span class="badge badge-${categoryFor(e.category)}">${labelFor(e.category)}</span></span>
         </div>
       </div>
     </div>`;
@@ -172,17 +322,18 @@ function renderCards(container, events) {
 }
 
 function card(e) {
-  const imgHtml = e.image_url
-    ? `<div class="card-img"><img src="${esc(e.image_url)}" alt="${esc(e.title)}" loading="lazy"></div>`
+  const imageURL = safeEventURL(e.image_url);
+  const imgHtml = imageURL
+    ? `<div class="card-img"><img src="${esc(imageURL)}" alt="${esc(e.title)}" loading="lazy"></div>`
     : `<div class="card-placeholder">${placeholderIcon(e.category)}</div>`;
 
   return `
-    <div class="card" data-id="${e.id}" role="button" tabindex="0">
+    <div class="card" data-id="${esc(e.id)}" role="button" tabindex="0">
       ${imgHtml}
       <div class="card-body">
-        <span class="badge badge-${e.category}">${labelFor(e.category)}</span>
+        <span class="badge badge-${categoryFor(e.category)}">${labelFor(e.category)}</span>
         <div class="card-title">${esc(e.title)}</div>
-        <div class="card-datetime">${formatDateShort(e.date)} &middot; ${e.time || 'TBD'}</div>
+        <div class="card-datetime">${formatDateShort(e.date)} &middot; ${esc(e.time || 'TBD')}</div>
         <div class="card-venue">${esc(e.venue)} &middot; ${esc(e.town)}</div>
         ${e.description ? `<div class="card-desc">${esc(truncate(e.description, 110))}</div>` : ''}
       </div>
@@ -201,11 +352,11 @@ function renderCalendar(container, events) {
   const cells = buildCalendarCells(year, mo);
 
   const monthLabel = month.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  const todayStr = toDateStr(new Date());
+  const todayStr = regionToday();
 
   const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  let html = `
+  let html = `${events.length ? '' : emptyState()}
     <div class="calendar-view">
       <div class="calendar-nav">
         <button class="cal-nav-btn" id="cal-prev" aria-label="Previous month">&#8249;</button>
@@ -239,14 +390,14 @@ function renderCalendar(container, events) {
 
     const MAX_PILLS = 3;
     const pillsHtml = dayEvents.slice(0, MAX_PILLS).map(e =>
-      `<div class="cal-pill pill-${e.category}" data-id="${e.id}">${esc(e.title)}</div>`
+      `<button class="cal-pill pill-${categoryFor(e.category)}" data-id="${esc(e.id)}" aria-label="${esc(e.title)}">${esc(e.title)}</button>`
     ).join('');
     const more = dayEvents.length > MAX_PILLS
       ? `<div class="cal-more">+${dayEvents.length - MAX_PILLS} more</div>` : '';
 
     html += `
       <div class="${classes}" data-date="${cell.date}">
-        <div class="cal-day-num">${cell.day}</div>
+        <button class="cal-day-num cal-day-select" aria-label="${formatDateLong(cell.date)}: ${dayEvents.length} event${dayEvents.length === 1 ? '' : 's'}" ${hasEvents ? '' : 'disabled'} ${dayEvents.length > 1 ? `aria-expanded="${isSelected}"` : ''}>${cell.day}</button>
         <div class="cal-events">${pillsHtml}${more}</div>
       </div>`;
   }
@@ -272,6 +423,10 @@ function setupEventInteractions(openEvent = openModal) {
   const container = document.getElementById('events-container');
 
   container.addEventListener('click', event => {
+    if (event.target.closest('#reset-results')) { resetFilters(); return; }
+    if (event.target.closest('#show-all-dates')) {
+      applyDateChoice('all'); syncControls(); updateBrowserState(); render(); return;
+    }
     const nav = event.target.closest('#cal-prev, #cal-next, #cal-today');
     if (nav && container.contains(nav)) {
       const month = state.calendarMonth;
@@ -280,11 +435,12 @@ function setupEventInteractions(openEvent = openModal) {
       } else if (nav.id === 'cal-next') {
         state.calendarMonth = new Date(month.getFullYear(), month.getMonth() + 1, 1);
       } else {
-        state.calendarMonth = new Date();
-        state.calendarMonth.setDate(1);
+        state.calendarMonth = monthFromDate(regionToday());
       }
       state.calendarSelectedDay = null;
+      updateBrowserState();
       render();
+      document.getElementById(nav.id).focus();
       return;
     }
 
@@ -292,7 +448,7 @@ function setupEventInteractions(openEvent = openModal) {
     if (eventTarget && container.contains(eventTarget) && eventTarget.dataset.id) {
       const visibleEvents = filterEvents(state.events, state.filters);
       if (visibleEvents.some(item => item.id === eventTarget.dataset.id)) {
-        openEvent(eventTarget.dataset.id);
+        openEvent(eventTarget.dataset.id, eventTarget);
       }
       return;
     }
@@ -303,12 +459,14 @@ function setupEventInteractions(openEvent = openModal) {
     const byDate = groupEventsByDate(filterEvents(state.events, state.filters));
     const dayEvents = byDate[day.dataset.date] || [];
     if (dayEvents.length === 1) {
-      openEvent(dayEvents[0].id);
+      openEvent(dayEvents[0].id, day.querySelector('.cal-day-select'));
     } else if (dayEvents.length > 1) {
       state.calendarSelectedDay = state.calendarSelectedDay === day.dataset.date
         ? null
         : day.dataset.date;
+      updateBrowserState();
       render();
+      container.querySelector(`.cal-day[data-date="${day.dataset.date}"] .cal-day-select`).focus();
     }
   });
 
@@ -320,7 +478,7 @@ function setupEventInteractions(openEvent = openModal) {
     event.preventDefault();
     const visibleEvents = filterEvents(state.events, state.filters);
     if (visibleEvents.some(item => item.id === eventTarget.dataset.id)) {
-      openEvent(eventTarget.dataset.id);
+      openEvent(eventTarget.dataset.id, eventTarget);
     }
   });
 }
@@ -328,25 +486,54 @@ function setupEventInteractions(openEvent = openModal) {
 /* ============================================================
    MODAL
    ============================================================ */
+let modalOpener = null;
+let modalBackground = [];
+let activeEventId = null;
+let modalOpenerKey = null;
+
 function setupModal() {
   const overlay = document.getElementById('modal-overlay');
-  const closeBtn = document.getElementById('modal-close');
-
-  closeBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.getElementById('modal-close').addEventListener('click', () => closeModal());
+  document.getElementById('modal-content').addEventListener('click', async event => {
+    if (event.target.closest('#copy-event-link')) await copyEventLink();
+    if (event.target.closest('#download-event')) downloadEventCalendar();
+  });
+  overlay.addEventListener('click', event => { if (event.target === overlay) closeModal(); });
+  document.addEventListener('keydown', event => {
+    if (overlay.classList.contains('hidden')) return;
+    if (event.key === 'Escape') { event.preventDefault(); closeModal(); return; }
+    if (event.key !== 'Tab') return;
+    const controls = [...overlay.querySelectorAll('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+      .filter(element => element.getClientRects().length > 0);
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !overlay.contains(document.activeElement))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !overlay.contains(document.activeElement))) {
+      event.preventDefault(); first.focus();
+    }
+  });
+  document.addEventListener('focusin', event => {
+    if (!overlay.classList.contains('hidden') && !overlay.contains(event.target)) {
+      document.getElementById('modal-close').focus();
+    }
+  });
 }
 
-function openModal(id) {
+function openModal(id, opener = document.activeElement, updateURL = true) {
   const e = state.events.find(ev => ev.id === id);
   if (!e) return;
 
   const content = document.getElementById('modal-content');
-  const timeStr = e.end_time ? `${e.time} – ${e.end_time}` : (e.time || 'Time TBD');
+  const eventURL = safeEventURL(e.url);
+  const timing = calendarTiming(e);
+  activeEventId = id;
+  if (updateURL) setEventURL(id);
+  const timeStr = e.time ? (e.end_time ? `${e.time} – ${e.end_time}` : e.time) : 'Time TBD';
 
   content.innerHTML = `
-    <div class="modal-category"><span class="badge badge-${e.category}">${labelFor(e.category)}</span></div>
-    <div class="modal-title">${esc(e.title)}</div>
+    <div class="modal-category"><span class="badge badge-${categoryFor(e.category)}">${labelFor(e.category)}</span></div>
+    <div class="modal-title" id="modal-title">${esc(e.title)}</div>
     <div class="modal-source">via ${esc(e.source || 'unknown')}</div>
     <div class="modal-meta">
       <div class="modal-meta-row">
@@ -359,14 +546,137 @@ function openModal(id) {
       </div>
     </div>
     ${e.description ? `<hr class="modal-divider"><p class="modal-description">${esc(e.description)}</p>` : ''}
-    ${e.url ? `<a class="modal-link" href="${esc(e.url)}" target="_blank" rel="noopener">${iconExternal()} More info</a>` : ''}`;
+    ${eventURL ? `<a class="modal-link" href="${esc(eventURL)}" target="_blank" rel="noopener">${iconExternal()} More info</a>` : ''}
+    <div id="modal-data-warning" class="modal-data-warning" role="status" hidden></div>
+    <p class="calendar-note">${esc(timing.error || timing.note)}</p>
+    <div class="event-actions">
+      <button id="copy-event-link" class="clear-btn">Copy event link</button>
+      <button id="download-event" class="calendar-download" ${timing.error ? 'disabled' : ''}>Download calendar (.ics)</button>
+    </div>
+    <p id="event-action-status" class="event-action-status" role="status"></p>
+    <div id="copy-link-fallback" hidden>
+      <label for="event-link-input">Event link — select and copy</label>
+      <input id="event-link-input" type="text" readonly value="${esc(sharedEventURL(id))}">
+    </div>`;
+  updateModalDataStatus();
+  presentModal(opener);
+}
 
-  document.getElementById('modal-overlay').classList.remove('hidden');
+function presentModal(opener) {
+  const overlay = document.getElementById('modal-overlay');
+  if (overlay.classList.contains('hidden')) {
+    modalOpener = opener;
+    modalOpenerKey = { id: opener?.dataset?.id, date: opener?.closest?.('.cal-day')?.dataset.date };
+    modalBackground = [...document.body.children].filter(element => element !== overlay && element.tagName !== 'SCRIPT')
+      .map(element => ({ element, inert: element.inert }));
+    modalBackground.forEach(({ element }) => { element.inert = true; });
+  }
+  document.body.classList.add('modal-open');
+  overlay.classList.remove('hidden');
   document.getElementById('modal-close').focus();
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.add('hidden');
+function closeModal(updateURL = true) {
+  const overlay = document.getElementById('modal-overlay');
+  if (overlay.classList.contains('hidden')) return;
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  modalBackground.forEach(({ element, inert }) => { element.inert = inert; });
+  modalBackground = [];
+  if (updateURL) setEventURL(null);
+  activeEventId = null;
+  if (!modalOpener?.isConnected && modalOpenerKey) {
+    modalOpener = [...document.querySelectorAll('[data-id]')].find(element => element.dataset.id === modalOpenerKey.id)
+      || [...document.querySelectorAll('.cal-day[data-date]')].find(element => element.dataset.date === modalOpenerKey.date)?.querySelector('.cal-day-select');
+  }
+  if (modalOpener?.isConnected) modalOpener.focus();
+  else document.querySelector(`.view-btn[data-view="${state.view}"]`).focus();
+  modalOpener = null;
+  modalOpenerKey = null;
+}
+
+function sharedEventURL(id) {
+  const url = new URL(location.href);
+  url.searchParams.set('event', id);
+  return url.href;
+}
+
+function setEventURL(id) {
+  const url = new URL(location.href);
+  if (id === null) url.searchParams.delete('event');
+  else url.searchParams.set('event', id);
+  if (url.href !== location.href) history.pushState(null, '', url.href);
+}
+
+function restoreEventFromURL() {
+  const params = new URLSearchParams(location.search);
+  if (!params.has('event')) { closeModal(false); return; }
+  const id = params.get('event');
+  if (state.events.some(event => event.id === id)) {
+    const opener = [...document.querySelectorAll('#events-container [data-id]')].find(element =>
+      element.dataset.id === id && element.getClientRects().length > 0);
+    openModal(id, opener || document.querySelector(`.view-btn[data-view="${state.view}"]`), false);
+    return;
+  }
+  activeEventId = null;
+  document.getElementById('modal-content').innerHTML = `
+    <h2 id="modal-title" class="modal-title">Event unavailable</h2>
+    <p>${state.loadFailed
+      ? 'The published listings could not be loaded, so this shared event cannot be checked. Please try again later.'
+      : 'This event is no longer in the current published listings. Browse upcoming events or confirm details with the organizer.'}</p>`;
+  presentModal(document.querySelector(`.view-btn[data-view="${state.view}"]`));
+}
+
+function updateModalDataStatus() {
+  const warning = document.getElementById('modal-data-warning');
+  if (!warning) return;
+  const pageWarning = document.getElementById('data-warning');
+  warning.hidden = pageWarning.hidden;
+  warning.textContent = pageWarning.textContent;
+}
+
+async function copyEventLink() {
+  const id = activeEventId;
+  if (id === null) return;
+  const status = document.getElementById('event-action-status');
+  const fallback = document.getElementById('copy-link-fallback');
+  const input = document.getElementById('event-link-input');
+  try {
+    await navigator.clipboard.writeText(sharedEventURL(id));
+    if (activeEventId !== id || !status.isConnected) return;
+    fallback.hidden = true;
+    status.textContent = 'Event link copied.';
+  } catch {
+    if (activeEventId !== id || !status.isConnected) return;
+    fallback.hidden = false;
+    input.value = sharedEventURL(id);
+    status.textContent = 'Select this link and copy it with your keyboard or device menu.';
+    input.focus();
+    input.select();
+    input.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const modal = input.closest('.modal');
+    modal.scrollTop = modal.scrollHeight;
+  }
+}
+
+function downloadEventCalendar() {
+  const event = state.events.find(item => item.id === activeEventId);
+  if (!event) return;
+  const status = document.getElementById('event-action-status');
+  try {
+    const blob = new Blob([createCalendar(event, state.generated)], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `pioneer-valley-event-${event.date}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    status.textContent = 'Calendar file downloaded. Confirm details with the organizer before attending.';
+  } catch {
+    status.textContent = 'A calendar entry could not be made from these published details.';
+  }
 }
 
 /* ============================================================
@@ -392,6 +702,7 @@ function toDateStr(date) {
 }
 
 function truncate(str, len) {
+  str = String(str);
   return str.length > len ? str.slice(0, len).trimEnd() + '…' : str;
 }
 
@@ -411,7 +722,12 @@ function emptyState() {
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
-      <p>No events match your filters.</p>
+      <p>No events match these filters and dates.</p>
+      <p>Try upcoming events with fewer filters, or browse earlier published listings.</p>
+      <div class="empty-actions">
+        <button id="reset-results" class="clear-btn">Reset to upcoming events</button>
+        <button id="show-all-dates" class="clear-btn">All published dates</button>
+      </div>
     </div>`;
 }
 
@@ -427,7 +743,8 @@ const CATEGORY_LABELS = {
   outdoor: 'Outdoor',
   festival: 'Festival',
 };
-function labelFor(cat) { return CATEGORY_LABELS[cat] || cat || ''; }
+function categoryFor(cat) { return Object.hasOwn(CATEGORY_LABELS, cat) ? cat : 'community'; }
+function labelFor(cat) { return CATEGORY_LABELS[categoryFor(cat)]; }
 
 function placeholderIcon(category) {
   const icons = {
@@ -436,7 +753,7 @@ function placeholderIcon(category) {
     arts:     '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
     default:  '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
   };
-  const path = icons[category] || icons.default;
+  const path = icons[categoryFor(category)] || icons.default;
   return `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
 }
 
