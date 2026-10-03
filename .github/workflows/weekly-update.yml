@@ -2,7 +2,7 @@ name: Weekly Event Update
 
 on:
   schedule:
-    # Every Sunday at 6 AM UTC (2 AM Eastern)
+    # Every Sunday at 6 AM UTC (2 AM EDT / 1 AM EST)
     - cron: '0 6 * * 0'
   workflow_dispatch:  # allow manual trigger from GitHub Actions tab
 
@@ -18,50 +18,61 @@ jobs:
       GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
     steps:
       - name: Checkout repository
+        id: checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
+        id: python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install dependencies
+        id: dependencies
         run: pip install -r requirements.txt
 
       - name: Install Playwright browser
+        id: browser
         run: python -m playwright install --with-deps chromium
 
       - name: Lint (blocks deploy on failure)
+        id: lint
         run: python -m ruff check .
 
       - name: Test (blocks deploy on failure)
+        id: tests
         run: python -m pytest -v
 
       - name: Run pipeline
+        id: pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python pipeline.py
+        run: python pipeline.py --report "$RUNNER_TEMP/pve-diagnostics/run-report.json"
 
       # Podcast mining is a nice-to-have: never block event publishing on it
       - name: Mine Fabulous 413 podcast (new episodes only)
+        id: podcast
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fab413_miner.py
 
       - name: Rebuild seasonal guide
+        id: seasonal
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fab413_guide.py
 
       - name: Mine Fabulous 413 entities (new episodes only)
+        id: entities
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fab413_entities.py
 
       - name: Rebuild 413 dashboard data
+        id: dashboard
         continue-on-error: true
         run: python fab413_stats.py
 
@@ -73,6 +84,7 @@ jobs:
           git diff --quiet docs/data/ docs/413/ || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push updated events
+        id: publish
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
@@ -85,6 +97,7 @@ jobs:
       # (a failed run stops the job earlier), so the email always reflects a
       # healthy event set. Skipped automatically if GMAIL_ADDRESS isn't set.
       - name: Email the weekly digest
+        id: digest
         if: ${{ env.GMAIL_ADDRESS != '' }}
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -92,3 +105,87 @@ jobs:
           # MAIL_TO secret is unset, the digest goes to GMAIL_ADDRESS itself.
           MAIL_TO: ${{ secrets.MAIL_TO }}
         run: python email_digest.py --days 14
+
+      # Uses only safe stage outcomes and the structured report, never raw logs/env.
+      - name: Summarize update diagnostics
+        if: always()
+        env:
+          DIAGNOSTIC_DIR: ${{ runner.temp }}/pve-diagnostics
+          CHECKOUT_OUTCOME: ${{ steps.checkout.outcome }}
+          PYTHON_OUTCOME: ${{ steps.python.outcome }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}
+          LINT_OUTCOME: ${{ steps.lint.outcome }}
+          TESTS_OUTCOME: ${{ steps.tests.outcome }}
+          PIPELINE_OUTCOME: ${{ steps.pipeline.outcome }}
+          PODCAST_OUTCOME: ${{ steps.podcast.outcome }}
+          SEASONAL_OUTCOME: ${{ steps.seasonal.outcome }}
+          ENTITIES_OUTCOME: ${{ steps.entities.outcome }}
+          DASHBOARD_OUTCOME: ${{ steps.dashboard.outcome }}
+          DIFF_OUTCOME: ${{ steps.diff.outcome }}
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+          DIGEST_OUTCOME: ${{ steps.digest.outcome }}
+        run: |
+          python3 - <<'PYTHON'
+          import json
+          import os
+          from pathlib import Path
+
+          directory = Path(os.environ["DIAGNOSTIC_DIR"])
+          directory.mkdir(parents=True, exist_ok=True)
+          stages = ("checkout", "python", "dependencies", "browser", "lint", "tests",
+                    "pipeline", "podcast", "seasonal", "entities", "dashboard", "diff",
+                    "publish", "digest")
+          allowed = {"success", "failure", "cancelled", "skipped"}
+          outcomes = {stage: os.environ.get(stage.upper() + "_OUTCOME", "") for stage in stages}
+          outcomes = {stage: outcome if outcome in allowed else "not_started"
+                      for stage, outcome in outcomes.items()}
+          try:
+              report = json.loads((directory / "run-report.json").read_text())
+          except (OSError, ValueError):
+              report = None
+          earlier_failure = any(outcomes[stage] in {"failure", "cancelled"}
+                                for stage in stages[:6])
+          diagnostic_status = ("available" if report else "earlier_workflow_failure"
+                               if earlier_failure else "pipeline_report_unavailable")
+          workflow = {"schema_version": 1, "steps": outcomes,
+                      "pipeline_diagnostics": diagnostic_status,
+                      "pages_deployment": "separate_workflow_check_required"}
+          (directory / "workflow-report.json").write_text(json.dumps(workflow, indent=2) + "\n")
+          lines = ["## Weekly update diagnostics", "",
+                   "| Workflow step | Outcome |", "| --- | --- |"]
+          lines.extend(f"| {stage} | {outcome} |" for stage, outcome in outcomes.items())
+          lines.extend(["", f"Pipeline diagnostics: **{diagnostic_status}**."])
+          if report:
+              lines.extend(["", f"Run date: {report['run_date']}. Mode: {report['mode']}.",
+                            f"Pipeline: **{report['status']}**, stage: **{report['stage']}**. "
+                            f"Reason: {report['reason']}.",
+                            f"Publication decision: **{report['publication']}**. "
+                            f"Prepared events: {report['prepared_event_count']}. "
+                            f"Written event count: {report['published_event_count']}.",
+                            "", "| Source | Status | Events | Previous yield |",
+                            "| --- | --- | --- | --- |"])
+              lines.extend(f"| {source['name']} | {source['status']} | {source['count']} | "
+                           f"{source.get('previous_count', '—')} |" for source in report["sources"])
+              lines.extend(["", "| Destination | Write outcome |", "| --- | --- |"])
+              lines.extend(f"| {write['destination']} | {write['status']} |"
+                           for write in report["writes"])
+          elif earlier_failure:
+              lines.append("An earlier workflow step failed; scraping/publication did not complete.")
+          else:
+              lines.append("No pipeline report is available; do not infer successful scraping.")
+          lines.extend(["", "Commit/push is reported separately above. Check the GitHub Pages "
+                        "deployment/build separately to confirm what visitors received.",
+                        "Optional podcast failures do not block event publication."])
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              summary.write("\n".join(lines) + "\n")
+          PYTHON
+
+      - name: Upload safe diagnostic reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-update-diagnostics
+          path: ${{ runner.temp }}/pve-diagnostics/*.json
+          if-no-files-found: warn
+          retention-days: 30

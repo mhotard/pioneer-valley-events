@@ -148,7 +148,7 @@ Use `"type": "playwright"` for JavaScript-rendered pages. The Claude Haiku model
 
 ## Automated weekly updates (GitHub Actions)
 
-The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC (2 AM Eastern). It:
+The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM UTC (2 AM EDT / 1 AM EST). It:
 1. Lints with `ruff` (blocks deploy on failure)
 2. Runs `pytest` (blocks deploy on failure)
 3. Runs `python pipeline.py`
@@ -158,6 +158,43 @@ The workflow in `.github/workflows/weekly-update.yml` runs every Sunday at 6 AM 
 **Required secret:** Add `ANTHROPIC_API_KEY` in your repo under **Settings → Secrets and variables → Actions**.
 
 To trigger manually: **Actions → Weekly Event Update → Run workflow**
+
+
+Each pipeline run writes `logs/run-report.json` (or the path supplied with
+`--report`), separate from published data. It records the run date, mode,
+per-source counts and status, health/publication decision, and completed or
+failed destination writes. It contains no source URLs, error bodies, or
+credentials. `published_event_count` is populated only after `events.json` was
+actually replaced; archives are separate writes, so a later archive failure
+can leave an explicitly reported partial publication. A preview can complete
+successfully while its selected source reports an error. Reports never replace
+the pipeline's exit status or exception.
+
+The weekly Action always attempts a job summary and uploads the
+**weekly-update-diagnostics** artifact, containing only safe diagnostic JSON
+from the runner's temporary directory. The workflow report distinguishes an
+earlier workflow failure from missing pipeline diagnostics, and reports
+commit/push separately. Optional podcast outcomes remain visible without
+blocking the main publication. Raw log files are not included in the artifact.
+
+When an update looks wrong, use this sequence without rerunning scrapers:
+
+1. **Scheduling:** check the Weekly Event Update run history for the expected
+   Sunday run. The existing cron is 06:00 UTC (02:00 EDT / 01:00 EST).
+2. **Setup, lint, or tests:** read the failed workflow step. A skipped pipeline
+   means no scrape completed; the summary identifies earlier workflow failures.
+3. **Preflight:** a `missing_api_key` reason means collection never started.
+   Check whether the required repository secret is configured without displaying
+   its value.
+4. **Source health:** inspect source `error` and `regression` statuses and event
+   counts in the summary/report. The existing 34% rejection threshold remains
+   in force. Diagnose from collected results and logs; do not add source probes,
+   retries, or extra scraping.
+5. **Publication and push:** distinguish the accepted health decision from
+   destination writes, then check commit/push outcome. A failed write or push
+   does not establish that the new file reached GitHub.
+6. **Pages:** check the separate GitHub Pages build/deployment and its commit.
+   Pipeline success alone does not confirm what visitors received.
 
 ---
 

@@ -47,7 +47,11 @@ def event(title, source, event_date="2026-07-11", **kwargs):
 
 
 @pytest.fixture(autouse=True)
-def isolate_cli(monkeypatch, caplog):
+def isolate_cli(monkeypatch, caplog, tmp_path):
+    monkeypatch.setattr(
+        pipeline, "REPORT_PATH",
+        str(tmp_path.parent / (tmp_path.name + "-diagnostics") / "run-report.json"),
+    )
     monkeypatch.delenv("ANTHROPIC_API_KEY_PIONEER", raising=False)
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.setattr(
